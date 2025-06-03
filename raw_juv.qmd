@@ -1,0 +1,136 @@
+# Juvenile  
+
+## Datasets  
+
+There are two datasets that represent juveniles: SCDNR's Creek Trawls, and NIW NERR's Oyster Landing seines. We will explore each.  
+
+```{r}
+library(tidyverse)
+library(patchwork)
+library(readxl)
+library(ggbeeswarm)
+
+source("functions.R")
+
+in_path <- here::here("data", "raw", "juv")
+
+surv1 <- "SCDNR Creek Trawls"
+surv2 <- "Oyster Landing Seines"
+```
+
+```{r}
+juv_sc_cpue <- read.csv(here::here(in_path, "SCDNR_CreekTrawlShrimpCPUE.csv"))
+juv_sc_size <- read.csv(here::here(in_path, "SCDNR_CreekTrawlShrimpSize.csv"))
+
+juv_ol <- read.csv(here::here(in_path, 
+                              "Oyster Landing Seine Shrimp Dataset - 1984-2023 (BWP, 2025-04-24)(kac 2025-06-02).csv"))
+```
+
+Pull out date characteristics and deal with column types if necessary  
+
+(OL's temp and salinity columns are character, due to entries of "DataGap". Weight has an entry that is only a decimal point. I'll turn these to NAs manually before forcing to numeric so that if anything else is odd (e.g. two decimal points in a number) I'll get a warning about the coercion and can look into it.)
+
+```{r}
+juv_sc_size <- juv_sc_size |> 
+    mutate(Date = lubridate::mdy(DTStart),
+           Year = lubridate::year(Date),
+           Month = lubridate::month(Date))
+
+juv_ol <- juv_ol |> 
+    mutate(Date = lubridate::mdy(Date),
+           Month = lubridate::month(Date),
+           Temp = case_when(Temp == "DataGap" ~ NA_character_,
+                            Temp == "" ~ NA_character_,
+                            .default = Temp),
+           Sal = case_when(Sal == "DataGap" ~ NA_character_,
+                           Sal == "" ~ NA_character_,
+                           .default = Sal),
+           Weight = case_when(Weight == "." ~ NA_character_,
+                              .default = Weight),
+           Temp = as.numeric(Temp),
+           Sal = as.numeric(Sal),
+           Weight = as.numeric(Weight))
+```
+
+
+
+Count and size are in the same file for Oyster Landing - up to 100 lengths taken, in columns. Probably should split this and pivot the lengths to long.  
+
+```{r}
+juv_ol_count <- juv_ol |> 
+    select(Sample:Count)
+
+juv_ol_size <- juv_ol |> 
+    select(Sample:Species,
+           starts_with("LEN")) |> 
+    pivot_longer(cols = starts_with("LEN"),
+                 names_to = "Rep",
+                 values_to = "Length") |> 
+    filter(!is.na(Length))
+```
+
+
+## Size Distributions  
+
+```{r}
+beeswarm_sizeDistn(juv_sc_size,
+                   x = "Species", y = "Length", month = "Month",
+                   survey = surv1)
+
+beeswarm_sizeDistn(juv_ol_size,
+                   x = "Species", y = "Length", month = "Month",
+                   survey = surv2)
+```
+
+
+There was a typo in the original files - Sample 748, from 2017-07-20, LEN21, value of 221. [confirmed from reserve that this was a typo; updated to '21' in '_corrected' file, september 2024 and then file with (kac 2025-06-02) appended to name] 
+
+Looks like OL seines are generally catching smaller individuals of both species than the SCDNR creek trawls.  
+
+
+## Abundance/CPUE Boxplots  
+
+```{r}
+p1 <- juv_sc_cpue |> 
+    mutate(TotNum = CPUE + 0.0001) |> 
+    ggplot() + 
+    geom_boxplot(aes(x = factor(Month),
+                     y = CPUE,
+                     fill = Month)) +
+    facet_wrap(~Species, ncol = 1, scales = "free_y") +
+    scale_y_log10() +
+    khroma::scale_fill_YlOrBr() +
+    labs(title = "CPUE in SCDNR Creek Trawls") +
+    theme(legend.position = "none")
+
+p2 <- juv_ol_count |> 
+    mutate(Count = Count + 0.001) |> 
+    ggplot() +
+    geom_boxplot(aes(x = factor(Month),
+                   y = Count,
+                   fill = Month)) +
+    scale_y_log10() +
+    khroma::scale_fill_YlOrBr() +
+    facet_wrap(~Species, ncol = 1, scales = "free_y") +
+    labs(title = "Count in OL Seines") +
+    theme(legend.position = "none")
+
+
+p1 + p2
+
+```
+
+Both surveys (unsurprisingly) show the same temporal pattern of abundance - aztecus in May/June, with setiferus later in the year.  
+
+## Abundance by Month  
+
+```{r}
+juv_ol_count2 <- juv_ol_count |> 
+    mutate(Count2 = Count + 0.001)
+beeswarm_abundByMonth(juv_ol_count2,
+                      y = "Count2",
+                      month = "Month",
+                      facet = "Species",
+                      survey = surv2) 
+```
+

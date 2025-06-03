@@ -1,0 +1,11 @@
+# Data Dictionaries - processed data  
+
+Explanations of files after summarizing/compiling. Shrimp abundance index files will all follow the same column convention. Environmental data files will probably take more explanation. 
+
+## Shrimp Data    
+
+details  
+
+## Environmental Data  
+
+etc.  

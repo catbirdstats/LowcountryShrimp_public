@@ -1,0 +1,3 @@
+# Shrimp Data Exploration  
+
+Here, we go through each file to see the distribution of data and to make some graphics illustrating what is present in each dataset.  

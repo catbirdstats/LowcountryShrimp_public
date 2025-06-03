@@ -1,0 +1,3 @@
+# Shrimp Year Explanations  
+
+Here we show how we defined 'shrimp year' for each species, and what that actually means in the context of winter temperatures.  

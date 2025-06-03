@@ -1,0 +1,3 @@
+# Regression Models  
+
+Start to explore what happens when we do more than just correlations.  

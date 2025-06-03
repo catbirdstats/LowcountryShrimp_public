@@ -1,0 +1,65 @@
+project:
+  type: book
+
+number-depth: 3
+
+execute:
+  echo: false
+  warning: false
+  message: false
+  error: true
+  cache: true
+  
+  
+book:
+  title: "Lowcountry Shrimp Dataset Deep Dive"
+  author: "Kim Cressman"
+  date: "5/28/2025"
+  chapters:
+    - index.qmd
+    - part: shrimp_data_exploration.qmd
+      chapters: 
+        - raw_postlarv.qmd
+        - raw_juv.qmd
+        - raw_subad.qmd
+        - raw_ad_seamap.qmd
+        - raw_ad_commercial.qmd
+        - raw_food_sources.qmd
+    - part: "Environmental Data Exploration"
+      chapters: 
+        - raw_wtemp.qmd
+        - raw_sal.qmd  
+    - part: "Shrimp Year Definition"
+      chapters: 
+        - shrimp_year_explanations.qmd
+    - part: "Summarizing to Abundance Index"
+      chapters:
+        - process_postlarv.qmd
+        - process_juv.qmd
+        - process_subad.qmd
+        - process_ad_seamap.qmd
+        - process_ad_commercial.qmd
+        - process_food_sources.qmd  
+    - part: "Summarizing Environmental Data"
+      chapters:
+        - process_wtemp.qmd
+        - process_sal.qmd  
+    - part: "Relationships between datasets"
+      chapters:
+        - rel_temp_thresholds.qmd  
+        - rel_sal.qmd  
+        - rel_regression_models.qmd  
+  appendices:
+    - app_dictionaries_raw.qmd
+    - app_dictionaries_processed.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+
+
+
