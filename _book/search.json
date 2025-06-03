@@ -1,0 +1,383 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Lowcountry Shrimp Dataset Deep Dive",
+    "section": "",
+    "text": "Summary",
+    "crumbs": [
+      "Summary"
+    ]
+  },
+  {
+    "objectID": "index.html#about-the-project",
+    "href": "index.html#about-the-project",
+    "title": "Lowcountry Shrimp Dataset Deep Dive",
+    "section": "About the Project",
+    "text": "About the Project\nFunded by the NERRS Science Collaborative, link to page",
+    "crumbs": [
+      "Summary"
+    ]
+  },
+  {
+    "objectID": "index.html#collaborators",
+    "href": "index.html#collaborators",
+    "title": "Lowcountry Shrimp Dataset Deep Dive",
+    "section": "Collaborators",
+    "text": "Collaborators\nName people here!",
+    "crumbs": [
+      "Summary"
+    ]
+  },
+  {
+    "objectID": "shrimp_data_exploration.html",
+    "href": "shrimp_data_exploration.html",
+    "title": "Shrimp Data Exploration",
+    "section": "",
+    "text": "Here, we go through each file to see the distribution of data and to make some graphics illustrating what is present in each dataset.",
+    "crumbs": [
+      "Shrimp Data Exploration"
+    ]
+  },
+  {
+    "objectID": "raw_postlarv.html",
+    "href": "raw_postlarv.html",
+    "title": "1  Postlarval",
+    "section": "",
+    "text": "1.1 Dataset characteristics\nThe only dataset representing postlarvae is from North Inlet-Winyah Bay. Two files are used: Penaeus_PostLarvae_NInlet_1981_2017_wide_kac.csv and Penaeus_Postlarval_Lengths_NInlet_1981 - 2017.xlsx. The latter file contains sizes, which were explored in this portion of the project but not expanded upon during later compiling stages.\nAfter some renaming, and turning columns to numeric:\nTable 1.1: Abundance data frame summary\n\n\n\n\nData summary\n\n\nName\npostlarv_abund\n\n\nNumber of rows\n1830\n\n\nNumber of columns\n21\n\n\n_______________________\n\n\n\nColumn type frequency:\n\n\n\ncharacter\n6\n\n\nDate\n1\n\n\nnumeric\n14\n\n\n________________________\n\n\n\nGroup variables\nNone\n\n\n\nVariable type: character\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nempty\nn_unique\nwhitespace\n\n\n\n\nreplicate\n0\n1\n1\n10\n0\n13\n0\n\n\ndate\n0\n1\n0\n10\n6\n915\n0\n\n\nseason\n0\n1\n4\n6\n0\n4\n0\n\n\nol_sal\n0\n1\n0\n7\n2\n181\n0\n\n\nol_temp\n0\n1\n0\n7\n2\n241\n0\n\n\nnotes\n0\n1\n0\n29\n1746\n22\n0\n\n\n\nVariable type: Date\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nmedian\nn_unique\n\n\n\n\ndate2\n6\n1\n1981-01-20\n2017-12-30\n1999-06-17\n914\n\n\n\nVariable type: numeric\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmean\nsd\np0\np25\np50\np75\np100\n\n\n\n\nsample\n0\n1\n458.00\n264.21\n1.0\n229.25\n458.00\n686.75\n915.00\n\n\nyear\n0\n1\n1998.67\n12.07\n1900.0\n1990.00\n1999.00\n2008.00\n2017.00\n\n\nmonth\n0\n1\n6.48\n3.45\n1.0\n3.00\n6.00\n9.00\n12.00\n\n\nday\n0\n1\n15.58\n8.83\n0.0\n8.00\n16.00\n23.00\n31.00\n\n\ndayofyear\n0\n1\n181.63\n105.57\n0.0\n90.25\n181.00\n271.75\n365.00\n\n\nweek\n0\n1\n26.96\n15.08\n1.0\n14.00\n27.00\n40.00\n53.00\n\n\nbb_surface_salinity\n0\n1\n31.59\n5.08\n5.9\n30.83\n33.20\n34.50\n38.60\n\n\nbb_surface_temp\n0\n1\n19.28\n7.15\n3.3\n13.20\n19.50\n26.37\n33.00\n\n\ntotal_153_zoop_ind_m.3\n0\n1\n9946.45\n10692.28\n0.0\n3440.03\n6531.50\n12306.58\n119401.90\n\n\nvol.filt.0.13\n7\n1\n32.36\n4.76\n0.0\n29.36\n32.47\n35.74\n45.68\n\n\ntotal_ppl_density\n9\n1\n0.20\n0.63\n0.0\n0.00\n0.00\n0.13\n8.40\n\n\nbrown_density\n9\n1\n0.05\n0.19\n0.0\n0.00\n0.00\n0.03\n3.77\n\n\nwhite_density\n9\n1\n0.05\n0.29\n0.0\n0.00\n0.00\n0.00\n8.19\n\n\npink_density\n9\n1\n0.09\n0.42\n0.0\n0.00\n0.00\n0.00\n6.71\nSplitting size data into brown and white shrimp:\nTable 1.2: Brown shrimp size summary\n\n\n\n\nData summary\n\n\nName\npostlarv_size_brown\n\n\nNumber of rows\n1952\n\n\nNumber of columns\n16\n\n\n_______________________\n\n\n\nColumn type frequency:\n\n\n\ncharacter\n5\n\n\nnumeric\n10\n\n\nPOSIXct\n1\n\n\n________________________\n\n\n\nGroup variables\nNone\n\n\n\nVariable type: character\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nempty\nn_unique\nwhitespace\n\n\n\n\nShrimp_ID\n0\n1.00\n6\n8\n0\n1949\n0\n\n\nTowID\n0\n1.00\n3\n4\n0\n414\n0\n\n\nReplicate\n0\n1.00\n1\n1\n0\n2\n0\n\n\nSpecies\n0\n1.00\n5\n5\n0\n1\n0\n\n\nNotes\n1830\n0.06\n1\n34\n0\n33\n0\n\n\n\nVariable type: numeric\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmean\nsd\np0\np25\np50\np75\np100\n\n\n\n\nCruise\n0\n1.00\n510.58\n192.75\n32.00\n388.00\n521.00\n606.00\n909.00\n\n\nShrimp_ID_number\n0\n1.00\n10.36\n13.36\n1.00\n2.00\n5.00\n14.00\n73.00\n\n\nSurface_Salinity\n2\n1.00\n26.58\n7.84\n5.90\n23.10\n29.60\n32.38\n38.60\n\n\nSurface_Temperature\n2\n1.00\n17.30\n5.44\n7.00\n13.60\n16.50\n19.50\n30.10\n\n\nRostrum_teeth\n40\n0.98\n2.68\n0.84\n0.00\n2.00\n3.00\n3.00\n6.00\n\n\nRostrum_length\n61\n0.97\n3141.90\n415.89\n1391.45\n3018.81\n3278.33\n3415.37\n4266.98\n\n\nTelson_length\n70\n0.96\n1516.31\n179.36\n749.62\n1441.84\n1567.86\n1635.95\n1872.39\n\n\nUropod_length\n38\n0.98\n1768.37\n214.82\n799.73\n1675.06\n1822.97\n1914.16\n2324.15\n\n\nYear\n0\n1.00\n2001.33\n7.81\n1982.00\n1996.00\n2001.50\n2005.00\n2017.00\n\n\nMonth\n0\n1.00\n4.26\n2.31\n1.00\n3.00\n4.00\n4.00\n12.00\n\n\n\nVariable type: POSIXct\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nmedian\nn_unique\n\n\n\n\nDate\n0\n1\n1982-04-20\n2017-10-03\n2002-01-03\n302\nTable 1.3: White shrimp size summary\n\n\n\n\nData summary\n\n\nName\npostlarv_size_white\n\n\nNumber of rows\n1096\n\n\nNumber of columns\n16\n\n\n_______________________\n\n\n\nColumn type frequency:\n\n\n\ncharacter\n5\n\n\nnumeric\n10\n\n\nPOSIXct\n1\n\n\n________________________\n\n\n\nGroup variables\nNone\n\n\n\nVariable type: character\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nempty\nn_unique\nwhitespace\n\n\n\n\nShrimp_ID\n0\n1.00\n7\n8\n0\n1087\n0\n\n\nTowID\n0\n1.00\n3\n4\n0\n249\n0\n\n\nReplicate\n0\n1.00\n1\n1\n0\n2\n0\n\n\nSpecies\n0\n1.00\n5\n5\n0\n1\n0\n\n\nNotes\n1029\n0.06\n5\n35\n0\n29\n0\n\n\n\nVariable type: numeric\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmean\nsd\np0\np25\np50\np75\np100\n\n\n\n\nCruise\n0\n1.00\n487.77\n228.39\n15.00\n356.00\n482.00\n632.50\n907.00\n\n\nShrimp_ID_number\n0\n1.00\n7.28\n8.19\n1.00\n2.00\n4.00\n10.00\n47.00\n\n\nSurface_Salinity\n0\n1.00\n31.57\n4.82\n6.90\n31.40\n33.20\n34.40\n38.60\n\n\nSurface_Temperature\n0\n1.00\n26.03\n2.43\n13.90\n25.20\n26.70\n27.50\n30.10\n\n\nRostrum_teeth\n16\n0.99\n1.65\n0.79\n0.00\n1.00\n2.00\n2.00\n6.00\n\n\nRostrum_length\n27\n0.98\n1940.35\n321.57\n1107.64\n1710.19\n1831.93\n2179.20\n3514.92\n\n\nTelson_length\n28\n0.97\n1033.78\n155.01\n593.65\n928.25\n990.63\n1144.55\n1708.58\n\n\nUropod_length\n18\n0.98\n1142.02\n197.06\n654.82\n995.32\n1081.15\n1281.64\n2075.20\n\n\nYear\n0\n1.00\n2000.24\n9.24\n1981.00\n1995.00\n2000.00\n2006.00\n2017.00\n\n\nMonth\n0\n1.00\n6.65\n1.16\n3.00\n6.00\n6.00\n7.00\n10.00\n\n\n\nVariable type: POSIXct\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nmedian\nn_unique\n\n\n\n\nDate\n0\n1\n1981-08-13\n2017-09-01\n2000-06-29\n184",
+    "crumbs": [
+      "Shrimp Data Exploration",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Postlarval</span>"
+    ]
+  },
+  {
+    "objectID": "raw_postlarv.html#size-distributions",
+    "href": "raw_postlarv.html#size-distributions",
+    "title": "1  Postlarval",
+    "section": "1.2 Size Distributions",
+    "text": "1.2 Size Distributions\nIn these plots, there is a panel for each shrimp species. Size is represented on the y-axis, and a cloud of points called a “beeswarm” has representation for every data point. Each point is colored by the numeric month in which the individual was caught, allowing us to see differences in size at different parts of the year and life-cycle.\nThere are three different measures of size in this dataset: Rostrum length, Telson length, and Uropod length. A graph is below for each.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWith brown shrimp, looks like we’ve got a couple of size classes in here - bigger shrimp earlier in the year, and smaller ones that are mostly later months.\nThe plot below shows the entire time series, with date (as year-month) along the x-axis and uropod length on the y-axis. Points are again colored by month.",
+    "crumbs": [
+      "Shrimp Data Exploration",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Postlarval</span>"
+    ]
+  },
+  {
+    "objectID": "raw_postlarv.html#abundance-and-size-boxplots",
+    "href": "raw_postlarv.html#abundance-and-size-boxplots",
+    "title": "1  Postlarval",
+    "section": "1.3 Abundance and Size Boxplots",
+    "text": "1.3 Abundance and Size Boxplots",
+    "crumbs": [
+      "Shrimp Data Exploration",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Postlarval</span>"
+    ]
+  },
+  {
+    "objectID": "raw_postlarv.html#abundance-by-month",
+    "href": "raw_postlarv.html#abundance-by-month",
+    "title": "1  Postlarval",
+    "section": "1.4 Abundance by Month",
+    "text": "1.4 Abundance by Month\n\n\n\n\n\n\n\n\n\nSo even though we’re seeing that pattern in brown shrimp of being so much bigger early in the year and smaller later, they’re just really not all that common later in the year.\nReally it’s Feb-Apr that we should probably concentrate on for brown shrimp, and June-Sept. for white.\nIf I were going to summarize…. make a table by year-month for each species, I’d probably want to calculate mean, sd, median, and IQR for size; ??? [average the density of the replicates?] for density; and then a rough estimation of biomass that combines the two.\nTo go up to annual estimates - have a column summing all months (for biomass), and a column focusing only on the most-concentrated months? Because really we care most about the months with the highest abundances, but that could be changing over the decades so we should have the full year as a backup.",
+    "crumbs": [
+      "Shrimp Data Exploration",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Postlarval</span>"
+    ]
+  },
+  {
+    "objectID": "raw_juv.html",
+    "href": "raw_juv.html",
+    "title": "2  Juvenile",
+    "section": "",
+    "text": "2.1 Datasets\nThere are two datasets that represent juveniles: SCDNR’s Creek Trawls, and NIW NERR’s Oyster Landing seines. We will explore each.\nPull out date characteristics and deal with column types if necessary\n(OL’s temp and salinity columns are character, due to entries of “DataGap”. Weight has an entry that is only a decimal point. I’ll turn these to NAs manually before forcing to numeric so that if anything else is odd (e.g. two decimal points in a number) I’ll get a warning about the coercion and can look into it.)\nCount and size are in the same file for Oyster Landing - up to 100 lengths taken, in columns. Probably should split this and pivot the lengths to long.",
+    "crumbs": [
+      "Shrimp Data Exploration",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Juvenile</span>"
+    ]
+  },
+  {
+    "objectID": "raw_juv.html#size-distributions",
+    "href": "raw_juv.html#size-distributions",
+    "title": "2  Juvenile",
+    "section": "2.2 Size Distributions",
+    "text": "2.2 Size Distributions\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThere was a typo in the original files - Sample 748, from 2017-07-20, LEN21, value of 221. [confirmed from reserve that this was a typo; updated to ‘21’ in ’_corrected’ file, september 2024 and then file with (kac 2025-06-02) appended to name]\nLooks like OL seines are generally catching smaller individuals of both species than the SCDNR creek trawls.",
+    "crumbs": [
+      "Shrimp Data Exploration",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Juvenile</span>"
+    ]
+  },
+  {
+    "objectID": "raw_juv.html#abundancecpue-boxplots",
+    "href": "raw_juv.html#abundancecpue-boxplots",
+    "title": "2  Juvenile",
+    "section": "2.3 Abundance/CPUE Boxplots",
+    "text": "2.3 Abundance/CPUE Boxplots\n\n\n\n\n\n\n\n\n\nBoth surveys (unsurprisingly) show the same temporal pattern of abundance - aztecus in May/June, with setiferus later in the year.",
+    "crumbs": [
+      "Shrimp Data Exploration",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Juvenile</span>"
+    ]
+  },
+  {
+    "objectID": "raw_juv.html#abundance-by-month",
+    "href": "raw_juv.html#abundance-by-month",
+    "title": "2  Juvenile",
+    "section": "2.4 Abundance by Month",
+    "text": "2.4 Abundance by Month",
+    "crumbs": [
+      "Shrimp Data Exploration",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Juvenile</span>"
+    ]
+  },
+  {
+    "objectID": "raw_subad.html",
+    "href": "raw_subad.html",
+    "title": "3  Subadults",
+    "section": "",
+    "text": "Stuff here ….",
+    "crumbs": [
+      "Shrimp Data Exploration",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Subadults</span>"
+    ]
+  },
+  {
+    "objectID": "raw_ad_seamap.html",
+    "href": "raw_ad_seamap.html",
+    "title": "4  Adults - fishery-independent",
+    "section": "",
+    "text": "SEAMAP info here",
+    "crumbs": [
+      "Shrimp Data Exploration",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Adults - fishery-independent</span>"
+    ]
+  },
+  {
+    "objectID": "raw_ad_commercial.html",
+    "href": "raw_ad_commercial.html",
+    "title": "5  Adults - landings and trip tickets",
+    "section": "",
+    "text": "Commercial data here",
+    "crumbs": [
+      "Shrimp Data Exploration",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Adults - landings and trip tickets</span>"
+    ]
+  },
+  {
+    "objectID": "raw_food_sources.html",
+    "href": "raw_food_sources.html",
+    "title": "6  Food sources (benthic cores)",
+    "section": "",
+    "text": "Stuff here",
+    "crumbs": [
+      "Shrimp Data Exploration",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Food sources (benthic cores)</span>"
+    ]
+  },
+  {
+    "objectID": "raw_wtemp.html",
+    "href": "raw_wtemp.html",
+    "title": "7  Water Temperature at Charleston Harbor",
+    "section": "",
+    "text": "stuff",
+    "crumbs": [
+      "Environmental Data Exploration",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Water Temperature at Charleston Harbor</span>"
+    ]
+  },
+  {
+    "objectID": "raw_sal.html",
+    "href": "raw_sal.html",
+    "title": "8  Salinity",
+    "section": "",
+    "text": "from SCDNR trawls",
+    "crumbs": [
+      "Environmental Data Exploration",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Salinity</span>"
+    ]
+  },
+  {
+    "objectID": "shrimp_year_explanations.html",
+    "href": "shrimp_year_explanations.html",
+    "title": "9  Shrimp Year Explanations",
+    "section": "",
+    "text": "Here we show how we defined ‘shrimp year’ for each species, and what that actually means in the context of winter temperatures.",
+    "crumbs": [
+      "Shrimp Year Definition",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Shrimp Year Explanations</span>"
+    ]
+  },
+  {
+    "objectID": "process_postlarv.html",
+    "href": "process_postlarv.html",
+    "title": "10  Postlarval Stage",
+    "section": "",
+    "text": "Datasets - …..",
+    "crumbs": [
+      "Summarizing to Abundance Index",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Postlarval Stage</span>"
+    ]
+  },
+  {
+    "objectID": "process_juv.html",
+    "href": "process_juv.html",
+    "title": "11  Juvenile",
+    "section": "",
+    "text": "Datasets …..\nMultiple datasets here; abundances and sizes also present",
+    "crumbs": [
+      "Summarizing to Abundance Index",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Juvenile</span>"
+    ]
+  },
+  {
+    "objectID": "process_subad.html",
+    "href": "process_subad.html",
+    "title": "12  Subadults",
+    "section": "",
+    "text": "Stuff here ….",
+    "crumbs": [
+      "Summarizing to Abundance Index",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Subadults</span>"
+    ]
+  },
+  {
+    "objectID": "process_ad_seamap.html",
+    "href": "process_ad_seamap.html",
+    "title": "13  Adults - fishery-independent",
+    "section": "",
+    "text": "13.1 test\nrendering with freeze: auto",
+    "crumbs": [
+      "Summarizing to Abundance Index",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Adults - fishery-independent</span>"
+    ]
+  },
+  {
+    "objectID": "process_ad_seamap.html#another-test",
+    "href": "process_ad_seamap.html#another-test",
+    "title": "13  Adults - fishery-independent",
+    "section": "13.2 another test",
+    "text": "13.2 another test\n\n\n[1] 4",
+    "crumbs": [
+      "Summarizing to Abundance Index",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Adults - fishery-independent</span>"
+    ]
+  },
+  {
+    "objectID": "process_ad_commercial.html",
+    "href": "process_ad_commercial.html",
+    "title": "14  Adults - landings and trip tickets",
+    "section": "",
+    "text": "14.1 test\ncode:\n[1] 2\nThe end",
+    "crumbs": [
+      "Summarizing to Abundance Index",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Adults - landings and trip tickets</span>"
+    ]
+  },
+  {
+    "objectID": "process_food_sources.html",
+    "href": "process_food_sources.html",
+    "title": "15  Food sources (benthic cores)",
+    "section": "",
+    "text": "Stuff here",
+    "crumbs": [
+      "Summarizing to Abundance Index",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Food sources (benthic cores)</span>"
+    ]
+  },
+  {
+    "objectID": "process_wtemp.html",
+    "href": "process_wtemp.html",
+    "title": "16  Water Temperature at Charleston Harbor",
+    "section": "",
+    "text": "stuff",
+    "crumbs": [
+      "Summarizing Environmental Data",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Water Temperature at Charleston Harbor</span>"
+    ]
+  },
+  {
+    "objectID": "process_sal.html",
+    "href": "process_sal.html",
+    "title": "17  Salinity",
+    "section": "",
+    "text": "from SCDNR trawls",
+    "crumbs": [
+      "Summarizing Environmental Data",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Salinity</span>"
+    ]
+  },
+  {
+    "objectID": "rel_temp_thresholds.html",
+    "href": "rel_temp_thresholds.html",
+    "title": "18  Temperature thresholds",
+    "section": "",
+    "text": "some stuff",
+    "crumbs": [
+      "Relationships between datasets",
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Temperature thresholds</span>"
+    ]
+  },
+  {
+    "objectID": "rel_sal.html",
+    "href": "rel_sal.html",
+    "title": "19  Nursery Period Salinity",
+    "section": "",
+    "text": "stuff",
+    "crumbs": [
+      "Relationships between datasets",
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Nursery Period Salinity</span>"
+    ]
+  },
+  {
+    "objectID": "rel_regression_models.html",
+    "href": "rel_regression_models.html",
+    "title": "20  Regression Models",
+    "section": "",
+    "text": "Start to explore what happens when we do more than just correlations.",
+    "crumbs": [
+      "Relationships between datasets",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "app_dictionaries_raw.html",
+    "href": "app_dictionaries_raw.html",
+    "title": "Appendix A — Data Dictionaries - raw datasets",
+    "section": "",
+    "text": "A.1 Postlarval data\ndescription",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Data Dictionaries - raw datasets</span>"
+    ]
+  },
+  {
+    "objectID": "app_dictionaries_raw.html#juvenile-data",
+    "href": "app_dictionaries_raw.html#juvenile-data",
+    "title": "Appendix A — Data Dictionaries - raw datasets",
+    "section": "A.2 Juvenile data",
+    "text": "A.2 Juvenile data\ndescription\n… etc.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Data Dictionaries - raw datasets</span>"
+    ]
+  },
+  {
+    "objectID": "app_dictionaries_processed.html",
+    "href": "app_dictionaries_processed.html",
+    "title": "Appendix B — Data Dictionaries - processed data",
+    "section": "",
+    "text": "B.1 Shrimp Data\ndetails",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Data Dictionaries - processed data</span>"
+    ]
+  },
+  {
+    "objectID": "app_dictionaries_processed.html#environmental-data",
+    "href": "app_dictionaries_processed.html#environmental-data",
+    "title": "Appendix B — Data Dictionaries - processed data",
+    "section": "B.2 Environmental Data",
+    "text": "B.2 Environmental Data\netc.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Data Dictionaries - processed data</span>"
+    ]
+  }
+]

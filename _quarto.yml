@@ -13,8 +13,7 @@ execute:
   
 book:
   title: "Lowcountry Shrimp Dataset Deep Dive"
-  author: "Kim Cressman"
-  date: "5/28/2025"
+  date: "6/3/2025"
   chapters:
     - index.qmd
     - part: shrimp_data_exploration.qmd
