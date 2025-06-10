@@ -1,3 +1,219 @@
 # Subadults  
 
-Stuff here ....
+## Datasets  
+
+There are two datasets that represent subadults: GADNR's EMTS sampling and SCDNR's Estuarine Trawls. We will explore each.  
+
+```{r}
+library(tidyverse)
+library(patchwork)
+library(readxl)
+library(ggbeeswarm)
+
+source("functions.R")
+
+in_path <- here::here("data", "raw", "subad")
+
+surv_ga <- "GADNR EMTS"
+surv_sc <- "SCDNR Estuarine Trawls"
+```
+
+```{r}
+# GA Counts
+subad_ga_count_brown <- read_xlsx(here::here(in_path, "GADNR_EMTS_PenaeidShrimp_Brown_Count_thru2021.xlsx"),
+                                  na = c("", ".")) |> 
+    mutate(Species = "brown")
+# looks from early exploration like NumperLb was mis-calculated when the sample weight wasn't the typical 1360.78 - it used that value anyway (this happened when catch was low)
+subad_ga_count_white <- read_xlsx(here::here(in_path, "GADNR_EMTS_PenaeidShrimp_White_Count_thru2021.xlsx"),
+                                  na = c("", "."))  |> 
+    mutate(Species = "white")
+
+# GA Sizes
+subad_ga_size_brown <- read_xlsx(here::here(in_path, "GADNR_EMTS_PenaeidShrimp_SIZE_thru2021.xlsx"),
+                                 sheet = "Brown shrimp") |> 
+    mutate(Species = "brown")
+subad_ga_size_white <- read_xlsx(here::here(in_path, "GADNR_EMTS_PenaeidShrimp_SIZE_thru2021.xlsx"),
+                                 sheet = "White Shrimp")  |> 
+    mutate(Species = "white")
+
+# SC
+subad_sc_cpue <- read.csv(here::here(in_path, "SCDNR_EstuarineTrawlShrimpCPUE.csv"))
+subad_sc_size <- read.csv(here::here(in_path, "SCDNR_EstuarineTrawlShrimpSize.csv")) |> 
+    filter(Length < 1000)  # there was a goof in the file somewhere
+```
+
+Combine species in GA data frames; pull out date characteristics and deal with column types if necessary; change shrimp species to common names.    
+
+```{r}
+subad_ga_count <- bind_rows(subad_ga_count_brown, subad_ga_count_white) |> 
+    mutate(GuessedDate = lubridate::ymd(substr(RefNum, 3, 8)),
+           Year = lubridate::year(GuessedDate),
+           Month = lubridate::month(GuessedDate))
+subad_ga_size <- bind_rows(subad_ga_size_brown, subad_ga_size_white) |> 
+    mutate(Date = lubridate::mdy(TowDate),
+           Year = lubridate::year(Date),
+           Month = lubridate::month(Date))
+
+subad_sc_cpue <- subad_sc_cpue |> 
+    mutate(Species = case_when(Species == "Penaeus aztecus" ~ "brown",
+                               Species == "Penaeus setiferus" ~ "white",
+                               Species == "Penaeus duorarum" ~ "pink",
+                               .default = "uh-oh"))
+
+subad_sc_size <- subad_sc_size |> 
+    mutate(Species = case_when(Species == "Penaeus aztecus" ~ "brown",
+                               Species == "Penaeus setiferus" ~ "white",
+                               Species == "Penaeus duorarum" ~ "pink",
+                               .default = "uh-oh"))
+```
+
+
+```{r}
+# save to use later
+save(subad_ga_count, subad_ga_size,
+     subad_sc_cpue, subad_sc_size,
+     file = here::here("data",
+                       "intermediate",
+                       "subadult_dfs.RData"),
+     compress = "xz")
+```
+
+
+## Tabular summaries of abundance  
+
+#### GADNR EMTS  
+
+```{r}
+#| label: tbl-abundance-ga
+#| tbl-cap: "Abundance (GA) data frame summary"
+skimr::skim_without_charts(subad_ga_count)
+```
+
+#### SCDNR Estuarine Trawls  
+
+```{r}
+#| label: tbl-abundance-sc
+#| tbl-cap: "Abundance (SC) data frame summary"
+skimr::skim_without_charts(subad_sc_cpue)
+```
+
+
+## Tabular summaries of size   
+
+```{r}
+# break up SC data frame by species
+sz_sc_brn <- subad_sc_size |> 
+    filter(Species == "brown")
+sz_sc_wht <- subad_sc_size |> 
+    filter(Species == "white")
+```
+
+### Brown Shrimp  
+
+#### GADNR EMTS  
+
+```{r}
+#| label: tbl-size-brown-ga
+#| tbl-cap: "Brown shrimp (GA) size summary"
+skimr::skim_without_charts(subad_ga_size_brown)
+```
+
+#### SCDNR Estuarine Trawls  
+
+```{r}
+#| label: tbl-size-brown-sc
+#| tbl-cap: "Brown shrimp (SC) size summary"
+skimr::skim_without_charts(sz_sc_brn)
+```
+
+### White Shrimp  
+
+#### GADNR EMTS  
+
+```{r}
+#| label: tbl-size-white-ga
+#| tbl-cap: "White shrimp (GA) size summary"
+skimr::skim_without_charts(subad_ga_size_white)
+```
+
+#### SCDNR Estuarine Trawls  
+
+```{r}
+#| label: tbl-size-white-sc
+#| tbl-cap: "White shrimp (SC) size summary"
+skimr::skim_without_charts(sz_sc_wht)
+```
+
+## Graphics - Size Distributions  
+
+South Carolina's file has over 300,000 points, which makes for a beeswarm plot that is very large and slow to render. Georgia's file is "only" 65k and even it is too slow to render beeswarm plots. So rather than graphing the full datasets, I have randomly sampled 10,000 rows from GA and 15,000 rows from SC (because SC has three species).  
+
+```{r}
+set.seed(1234)
+# subsample GA
+subad_ga_sizeb_ind <- sample(1:nrow(subad_ga_size), size = 10000, replace = FALSE)
+subad_ga_sizeb <- subad_ga_size[subad_ga_sizeb_ind, ]
+# subsample SC
+subad_sc_sizeb_ind <- sample(1:nrow(subad_sc_size), size = 15000, replace = FALSE)
+subad_sc_sizeb <- subad_sc_size[subad_sc_sizeb_ind, ]
+```
+
+```{r}
+#| label: fig-beeswarm-ga
+#| fig-cap: "Beeswarm plot of subadult shrimp length for the GADNR data. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center."
+
+
+# make plots
+beeswarm_sizeDistn(subad_ga_sizeb,
+                   x = "Species", y = "Size", month = "Month",
+                   survey = surv_ga)
+```
+
+```{r}
+#| label: fig-beeswarm-sc
+#| fig-cap: "Beeswarm plot of subadult shrimp length for the SCDNR data. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center."
+
+beeswarm_sizeDistn(subad_sc_sizeb,
+                   x = "Species", y = "Length", month = "Month",
+                   survey = surv_sc)
+```
+
+
+## Graphics - Abundance/CPUE Boxplots  
+
+```{r}
+#| label: fig-abund-cpue
+#| fig-cap: "Boxplots representing shrimp abundance (as either CPUE or count, depending on the survey) by month. Note the log10-scaled y-axes."
+
+p1 <- subad_sc_cpue |> 
+    mutate(TotNum = CPUE + 0.0001) |> 
+    ggplot() + 
+    geom_boxplot(aes(x = factor(Month),
+                     y = CPUE,
+                     fill = Month)) +
+    facet_wrap(~Species, ncol = 1, scales = "free_y") +
+    scale_y_log10() +
+    khroma::scale_fill_YlOrBr() +
+    labs(title = "CPUE in SCDNR Estuarine Trawls",
+         x = "Month") +
+    theme(legend.position = "none")
+
+p2 <- subad_ga_count |> 
+    mutate(Count = TotNum + 0.001) |> 
+    ggplot() +
+    geom_boxplot(aes(x = factor(Month),
+                   y = Count,
+                   fill = Month)) +
+    scale_y_log10() +
+    khroma::scale_fill_YlOrBr() +
+    facet_wrap(~Species, ncol = 1, scales = "free_y") +
+    labs(title = "Count in GA EMTS",
+         x = "Month") +
+    theme(legend.position = "none")
+
+
+p1 + p2
+
+```
+
+Both surveys (unsurprisingly) show the same temporal pattern of abundance - brown shrimp most abundant in June and July, also high in August; and May in SC. For white shrimp, we see a dip in June and (less so) July.  

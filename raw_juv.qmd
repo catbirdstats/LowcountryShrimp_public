@@ -1,4 +1,4 @@
-# Juvenile  
+# Juveniles  
 
 ## Datasets  
 
@@ -14,8 +14,8 @@ source("functions.R")
 
 in_path <- here::here("data", "raw", "juv")
 
-surv1 <- "SCDNR Creek Trawls"
-surv2 <- "Oyster Landing Seines"
+surv_sc <- "SCDNR Creek Trawls"
+surv_ol <- "Oyster Landing Seines"
 ```
 
 ```{r}
@@ -26,7 +26,7 @@ juv_ol <- read.csv(here::here(in_path,
                               "Oyster Landing Seine Shrimp Dataset - 1984-2023 (BWP, 2025-04-24)(kac 2025-06-02).csv"))
 ```
 
-Pull out date characteristics and deal with column types if necessary  
+Pull out date characteristics and deal with column types if necessary; change Species columns to common names.    
 
 (OL's temp and salinity columns are character, due to entries of "DataGap". Weight has an entry that is only a decimal point. I'll turn these to NAs manually before forcing to numeric so that if anything else is odd (e.g. two decimal points in a number) I'll get a warning about the coercion and can look into it.)
 
@@ -34,7 +34,17 @@ Pull out date characteristics and deal with column types if necessary
 juv_sc_size <- juv_sc_size |> 
     mutate(Date = lubridate::mdy(DTStart),
            Year = lubridate::year(Date),
-           Month = lubridate::month(Date))
+           Month = lubridate::month(Date),
+           Species = case_when(Species == "Penaeus aztecus" ~ "brown",
+                               Species == "Penaeus setiferus" ~ "white",
+                               Species == "Penaeus duorarum" ~ "pink",
+                               .default = "uh-oh"))
+
+juv_sc_cpue <- juv_sc_cpue |> 
+    mutate(Species = case_when(Species == "Penaeus aztecus" ~ "brown",
+                               Species == "Penaeus setiferus" ~ "white",
+                               Species == "Penaeus duorarum" ~ "pink",
+                               .default = "uh-oh"))
 
 juv_ol <- juv_ol |> 
     mutate(Date = lubridate::mdy(Date),
@@ -49,7 +59,10 @@ juv_ol <- juv_ol |>
                               .default = Weight),
            Temp = as.numeric(Temp),
            Sal = as.numeric(Sal),
-           Weight = as.numeric(Weight))
+           Weight = as.numeric(Weight),
+           Species = case_when(Species == "Farfantepenaeus aztecus" ~ "brown",
+                               Species == "Litopenaeus setiferus" ~ "white",
+                               .default = "uh-oh"))
 ```
 
 
@@ -69,17 +82,116 @@ juv_ol_size <- juv_ol |>
     filter(!is.na(Length))
 ```
 
+```{r}
+# save to use later
+save(juv_sc_cpue, juv_sc_size,
+     juv_ol_count, juv_ol_size,
+     file = here::here("data",
+                       "intermediate",
+                       "juvenile_dfs.RData"),
+     compress = "xz")
+```
 
-## Size Distributions  
+
+## Tabular summaries of abundance  
+
+#### SCDNR Creek Trawls  
 
 ```{r}
-beeswarm_sizeDistn(juv_sc_size,
-                   x = "Species", y = "Length", month = "Month",
-                   survey = surv1)
+#| label: tbl-abundance-sc
+#| tbl-cap: "Abundance (SC) data frame summary"
+skimr::skim_without_charts(juv_sc_cpue)
+```
 
-beeswarm_sizeDistn(juv_ol_size,
+#### Oyster Landing Seines  
+
+```{r}
+#| label: tbl-abundance-ol
+#| tbl-cap: "Abundance (Oyster Landing) data frame summary"
+skimr::skim_without_charts(juv_ol_count)
+```
+
+## Tabular summaries of size   
+
+```{r}
+sz_sc_brn <- juv_sc_size |> 
+    filter(Species == "brown")
+sz_sc_wht <- juv_sc_size |> 
+    filter(Species == "white")
+
+sz_ol_brn <- juv_ol_size |> 
+    filter(Species == "brown")
+sz_ol_wht <- juv_ol_size |> 
+    filter(Species == "white")
+```
+
+### Brown Shrimp  
+
+#### SCDNR Creek Trawls  
+
+```{r}
+#| label: tbl-size-brown-sc
+#| tbl-cap: "Brown shrimp (SC) size summary"
+skimr::skim_without_charts(sz_sc_brn)
+```
+
+#### Oyster Landing Seines  
+
+```{r}
+#| label: tbl-size-brown-ol
+#| tbl-cap: "Brown shrimp (Oyster Landing) size summary"
+skimr::skim_without_charts(sz_ol_brn)
+```
+
+### White Shrimp  
+
+#### SCDNR Creek Trawls  
+
+```{r}
+#| label: tbl-size-white-sc
+#| tbl-cap: "White shrimp (SC) size summary"
+skimr::skim_without_charts(sz_sc_wht)
+```
+
+#### Oyster Landing Seines  
+
+```{r}
+#| label: tbl-size-white-ol
+#| tbl-cap: "White shrimp (Oyster Landing) size summary"
+skimr::skim_without_charts(sz_ol_wht)
+```
+
+## Graphics - Size Distributions  
+
+Beeswarm plots can be slow to render so I have subsetted both data frames here to 15,000 rows.  
+
+```{r}
+set.seed(1234)
+# subsample OL
+juv_ol_size_ind <- sample(1:nrow(juv_ol_size), size = 15000, replace = FALSE)
+juv_ol_sizeb <- juv_ol_size[juv_ol_size_ind, ]
+# subsample SC
+juv_sc_sizeb_ind <- sample(1:nrow(juv_sc_size), size = 15000, replace = FALSE)
+juv_sc_sizeb <- juv_sc_size[juv_sc_sizeb_ind, ]
+```
+
+```{r}
+#| label: fig-beeswarm-sc
+#| fig-cap: "Beeswarm plot of juvenile shrimp length for the SCDNR data. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center."
+
+
+beeswarm_sizeDistn(juv_sc_sizeb,
                    x = "Species", y = "Length", month = "Month",
-                   survey = surv2)
+                   survey = surv_sc)
+```
+
+```{r}
+#| label: fig-beeswarm-ol
+#| fig-cap: "Beeswarm plot of juvenile shrimp length for the Oyster Landing seine data. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center."
+
+beeswarm_sizeDistn(juv_ol_sizeb,
+                   x = "Species", y = "Length", month = "Month",
+                   survey = surv_ol)
 ```
 
 
@@ -88,9 +200,12 @@ There was a typo in the original files - Sample 748, from 2017-07-20, LEN21, val
 Looks like OL seines are generally catching smaller individuals of both species than the SCDNR creek trawls.  
 
 
-## Abundance/CPUE Boxplots  
+## Graphics - Abundance/CPUE Boxplots  
 
 ```{r}
+#| label: fig-abund-cpue
+#| fig-cap: "Boxplots representing shrimp abundance (as either CPUE or count, depending on the survey) by month. Note the log10-scaled y-axes."
+
 p1 <- juv_sc_cpue |> 
     mutate(TotNum = CPUE + 0.0001) |> 
     ggplot() + 
@@ -100,7 +215,8 @@ p1 <- juv_sc_cpue |>
     facet_wrap(~Species, ncol = 1, scales = "free_y") +
     scale_y_log10() +
     khroma::scale_fill_YlOrBr() +
-    labs(title = "CPUE in SCDNR Creek Trawls") +
+    labs(title = "CPUE in SCDNR Creek Trawls",
+         x = "Month") +
     theme(legend.position = "none")
 
 p2 <- juv_ol_count |> 
@@ -112,7 +228,8 @@ p2 <- juv_ol_count |>
     scale_y_log10() +
     khroma::scale_fill_YlOrBr() +
     facet_wrap(~Species, ncol = 1, scales = "free_y") +
-    labs(title = "Count in OL Seines") +
+    labs(title = "Count in OL Seines",
+         x = "Month") +
     theme(legend.position = "none")
 
 
@@ -121,16 +238,4 @@ p1 + p2
 ```
 
 Both surveys (unsurprisingly) show the same temporal pattern of abundance - aztecus in May/June, with setiferus later in the year.  
-
-## Abundance by Month  
-
-```{r}
-juv_ol_count2 <- juv_ol_count |> 
-    mutate(Count2 = Count + 0.001)
-beeswarm_abundByMonth(juv_ol_count2,
-                      y = "Count2",
-                      month = "Month",
-                      facet = "Species",
-                      survey = surv2) 
-```
 

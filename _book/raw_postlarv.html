@@ -130,7 +130,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./raw_juv.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Juvenile</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Juveniles</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -331,10 +331,15 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#dataset-characteristics" id="toc-dataset-characteristics" class="nav-link active" data-scroll-target="#dataset-characteristics"><span class="header-section-number">1.1</span> Dataset characteristics</a></li>
-  <li><a href="#size-distributions" id="toc-size-distributions" class="nav-link" data-scroll-target="#size-distributions"><span class="header-section-number">1.2</span> Size Distributions</a></li>
-  <li><a href="#abundance-and-size-boxplots" id="toc-abundance-and-size-boxplots" class="nav-link" data-scroll-target="#abundance-and-size-boxplots"><span class="header-section-number">1.3</span> Abundance and Size Boxplots</a></li>
-  <li><a href="#abundance-by-month" id="toc-abundance-by-month" class="nav-link" data-scroll-target="#abundance-by-month"><span class="header-section-number">1.4</span> Abundance by Month</a></li>
+  <li><a href="#dataset" id="toc-dataset" class="nav-link active" data-scroll-target="#dataset"><span class="header-section-number">1.1</span> Dataset</a></li>
+  <li><a href="#tabular-summary-of-abundance" id="toc-tabular-summary-of-abundance" class="nav-link" data-scroll-target="#tabular-summary-of-abundance"><span class="header-section-number">1.2</span> Tabular summary of abundance</a></li>
+  <li><a href="#tabular-summaries-of-size" id="toc-tabular-summaries-of-size" class="nav-link" data-scroll-target="#tabular-summaries-of-size"><span class="header-section-number">1.3</span> Tabular summaries of size</a>
+  <ul class="collapse">
+  <li><a href="#brown-shrimp" id="toc-brown-shrimp" class="nav-link" data-scroll-target="#brown-shrimp"><span class="header-section-number">1.3.1</span> Brown Shrimp</a></li>
+  <li><a href="#white-shrimp" id="toc-white-shrimp" class="nav-link" data-scroll-target="#white-shrimp"><span class="header-section-number">1.3.2</span> White Shrimp</a></li>
+  </ul></li>
+  <li><a href="#graphics---size-distributions" id="toc-graphics---size-distributions" class="nav-link" data-scroll-target="#graphics---size-distributions"><span class="header-section-number">1.4</span> Graphics - Size Distributions</a></li>
+  <li><a href="#graphics---abundance-and-size-boxplots" id="toc-graphics---abundance-and-size-boxplots" class="nav-link" data-scroll-target="#graphics---abundance-and-size-boxplots"><span class="header-section-number">1.5</span> Graphics - Abundance and Size Boxplots</a></li>
   </ul>
 </nav>
     </div>
@@ -360,10 +365,12 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="dataset-characteristics" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="dataset-characteristics"><span class="header-section-number">1.1</span> Dataset characteristics</h2>
+<section id="dataset" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="dataset"><span class="header-section-number">1.1</span> Dataset</h2>
 <p>The only dataset representing postlarvae is from North Inlet-Winyah Bay. Two files are used: <code>Penaeus_PostLarvae_NInlet_1981_2017_wide_kac.csv</code> and <code>Penaeus_Postlarval_Lengths_NInlet_1981 - 2017.xlsx</code>. The latter file contains sizes, which were explored in this portion of the project but not expanded upon during later compiling stages.</p>
-<p>After some renaming, and turning columns to numeric:</p>
+</section>
+<section id="tabular-summary-of-abundance" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="tabular-summary-of-abundance"><span class="header-section-number">1.2</span> Tabular summary of abundance</h2>
 <div class="cell">
 <div id="tbl-abundance" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -742,7 +749,11 @@ Table&nbsp;1.1: Abundance data frame summary
 </figure>
 </div>
 </div>
-<p>Splitting size data into brown and white shrimp:</p>
+</section>
+<section id="tabular-summaries-of-size" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="tabular-summaries-of-size"><span class="header-section-number">1.3</span> Tabular summaries of size</h2>
+<section id="brown-shrimp" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="brown-shrimp"><span class="header-section-number">1.3.1</span> Brown Shrimp</h3>
 <div class="cell">
 <div id="tbl-size-brown" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1063,6 +1074,9 @@ Table&nbsp;1.2: Brown shrimp size summary
 </figure>
 </div>
 </div>
+</section>
+<section id="white-shrimp" class="level3" data-number="1.3.2">
+<h3 data-number="1.3.2" class="anchored" data-anchor-id="white-shrimp"><span class="header-section-number">1.3.2</span> White Shrimp</h3>
 <div class="cell">
 <div id="tbl-size-white" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1384,29 +1398,49 @@ Table&nbsp;1.3: White shrimp size summary
 </div>
 </div>
 </section>
-<section id="size-distributions" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="size-distributions"><span class="header-section-number">1.2</span> Size Distributions</h2>
+</section>
+<section id="graphics---size-distributions" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="graphics---size-distributions"><span class="header-section-number">1.4</span> Graphics - Size Distributions</h2>
 <p>In these plots, there is a panel for each shrimp species. Size is represented on the y-axis, and a cloud of points called a “beeswarm” has representation for every data point. Each point is colored by the numeric month in which the individual was caught, allowing us to see differences in size at different parts of the year and life-cycle.</p>
 <p>There are three different measures of size in this dataset: Rostrum length, Telson length, and Uropod length. A graph is below for each.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="raw_postlarv_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<div id="fig-beeswarm-rostrum" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-beeswarm-rostrum-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="raw_postlarv_files/figure-html/fig-beeswarm-rostrum-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-beeswarm-rostrum-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.1: Beeswarm plot of rostrum length in postlarval shrimp. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center.
+</figcaption>
 </figure>
 </div>
 </div>
+</div>
+<div class="cell">
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="raw_postlarv_files/figure-html/unnamed-chunk-7-2.png" class="img-fluid figure-img" width="672"></p>
+<div id="fig-beeswarm-telson" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-beeswarm-telson-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="raw_postlarv_files/figure-html/fig-beeswarm-telson-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-beeswarm-telson-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.2: Beeswarm plot of telson length in postlarval shrimp. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center.
+</figcaption>
 </figure>
 </div>
 </div>
+</div>
+<div class="cell">
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="raw_postlarv_files/figure-html/unnamed-chunk-7-3.png" class="img-fluid figure-img" width="672"></p>
+<div id="fig-beeswarm-uropod" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-beeswarm-uropod-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="raw_postlarv_files/figure-html/fig-beeswarm-uropod-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-beeswarm-uropod-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.3: Beeswarm plot of uropod length in postlarval shrimp. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -1415,41 +1449,36 @@ Table&nbsp;1.3: White shrimp size summary
 <p>The plot below shows the entire time series, with date (as year-month) along the x-axis and uropod length on the y-axis. Points are again colored by month.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="raw_postlarv_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+<div id="fig-length-timeseries" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-length-timeseries-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="raw_postlarv_files/figure-html/fig-length-timeseries-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-length-timeseries-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.4: Time series plot of uropod length in postlarval shrimp. Points represent measurements of individual shrimp, and are colored by the month in which they were captured.
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="abundance-and-size-boxplots" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="abundance-and-size-boxplots"><span class="header-section-number">1.3</span> Abundance and Size Boxplots</h2>
+<section id="graphics---abundance-and-size-boxplots" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="graphics---abundance-and-size-boxplots"><span class="header-section-number">1.5</span> Graphics - Abundance and Size Boxplots</h2>
 <div class="cell">
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="raw_postlarv_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
+<div id="fig-abund-size" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-abund-size-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="raw_postlarv_files/figure-html/fig-abund-size-1.png" class="img-fluid figure-img" width="672">
 </div>
-</div>
-</div>
-</section>
-<section id="abundance-by-month" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="abundance-by-month"><span class="header-section-number">1.4</span> Abundance by Month</h2>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="raw_postlarv_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-abund-size-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.5: Boxplots representing shrimp size and abundance Note the log10-scaled y-axes.
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>So even though we’re seeing that pattern in brown shrimp of being so much bigger early in the year and smaller later, they’re just really not all that common later in the year.</p>
-<p>Really it’s Feb-Apr that we should probably concentrate on for brown shrimp, and June-Sept.&nbsp;for white.</p>
-<p>If I were going to summarize…. make a table by year-month for each species, I’d probably want to calculate mean, sd, median, and IQR for size; ??? [average the density of the replicates?] for density; and then a rough estimation of biomass that combines the two.</p>
-<p>To go up to annual estimates - have a column summing all months (for biomass), and a column focusing only on the most-concentrated months? Because really we care most about the months with the highest abundances, but that could be changing over the decades so we should have the full year as a backup.</p>
 
 
 </section>
@@ -1871,8 +1900,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./raw_juv.html" class="pagination-link" aria-label="Juvenile">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Juvenile</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./raw_juv.html" class="pagination-link" aria-label="Juveniles">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Juveniles</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

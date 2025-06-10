@@ -18,7 +18,7 @@ postlarv_abund <- read.csv(here::here(in_path, "Penaeus_PostLarvae_NInlet_1981_2
 postlarv_size <- read_xlsx(here::here(in_path, "Penaeus_Postlarval_Lengths_NInlet_1981 - 2017.xlsx"))
 ```
 
-##  Dataset characteristics  
+##  Dataset  
 
 The only dataset representing postlarvae is from North Inlet-Winyah Bay. Two files are used: `Penaeus_PostLarvae_NInlet_1981_2017_wide_kac.csv` and `Penaeus_Postlarval_Lengths_NInlet_1981 - 2017.xlsx`. The latter file contains sizes, which were explored in this portion of the project but not expanded upon during later compiling stages. 
 
@@ -45,9 +45,16 @@ postlarv_size_brown <- postlarv_size |>
 
 postlarv_size_white <- postlarv_size |> 
     filter(Species == "white")
+
+# save out these data frames
+save(postlarv_abund, postlarv_size,
+     file = here::here("data",
+                       "intermediate",
+                       "postlarval_dfs.RData"),
+     compress = "xz")
 ```
 
-After some renaming, and turning columns to numeric:  
+## Tabular summary of abundance   
 
 ```{r}
 #| label: tbl-abundance
@@ -55,7 +62,9 @@ After some renaming, and turning columns to numeric:
 skimr::skim_without_charts(postlarv_abund)
 ```
 
-Splitting size data into brown and white shrimp:  
+## Tabular summaries of size   
+
+### Brown Shrimp  
 
 ```{r}
 #| label: tbl-size-brown
@@ -63,28 +72,43 @@ Splitting size data into brown and white shrimp:
 skimr::skim_without_charts(postlarv_size_brown)
 ```
 
+### White Shrimp  
+
 ```{r}
 #| label: tbl-size-white
 #| tbl-cap: "White shrimp size summary"
 skimr::skim_without_charts(postlarv_size_white)
 ```
 
-## Size Distributions  
+## Graphics - Size Distributions  
 
 In these plots, there is a panel for each shrimp species. Size is represented on the y-axis, and a cloud of points called a "beeswarm" has representation for every data point. Each point is colored by the numeric month in which the individual was caught, allowing us to see differences in size at different parts of the year and life-cycle.  
 
 There are three different measures of size in this dataset: Rostrum length, Telson length, and Uropod length. A graph is below for each.  
 
 ```{r}
+#| label: fig-beeswarm-rostrum
+#| fig-cap: "Beeswarm plot of rostrum length in postlarval shrimp. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center."
+
 beeswarm_sizeDistn(postlarv_size, 
                x = "Species", y = "Rostrum_length",
                month = "Month",
                survey = surv)
+```
+
+```{r}
+#| label: fig-beeswarm-telson
+#| fig-cap: "Beeswarm plot of telson length in postlarval shrimp. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center."
 
 beeswarm_sizeDistn(postlarv_size, 
                x = "Species", y = "Telson_length",
                month = "Month",
                survey = surv)
+```
+
+```{r}
+#| label: fig-beeswarm-uropod
+#| fig-cap: "Beeswarm plot of uropod length in postlarval shrimp. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center."
 
 beeswarm_sizeDistn(postlarv_size, 
                x = "Species", y = "Uropod_length",
@@ -97,6 +121,9 @@ With brown shrimp, looks like we've got a couple of size classes in here - bigge
 The plot below shows the entire time series, with date (as year-month) along the x-axis and uropod length on the y-axis. Points are again colored by month.  
 
 ```{r}
+#| label: fig-length-timeseries
+#| fig-cap: "Time series plot of uropod length in postlarval shrimp. Points represent measurements of individual shrimp, and are colored by the month in which they were captured."
+
 ggplot(postlarv_size) +
     geom_point(aes(x = Date,
                    y = Uropod_length,
@@ -106,9 +133,12 @@ ggplot(postlarv_size) +
 ```
 
 
-## Abundance and Size Boxplots  
+## Graphics - Abundance and Size Boxplots  
 
 ```{r}
+#| label: fig-abund-size
+#| fig-cap: "Boxplots representing shrimp size and abundance Note the log10-scaled y-axes."
+
 p1 <- ggplot(postlarv_size) +
     geom_boxplot(aes(x = factor(Month),
                      y = Uropod_length,
@@ -146,22 +176,4 @@ p2 <- ggplot(postlarv_abund_long) +
 p1 + p2
 ```
 
-## Abundance by Month  
-
-```{r}
-beeswarm_abundByMonth(postlarv_abund_long,
-                      y = "Density2",
-                      month = "Month",
-                      facet = "Species",
-                      survey = surv) 
-```
-
-
 So even though we're seeing that pattern in brown shrimp of being so much bigger early in the year and smaller later, they're just really not all that common later in the year.  
-
-Really it's Feb-Apr that we should probably concentrate on for brown shrimp, and June-Sept. for white.  
-
-If I were going to summarize.... make a table by year-month for each species, I'd probably want to calculate mean, sd, median, and IQR for size; ??? [average the density of the replicates?] for density; and then a rough estimation of biomass that combines the two.  
-
-To go up to annual estimates - have a column summing all months (for biomass), and a column focusing only on the most-concentrated months? Because really we care most about the months with the highest abundances, but that could be changing over the decades so we should have the full year as a backup.  
-

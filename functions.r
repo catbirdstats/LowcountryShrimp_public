@@ -24,6 +24,7 @@ beeswarm_sizeDistn <- function(df, x, y, month, survey){
     
 }
 
+
 beeswarm_abundByMonth <- function(df, y, month, facet, survey){
     # all options except df need to be fed in as character strings
     

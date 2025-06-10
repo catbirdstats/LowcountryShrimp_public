@@ -13,7 +13,7 @@ execute:
   
 book:
   title: "Lowcountry Shrimp Dataset Deep Dive"
-  date: "6/3/2025"
+  date: "6/10/2025"
   chapters:
     - index.qmd
     - part: shrimp_data_exploration.qmd
