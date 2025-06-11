@@ -332,14 +332,15 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#datasets" id="toc-datasets" class="nav-link active" data-scroll-target="#datasets"><span class="header-section-number">3.1</span> Datasets</a></li>
-  <li><a href="#tabular-summaries-of-abundance" id="toc-tabular-summaries-of-abundance" class="nav-link" data-scroll-target="#tabular-summaries-of-abundance"><span class="header-section-number">3.2</span> Tabular summaries of abundance</a></li>
-  <li><a href="#tabular-summaries-of-size" id="toc-tabular-summaries-of-size" class="nav-link" data-scroll-target="#tabular-summaries-of-size"><span class="header-section-number">3.3</span> Tabular summaries of size</a>
+  <li><a href="#graphics---size-distributions" id="toc-graphics---size-distributions" class="nav-link" data-scroll-target="#graphics---size-distributions"><span class="header-section-number">3.2</span> Graphics - Size Distributions</a></li>
+  <li><a href="#graphics---abundancecpue-boxplots" id="toc-graphics---abundancecpue-boxplots" class="nav-link" data-scroll-target="#graphics---abundancecpue-boxplots"><span class="header-section-number">3.3</span> Graphics - Abundance/CPUE Boxplots</a></li>
+  <li><a href="#tabular-summaries-of-abundance" id="toc-tabular-summaries-of-abundance" class="nav-link" data-scroll-target="#tabular-summaries-of-abundance"><span class="header-section-number">3.4</span> Tabular summaries of abundance</a></li>
+  <li><a href="#tabular-summaries-of-size" id="toc-tabular-summaries-of-size" class="nav-link" data-scroll-target="#tabular-summaries-of-size"><span class="header-section-number">3.5</span> Tabular summaries of size</a>
   <ul class="collapse">
-  <li><a href="#brown-shrimp" id="toc-brown-shrimp" class="nav-link" data-scroll-target="#brown-shrimp"><span class="header-section-number">3.3.1</span> Brown Shrimp</a></li>
-  <li><a href="#white-shrimp" id="toc-white-shrimp" class="nav-link" data-scroll-target="#white-shrimp"><span class="header-section-number">3.3.2</span> White Shrimp</a></li>
+  <li><a href="#brown-shrimp" id="toc-brown-shrimp" class="nav-link" data-scroll-target="#brown-shrimp"><span class="header-section-number">3.5.1</span> Brown Shrimp</a></li>
+  <li><a href="#white-shrimp" id="toc-white-shrimp" class="nav-link" data-scroll-target="#white-shrimp"><span class="header-section-number">3.5.2</span> White Shrimp</a></li>
   </ul></li>
-  <li><a href="#graphics---size-distributions" id="toc-graphics---size-distributions" class="nav-link" data-scroll-target="#graphics---size-distributions"><span class="header-section-number">3.4</span> Graphics - Size Distributions</a></li>
-  <li><a href="#graphics---abundancecpue-boxplots" id="toc-graphics---abundancecpue-boxplots" class="nav-link" data-scroll-target="#graphics---abundancecpue-boxplots"><span class="header-section-number">3.5</span> Graphics - Abundance/CPUE Boxplots</a></li>
+  <li><a href="#about" id="toc-about" class="nav-link" data-scroll-target="#about"><span class="header-section-number">3.6</span> About</a></li>
   </ul>
 </nav>
     </div>
@@ -368,12 +369,65 @@ ul.task-list li input[type="checkbox"] {
 <section id="datasets" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="datasets"><span class="header-section-number">3.1</span> Datasets</h2>
 <p>There are two datasets that represent subadults: GADNR’s EMTS sampling and SCDNR’s Estuarine Trawls. We will explore each.</p>
-<p>Combine species in GA data frames; pull out date characteristics and deal with column types if necessary; change shrimp species to common names.</p>
 </section>
-<section id="tabular-summaries-of-abundance" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="tabular-summaries-of-abundance"><span class="header-section-number">3.2</span> Tabular summaries of abundance</h2>
+<section id="graphics---size-distributions" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="graphics---size-distributions"><span class="header-section-number">3.2</span> Graphics - Size Distributions</h2>
+<p>South Carolina’s file has over 300,000 points, which makes for a beeswarm plot that is very large and slow to render. Georgia’s file is “only” 65k and even it is too slow to render beeswarm plots. So rather than graphing the full datasets, I have randomly sampled 10,000 rows from GA and 15,000 rows from SC (because SC has three species).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-beeswarm-ga" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-beeswarm-ga-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="raw_subad_files/figure-html/fig-beeswarm-ga-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-beeswarm-ga-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.1: Beeswarm plot of subadult shrimp length for the GADNR data. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-beeswarm-sc" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-beeswarm-sc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="raw_subad_files/figure-html/fig-beeswarm-sc-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-beeswarm-sc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.2: Beeswarm plot of subadult shrimp length for the SCDNR data. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="graphics---abundancecpue-boxplots" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="graphics---abundancecpue-boxplots"><span class="header-section-number">3.3</span> Graphics - Abundance/CPUE Boxplots</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-abund-cpue" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-abund-cpue-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="raw_subad_files/figure-html/fig-abund-cpue-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-abund-cpue-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.3: Boxplots representing shrimp abundance (as either CPUE or count, depending on the survey) by month. Note the log10-scaled y-axes.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Both surveys (unsurprisingly) show the same temporal pattern of abundance - brown shrimp most abundant in June and July, also high in August; and May in SC. For white shrimp, we see a dip in June and (less so) July.</p>
+</section>
+<section id="tabular-summaries-of-abundance" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="tabular-summaries-of-abundance"><span class="header-section-number">3.4</span> Tabular summaries of abundance</h2>
 <section id="gadnr-emts" class="level4">
 <h4 class="anchored" data-anchor-id="gadnr-emts">GADNR EMTS</h4>
+<details>
+<summary>
+Click to expand
+</summary>
 <div class="cell">
 <div id="tbl-abundance-ga" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -676,9 +730,14 @@ Table&nbsp;3.1: Abundance (GA) data frame summary
 </figure>
 </div>
 </div>
+</details>
 </section>
 <section id="scdnr-estuarine-trawls" class="level4">
 <h4 class="anchored" data-anchor-id="scdnr-estuarine-trawls">SCDNR Estuarine Trawls</h4>
+<details>
+<summary>
+Click to expand
+</summary>
 <div class="cell">
 <div id="tbl-abundance-sc" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -937,14 +996,18 @@ Table&nbsp;3.2: Abundance (SC) data frame summary
 </figure>
 </div>
 </div>
+</details>
 </section>
 </section>
-<section id="tabular-summaries-of-size" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="tabular-summaries-of-size"><span class="header-section-number">3.3</span> Tabular summaries of size</h2>
-<section id="brown-shrimp" class="level3" data-number="3.3.1">
-<h3 data-number="3.3.1" class="anchored" data-anchor-id="brown-shrimp"><span class="header-section-number">3.3.1</span> Brown Shrimp</h3>
+<section id="tabular-summaries-of-size" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="tabular-summaries-of-size"><span class="header-section-number">3.5</span> Tabular summaries of size</h2>
+<section id="brown-shrimp" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="brown-shrimp"><span class="header-section-number">3.5.1</span> Brown Shrimp</h3>
 <section id="gadnr-emts-1" class="level4">
 <h4 class="anchored" data-anchor-id="gadnr-emts-1">GADNR EMTS</h4>
+<summary>
+Click to expand
+</summary>
 <div class="cell">
 <div id="tbl-size-brown-ga" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1099,9 +1162,13 @@ Table&nbsp;3.3: Brown shrimp (GA) size summary
 </figure>
 </div>
 </div>
+
 </section>
 <section id="scdnr-estuarine-trawls-1" class="level4">
 <h4 class="anchored" data-anchor-id="scdnr-estuarine-trawls-1">SCDNR Estuarine Trawls</h4>
+<summary>
+Click to expand
+</summary>
 <div class="cell">
 <div id="tbl-size-brown-sc" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1384,12 +1451,16 @@ Table&nbsp;3.4: Brown shrimp (SC) size summary
 </figure>
 </div>
 </div>
+
 </section>
 </section>
-<section id="white-shrimp" class="level3" data-number="3.3.2">
-<h3 data-number="3.3.2" class="anchored" data-anchor-id="white-shrimp"><span class="header-section-number">3.3.2</span> White Shrimp</h3>
+<section id="white-shrimp" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="white-shrimp"><span class="header-section-number">3.5.2</span> White Shrimp</h3>
 <section id="gadnr-emts-2" class="level4">
 <h4 class="anchored" data-anchor-id="gadnr-emts-2">GADNR EMTS</h4>
+<summary>
+Click to expand
+</summary>
 <div class="cell">
 <div id="tbl-size-white-ga" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1544,9 +1615,13 @@ Table&nbsp;3.5: White shrimp (GA) size summary
 </figure>
 </div>
 </div>
+
 </section>
 <section id="scdnr-estuarine-trawls-2" class="level4">
 <h4 class="anchored" data-anchor-id="scdnr-estuarine-trawls-2">SCDNR Estuarine Trawls</h4>
+<summary>
+Click to expand
+</summary>
 <div class="cell">
 <div id="tbl-size-white-sc" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1829,58 +1904,42 @@ Table&nbsp;3.6: White shrimp (SC) size summary
 </figure>
 </div>
 </div>
+
 </section>
 </section>
 </section>
-<section id="graphics---size-distributions" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="graphics---size-distributions"><span class="header-section-number">3.4</span> Graphics - Size Distributions</h2>
-<p>South Carolina’s file has over 300,000 points, which makes for a beeswarm plot that is very large and slow to render. Georgia’s file is “only” 65k and even it is too slow to render beeswarm plots. So rather than graphing the full datasets, I have randomly sampled 10,000 rows from GA and 15,000 rows from SC (because SC has three species).</p>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-beeswarm-ga" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-beeswarm-ga-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="raw_subad_files/figure-html/fig-beeswarm-ga-1.png" class="img-fluid figure-img" width="672">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-beeswarm-ga-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.1: Beeswarm plot of subadult shrimp length for the GADNR data. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center.
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-beeswarm-sc" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-beeswarm-sc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="raw_subad_files/figure-html/fig-beeswarm-sc-1.png" class="img-fluid figure-img" width="672">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-beeswarm-sc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.2: Beeswarm plot of subadult shrimp length for the SCDNR data. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center.
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="graphics---abundancecpue-boxplots" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="graphics---abundancecpue-boxplots"><span class="header-section-number">3.5</span> Graphics - Abundance/CPUE Boxplots</h2>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-abund-cpue" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-abund-cpue-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="raw_subad_files/figure-html/fig-abund-cpue-1.png" class="img-fluid figure-img" width="672">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-abund-cpue-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.3: Boxplots representing shrimp abundance (as either CPUE or count, depending on the survey) by month. Note the log10-scaled y-axes.
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>Both surveys (unsurprisingly) show the same temporal pattern of abundance - brown shrimp most abundant in June and July, also high in August; and May in SC. For white shrimp, we see a dip in June and (less so) July.</p>
+<section id="about" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="about"><span class="header-section-number">3.6</span> About</h2>
+<p><strong>Input <code>.qmd</code> file</strong> for this section was:</p>
+<p>raw_subad.qmd</p>
+<p><strong>Input data file(s):</strong></p>
+<ul>
+<li><code>GADNR_EMTS_PenaeidShrimp_Brown_Count_thru2021.xlsx</code></li>
+<li><code>GADNR_EMTS_PenaeidShrimp_White_Count_thru2021.xlsx</code></li>
+<li><code>GADNR_EMTS_PenaeidShrimp_SIZE_thru2021.xlsx</code>, sheet = “Brown shrimp”</li>
+<li><code>GADNR_EMTS_PenaeidShrimp_SIZE_thru2021.xlsx</code>, sheet = “White Shrimp”</li>
+<li><code>SCDNR_EstuarineTrawlShrimpCPUE.csv</code></li>
+<li><code>SCDNR_EstuarineTrawlShrimpSize.csv</code></li>
+</ul>
+<p><strong>Generated data file(s):</strong> Modified data frames were written to <code>subadult_dfs.RData</code>:</p>
+<ul>
+<li><code>subad_ga_count</code></li>
+<li><code>subad_ga_size</code></li>
+<li><code>subad_sc_cpue</code></li>
+<li><code>subad_sc_size</code></li>
+</ul>
+<p><strong>Modifications to data:</strong></p>
+<ul>
+<li>All files: changed <code>Species</code> from provided scientific names to ‘brown’, ‘white’, and ‘pink’.<br>
+</li>
+<li>GA counts file: extracted date from the Reference Number, as date was not its own field.<br>
+</li>
+<li>SC size file: filtered data to remove lengths &gt;1000. There were 3 such rows.</li>
+</ul>
+<p><strong>Other notes about data:</strong></p>
+<ul>
+<li>In GA count files, early exploration not shown here indicated that <code>NumperLb</code> was mis-calculated when the sample weight wasn’t the typical 1360.78 - calculations in the spreadsheet used that value anyway. This issue seemed to happen when catch was low.</li>
+</ul>
 
 
 </section>

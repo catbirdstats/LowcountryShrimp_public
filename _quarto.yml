@@ -59,6 +59,8 @@ format:
     theme: cosmo
   pdf:
     documentclass: scrreprt
+    fig-pos: "H"
+    tbl-pos: "H"
 
 
 
