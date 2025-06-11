@@ -198,6 +198,9 @@ sz_sc_wht <- subad_sc_size |>
 
 #### GADNR EMTS
 
+
+<details>
+
 ::: {.content-visible when-format="html"}
 <summary>Click to expand</summary>
 :::
@@ -211,6 +214,9 @@ skimr::skim_without_charts(subad_ga_size_brown)
 </details>
 
 #### SCDNR Estuarine Trawls
+
+
+<details>
 
 ::: {.content-visible when-format="html"}
 <summary>Click to expand</summary>
@@ -228,6 +234,9 @@ skimr::skim_without_charts(sz_sc_brn)
 
 #### GADNR EMTS
 
+<details>
+
+
 ::: {.content-visible when-format="html"}
 <summary>Click to expand</summary>
 :::
@@ -241,6 +250,9 @@ skimr::skim_without_charts(subad_ga_size_white)
 </details>
 
 #### SCDNR Estuarine Trawls
+
+<details>
+
 
 ::: {.content-visible when-format="html"}
 <summary>Click to expand</summary>

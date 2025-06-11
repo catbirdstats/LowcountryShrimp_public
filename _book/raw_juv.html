@@ -124,7 +124,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./raw_postlarv.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Postlarval</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Postlarvae</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -142,7 +142,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./raw_ad_seamap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Adults - fishery-independent</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Adults - fisheries-independent</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -332,14 +332,15 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#datasets" id="toc-datasets" class="nav-link active" data-scroll-target="#datasets"><span class="header-section-number">2.1</span> Datasets</a></li>
-  <li><a href="#tabular-summaries-of-abundance" id="toc-tabular-summaries-of-abundance" class="nav-link" data-scroll-target="#tabular-summaries-of-abundance"><span class="header-section-number">2.2</span> Tabular summaries of abundance</a></li>
-  <li><a href="#tabular-summaries-of-size" id="toc-tabular-summaries-of-size" class="nav-link" data-scroll-target="#tabular-summaries-of-size"><span class="header-section-number">2.3</span> Tabular summaries of size</a>
+  <li><a href="#graphics---size-distributions" id="toc-graphics---size-distributions" class="nav-link" data-scroll-target="#graphics---size-distributions"><span class="header-section-number">2.2</span> Graphics - Size Distributions</a></li>
+  <li><a href="#graphics---abundancecpue-boxplots" id="toc-graphics---abundancecpue-boxplots" class="nav-link" data-scroll-target="#graphics---abundancecpue-boxplots"><span class="header-section-number">2.3</span> Graphics - Abundance/CPUE Boxplots</a></li>
+  <li><a href="#tabular-summaries-of-abundance" id="toc-tabular-summaries-of-abundance" class="nav-link" data-scroll-target="#tabular-summaries-of-abundance"><span class="header-section-number">2.4</span> Tabular summaries of abundance</a></li>
+  <li><a href="#tabular-summaries-of-size" id="toc-tabular-summaries-of-size" class="nav-link" data-scroll-target="#tabular-summaries-of-size"><span class="header-section-number">2.5</span> Tabular summaries of size</a>
   <ul class="collapse">
-  <li><a href="#brown-shrimp" id="toc-brown-shrimp" class="nav-link" data-scroll-target="#brown-shrimp"><span class="header-section-number">2.3.1</span> Brown Shrimp</a></li>
-  <li><a href="#white-shrimp" id="toc-white-shrimp" class="nav-link" data-scroll-target="#white-shrimp"><span class="header-section-number">2.3.2</span> White Shrimp</a></li>
+  <li><a href="#brown-shrimp" id="toc-brown-shrimp" class="nav-link" data-scroll-target="#brown-shrimp"><span class="header-section-number">2.5.1</span> Brown Shrimp</a></li>
+  <li><a href="#white-shrimp" id="toc-white-shrimp" class="nav-link" data-scroll-target="#white-shrimp"><span class="header-section-number">2.5.2</span> White Shrimp</a></li>
   </ul></li>
-  <li><a href="#graphics---size-distributions" id="toc-graphics---size-distributions" class="nav-link" data-scroll-target="#graphics---size-distributions"><span class="header-section-number">2.4</span> Graphics - Size Distributions</a></li>
-  <li><a href="#graphics---abundancecpue-boxplots" id="toc-graphics---abundancecpue-boxplots" class="nav-link" data-scroll-target="#graphics---abundancecpue-boxplots"><span class="header-section-number">2.5</span> Graphics - Abundance/CPUE Boxplots</a></li>
+  <li><a href="#about" id="toc-about" class="nav-link" data-scroll-target="#about"><span class="header-section-number">2.6</span> About</a></li>
   </ul>
 </nav>
     </div>
@@ -368,14 +369,66 @@ ul.task-list li input[type="checkbox"] {
 <section id="datasets" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="datasets"><span class="header-section-number">2.1</span> Datasets</h2>
 <p>There are two datasets that represent juveniles: SCDNR’s Creek Trawls, and NIW NERR’s Oyster Landing seines. We will explore each.</p>
-<p>Pull out date characteristics and deal with column types if necessary; change Species columns to common names.</p>
-<p>(OL’s temp and salinity columns are character, due to entries of “DataGap”. Weight has an entry that is only a decimal point. I’ll turn these to NAs manually before forcing to numeric so that if anything else is odd (e.g.&nbsp;two decimal points in a number) I’ll get a warning about the coercion and can look into it.)</p>
-<p>Count and size are in the same file for Oyster Landing - up to 100 lengths taken, in columns. Probably should split this and pivot the lengths to long.</p>
 </section>
-<section id="tabular-summaries-of-abundance" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="tabular-summaries-of-abundance"><span class="header-section-number">2.2</span> Tabular summaries of abundance</h2>
+<section id="graphics---size-distributions" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="graphics---size-distributions"><span class="header-section-number">2.2</span> Graphics - Size Distributions</h2>
+<p>Beeswarm plots can be slow to render so I have subsetted both data frames here to 15,000 rows.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-beeswarm-sc" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-beeswarm-sc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="raw_juv_files/figure-html/fig-beeswarm-sc-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-beeswarm-sc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.1: Beeswarm plot of juvenile shrimp length for the SCDNR data. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-beeswarm-ol" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-beeswarm-ol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="raw_juv_files/figure-html/fig-beeswarm-ol-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-beeswarm-ol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.2: Beeswarm plot of juvenile shrimp length for the Oyster Landing seine data. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Looks like OL seines are generally catching smaller individuals of both species than the SCDNR creek trawls.</p>
+</section>
+<section id="graphics---abundancecpue-boxplots" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="graphics---abundancecpue-boxplots"><span class="header-section-number">2.3</span> Graphics - Abundance/CPUE Boxplots</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-abund-cpue" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-abund-cpue-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="raw_juv_files/figure-html/fig-abund-cpue-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-abund-cpue-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.3: Boxplots representing shrimp abundance (as either CPUE or count, depending on the survey) by month. Note the log10-scaled y-axes.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Both surveys (unsurprisingly) show the same temporal pattern of abundance - aztecus in May/June, with setiferus later in the year.</p>
+</section>
+<section id="tabular-summaries-of-abundance" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="tabular-summaries-of-abundance"><span class="header-section-number">2.4</span> Tabular summaries of abundance</h2>
 <section id="scdnr-creek-trawls" class="level4">
 <h4 class="anchored" data-anchor-id="scdnr-creek-trawls">SCDNR Creek Trawls</h4>
+<details>
+<summary>
+Click to expand
+</summary>
 <div class="cell">
 <div id="tbl-abundance-sc" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -634,9 +687,14 @@ Table&nbsp;2.1: Abundance (SC) data frame summary
 </figure>
 </div>
 </div>
+</details>
 </section>
 <section id="oyster-landing-seines" class="level4">
 <h4 class="anchored" data-anchor-id="oyster-landing-seines">Oyster Landing Seines</h4>
+<details>
+<summary>
+Click to expand
+</summary>
 <div class="cell">
 <div id="tbl-abundance-ol" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -911,14 +969,19 @@ Table&nbsp;2.2: Abundance (Oyster Landing) data frame summary
 </figure>
 </div>
 </div>
+</details>
 </section>
 </section>
-<section id="tabular-summaries-of-size" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="tabular-summaries-of-size"><span class="header-section-number">2.3</span> Tabular summaries of size</h2>
-<section id="brown-shrimp" class="level3" data-number="2.3.1">
-<h3 data-number="2.3.1" class="anchored" data-anchor-id="brown-shrimp"><span class="header-section-number">2.3.1</span> Brown Shrimp</h3>
+<section id="tabular-summaries-of-size" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="tabular-summaries-of-size"><span class="header-section-number">2.5</span> Tabular summaries of size</h2>
+<section id="brown-shrimp" class="level3" data-number="2.5.1">
+<h3 data-number="2.5.1" class="anchored" data-anchor-id="brown-shrimp"><span class="header-section-number">2.5.1</span> Brown Shrimp</h3>
 <section id="scdnr-creek-trawls-1" class="level4">
 <h4 class="anchored" data-anchor-id="scdnr-creek-trawls-1">SCDNR Creek Trawls</h4>
+<details>
+<summary>
+Click to expand
+</summary>
 <div class="cell">
 <div id="tbl-size-brown-sc" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1217,9 +1280,14 @@ Table&nbsp;2.3: Brown shrimp (SC) size summary
 </figure>
 </div>
 </div>
+</details>
 </section>
 <section id="oyster-landing-seines-1" class="level4">
 <h4 class="anchored" data-anchor-id="oyster-landing-seines-1">Oyster Landing Seines</h4>
+<details>
+<summary>
+Click to expand
+</summary>
 <div class="cell">
 <div id="tbl-size-brown-ol" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1492,12 +1560,17 @@ Table&nbsp;2.4: Brown shrimp (Oyster Landing) size summary
 </figure>
 </div>
 </div>
+</details>
 </section>
 </section>
-<section id="white-shrimp" class="level3" data-number="2.3.2">
-<h3 data-number="2.3.2" class="anchored" data-anchor-id="white-shrimp"><span class="header-section-number">2.3.2</span> White Shrimp</h3>
+<section id="white-shrimp" class="level3" data-number="2.5.2">
+<h3 data-number="2.5.2" class="anchored" data-anchor-id="white-shrimp"><span class="header-section-number">2.5.2</span> White Shrimp</h3>
 <section id="scdnr-creek-trawls-2" class="level4">
 <h4 class="anchored" data-anchor-id="scdnr-creek-trawls-2">SCDNR Creek Trawls</h4>
+<details>
+<summary>
+Click to expand
+</summary>
 <div class="cell">
 <div id="tbl-size-white-sc" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1796,9 +1869,14 @@ Table&nbsp;2.5: White shrimp (SC) size summary
 </figure>
 </div>
 </div>
+</details>
 </section>
 <section id="oyster-landing-seines-2" class="level4">
 <h4 class="anchored" data-anchor-id="oyster-landing-seines-2">Oyster Landing Seines</h4>
+<details>
+<summary>
+Click to expand
+</summary>
 <div class="cell">
 <div id="tbl-size-white-ol" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -2071,60 +2149,38 @@ Table&nbsp;2.6: White shrimp (Oyster Landing) size summary
 </figure>
 </div>
 </div>
+</details>
 </section>
 </section>
 </section>
-<section id="graphics---size-distributions" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="graphics---size-distributions"><span class="header-section-number">2.4</span> Graphics - Size Distributions</h2>
-<p>Beeswarm plots can be slow to render so I have subsetted both data frames here to 15,000 rows.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-beeswarm-sc" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-beeswarm-sc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="raw_juv_files/figure-html/fig-beeswarm-sc-1.png" class="img-fluid figure-img" width="672">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-beeswarm-sc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.1: Beeswarm plot of juvenile shrimp length for the SCDNR data. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center.
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-beeswarm-ol" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-beeswarm-ol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="raw_juv_files/figure-html/fig-beeswarm-ol-1.png" class="img-fluid figure-img" width="672">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-beeswarm-ol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.2: Beeswarm plot of juvenile shrimp length for the Oyster Landing seine data. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center.
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>There was a typo in the original files - Sample 748, from 2017-07-20, LEN21, value of 221. [confirmed from reserve that this was a typo; updated to ‘21’ in ’_corrected’ file, september 2024 and then file with (kac 2025-06-02) appended to name]</p>
-<p>Looks like OL seines are generally catching smaller individuals of both species than the SCDNR creek trawls.</p>
-</section>
-<section id="graphics---abundancecpue-boxplots" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="graphics---abundancecpue-boxplots"><span class="header-section-number">2.5</span> Graphics - Abundance/CPUE Boxplots</h2>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-abund-cpue" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-abund-cpue-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="raw_juv_files/figure-html/fig-abund-cpue-1.png" class="img-fluid figure-img" width="672">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-abund-cpue-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.3: Boxplots representing shrimp abundance (as either CPUE or count, depending on the survey) by month. Note the log10-scaled y-axes.
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>Both surveys (unsurprisingly) show the same temporal pattern of abundance - aztecus in May/June, with setiferus later in the year.</p>
+<section id="about" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="about"><span class="header-section-number">2.6</span> About</h2>
+<p><strong>Input <code>.qmd</code> file</strong> for this section was:</p>
+<p>raw_juv.qmd</p>
+<p><strong>Input data file(s):</strong></p>
+<ul>
+<li><code>SCDNR_CreekTrawlShrimpCPUE.csv</code></li>
+<li><code>SCDNR_CreekTrawlShrimpSize.csv</code></li>
+<li><code>Oyster Landing Seine Shrimp Dataset - 1984-2023 (BWP, 2025-04-24)(kac 2025-06-02).csv</code></li>
+</ul>
+<p><strong>Generated data file(s):</strong> Modified data frames were written to <code>juvenile_dfs.RData</code>:</p>
+<ul>
+<li><code>juv_sc_cpue</code></li>
+<li><code>juv_sc_size</code></li>
+<li><code>juv_ol_count</code></li>
+<li><code>juv_ol_size</code></li>
+</ul>
+<p><strong>Modifications to data:</strong></p>
+<ul>
+<li>All files: changed <code>Species</code> from provided scientific names to ‘brown’, ‘white’, and ‘pink’.<br>
+</li>
+<li>Oyster Landing file: removed ‘DataGap’ from temp, salinity, and weight columns and turned these to numeric. Split data into counts data frame and sizes data frame. Pivoted sizes to long format.<br>
+</li>
+</ul>
+<p><strong>Other notes about data:</strong></p>
+<ul>
+<li>Oyster Landing file used had a manual correction from Kim; original file had a typo - Sample 748, from 2017-07-20, LEN21, value of 221. Changed to 21.</li>
+</ul>
 
 
 </section>
@@ -2541,8 +2597,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./raw_postlarv.html" class="pagination-link" aria-label="Postlarval">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Postlarval</span></span>
+      <a href="./raw_postlarv.html" class="pagination-link" aria-label="Postlarvae">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Postlarvae</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

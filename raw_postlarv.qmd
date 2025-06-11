@@ -1,4 +1,4 @@
-# Postlarval  
+# Postlarvae  
 
 ```{r}
 library(tidyverse)
@@ -20,7 +20,7 @@ postlarv_size <- read_xlsx(here::here(in_path, "Penaeus_Postlarval_Lengths_NInle
 
 ##  Dataset  
 
-The only dataset representing postlarvae is from North Inlet-Winyah Bay. Two files are used: `Penaeus_PostLarvae_NInlet_1981_2017_wide_kac.csv` and `Penaeus_Postlarval_Lengths_NInlet_1981 - 2017.xlsx`. The latter file contains sizes, which were explored in this portion of the project but not expanded upon during later compiling stages. 
+The only dataset representing postlarvae is from North Inlet-Winyah Bay. 
 
 
 ```{r}
@@ -54,31 +54,6 @@ save(postlarv_abund, postlarv_size,
      compress = "xz")
 ```
 
-## Tabular summary of abundance   
-
-```{r}
-#| label: tbl-abundance
-#| tbl-cap: "Abundance data frame summary"
-skimr::skim_without_charts(postlarv_abund)
-```
-
-## Tabular summaries of size   
-
-### Brown Shrimp  
-
-```{r}
-#| label: tbl-size-brown
-#| tbl-cap: "Brown shrimp size summary"
-skimr::skim_without_charts(postlarv_size_brown)
-```
-
-### White Shrimp  
-
-```{r}
-#| label: tbl-size-white
-#| tbl-cap: "White shrimp size summary"
-skimr::skim_without_charts(postlarv_size_white)
-```
 
 ## Graphics - Size Distributions  
 
@@ -177,3 +152,79 @@ p1 + p2
 ```
 
 So even though we're seeing that pattern in brown shrimp of being so much bigger early in the year and smaller later, they're just really not all that common later in the year.  
+
+## Tabular summary of abundance   
+
+<details>
+
+::: {.content-visible when-format="html"}
+<summary>Click to expand</summary>
+:::
+
+```{r}
+#| label: tbl-abundance
+#| tbl-cap: "Abundance data frame summary"
+skimr::skim_without_charts(postlarv_abund)
+```
+
+</details>
+
+## Tabular summaries of size   
+
+### Brown Shrimp  
+
+<details>
+
+::: {.content-visible when-format="html"}
+<summary>Click to expand</summary>
+:::
+
+```{r}
+#| label: tbl-size-brown
+#| tbl-cap: "Brown shrimp size summary"
+skimr::skim_without_charts(postlarv_size_brown)
+```
+
+</details>
+
+### White Shrimp  
+
+<details>
+
+::: {.content-visible when-format="html"}
+<summary>Click to expand</summary>
+:::
+
+```{r}
+#| label: tbl-size-white
+#| tbl-cap: "White shrimp size summary"
+skimr::skim_without_charts(postlarv_size_white)
+```
+
+</details>
+
+
+## About
+
+**Input `.qmd` file** for this section was:
+
+`r xfun::with_ext(knitr::current_input(), "qmd")`
+
+**Input data file(s):**
+
+-   `Penaeus_PostLarvae_NInlet_1981_2017_wide_kac.csv`
+-   `Penaeus_Postlarval_Lengths_NInlet_1981 - 2017.xlsx`
+
+**Generated data file(s):** Modified data frames were written to `postlarval_dfs.RData`:
+
+-   `postlarv_abund`
+-   `postlarv_size`
+
+
+**Modifications to data:**
+
+-   minor re-naming: inserted underscores rather than spaces; changed `Shrimp Species` to `Species`.  
+
+**Other notes about data:**
+
+none  

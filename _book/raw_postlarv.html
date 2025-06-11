@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Lowcountry Shrimp Dataset Deep Dive - 1&nbsp; Postlarval</title>
+<title>Lowcountry Shrimp Dataset Deep Dive - 1&nbsp; Postlarvae</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -81,7 +81,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./shrimp_data_exploration.html">Shrimp Data Exploration</a></li><li class="breadcrumb-item"><a href="./raw_postlarv.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Postlarval</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./shrimp_data_exploration.html">Shrimp Data Exploration</a></li><li class="breadcrumb-item"><a href="./raw_postlarv.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Postlarvae</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -124,7 +124,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./raw_postlarv.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Postlarval</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Postlarvae</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -142,7 +142,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./raw_ad_seamap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Adults - fishery-independent</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Adults - fisheries-independent</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -332,23 +332,24 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#dataset" id="toc-dataset" class="nav-link active" data-scroll-target="#dataset"><span class="header-section-number">1.1</span> Dataset</a></li>
-  <li><a href="#tabular-summary-of-abundance" id="toc-tabular-summary-of-abundance" class="nav-link" data-scroll-target="#tabular-summary-of-abundance"><span class="header-section-number">1.2</span> Tabular summary of abundance</a></li>
-  <li><a href="#tabular-summaries-of-size" id="toc-tabular-summaries-of-size" class="nav-link" data-scroll-target="#tabular-summaries-of-size"><span class="header-section-number">1.3</span> Tabular summaries of size</a>
+  <li><a href="#graphics---size-distributions" id="toc-graphics---size-distributions" class="nav-link" data-scroll-target="#graphics---size-distributions"><span class="header-section-number">1.2</span> Graphics - Size Distributions</a></li>
+  <li><a href="#graphics---abundance-and-size-boxplots" id="toc-graphics---abundance-and-size-boxplots" class="nav-link" data-scroll-target="#graphics---abundance-and-size-boxplots"><span class="header-section-number">1.3</span> Graphics - Abundance and Size Boxplots</a></li>
+  <li><a href="#tabular-summary-of-abundance" id="toc-tabular-summary-of-abundance" class="nav-link" data-scroll-target="#tabular-summary-of-abundance"><span class="header-section-number">1.4</span> Tabular summary of abundance</a></li>
+  <li><a href="#tabular-summaries-of-size" id="toc-tabular-summaries-of-size" class="nav-link" data-scroll-target="#tabular-summaries-of-size"><span class="header-section-number">1.5</span> Tabular summaries of size</a>
   <ul class="collapse">
-  <li><a href="#brown-shrimp" id="toc-brown-shrimp" class="nav-link" data-scroll-target="#brown-shrimp"><span class="header-section-number">1.3.1</span> Brown Shrimp</a></li>
-  <li><a href="#white-shrimp" id="toc-white-shrimp" class="nav-link" data-scroll-target="#white-shrimp"><span class="header-section-number">1.3.2</span> White Shrimp</a></li>
+  <li><a href="#brown-shrimp" id="toc-brown-shrimp" class="nav-link" data-scroll-target="#brown-shrimp"><span class="header-section-number">1.5.1</span> Brown Shrimp</a></li>
+  <li><a href="#white-shrimp" id="toc-white-shrimp" class="nav-link" data-scroll-target="#white-shrimp"><span class="header-section-number">1.5.2</span> White Shrimp</a></li>
   </ul></li>
-  <li><a href="#graphics---size-distributions" id="toc-graphics---size-distributions" class="nav-link" data-scroll-target="#graphics---size-distributions"><span class="header-section-number">1.4</span> Graphics - Size Distributions</a></li>
-  <li><a href="#graphics---abundance-and-size-boxplots" id="toc-graphics---abundance-and-size-boxplots" class="nav-link" data-scroll-target="#graphics---abundance-and-size-boxplots"><span class="header-section-number">1.5</span> Graphics - Abundance and Size Boxplots</a></li>
+  <li><a href="#about" id="toc-about" class="nav-link" data-scroll-target="#about"><span class="header-section-number">1.6</span> About</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./shrimp_data_exploration.html">Shrimp Data Exploration</a></li><li class="breadcrumb-item"><a href="./raw_postlarv.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Postlarval</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./shrimp_data_exploration.html">Shrimp Data Exploration</a></li><li class="breadcrumb-item"><a href="./raw_postlarv.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Postlarvae</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Postlarval</span></h1>
+<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Postlarvae</span></h1>
 </div>
 
 
@@ -367,10 +368,95 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="dataset" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="dataset"><span class="header-section-number">1.1</span> Dataset</h2>
-<p>The only dataset representing postlarvae is from North Inlet-Winyah Bay. Two files are used: <code>Penaeus_PostLarvae_NInlet_1981_2017_wide_kac.csv</code> and <code>Penaeus_Postlarval_Lengths_NInlet_1981 - 2017.xlsx</code>. The latter file contains sizes, which were explored in this portion of the project but not expanded upon during later compiling stages.</p>
+<p>The only dataset representing postlarvae is from North Inlet-Winyah Bay.</p>
 </section>
-<section id="tabular-summary-of-abundance" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="tabular-summary-of-abundance"><span class="header-section-number">1.2</span> Tabular summary of abundance</h2>
+<section id="graphics---size-distributions" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="graphics---size-distributions"><span class="header-section-number">1.2</span> Graphics - Size Distributions</h2>
+<p>In these plots, there is a panel for each shrimp species. Size is represented on the y-axis, and a cloud of points called a “beeswarm” has representation for every data point. Each point is colored by the numeric month in which the individual was caught, allowing us to see differences in size at different parts of the year and life-cycle.</p>
+<p>There are three different measures of size in this dataset: Rostrum length, Telson length, and Uropod length. A graph is below for each.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-beeswarm-rostrum" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-beeswarm-rostrum-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="raw_postlarv_files/figure-html/fig-beeswarm-rostrum-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-beeswarm-rostrum-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.1: Beeswarm plot of rostrum length in postlarval shrimp. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-beeswarm-telson" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-beeswarm-telson-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="raw_postlarv_files/figure-html/fig-beeswarm-telson-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-beeswarm-telson-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.2: Beeswarm plot of telson length in postlarval shrimp. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-beeswarm-uropod" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-beeswarm-uropod-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="raw_postlarv_files/figure-html/fig-beeswarm-uropod-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-beeswarm-uropod-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.3: Beeswarm plot of uropod length in postlarval shrimp. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>With brown shrimp, looks like we’ve got a couple of size classes in here - bigger shrimp earlier in the year, and smaller ones that are mostly later months.</p>
+<p>The plot below shows the entire time series, with date (as year-month) along the x-axis and uropod length on the y-axis. Points are again colored by month.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-length-timeseries" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-length-timeseries-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="raw_postlarv_files/figure-html/fig-length-timeseries-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-length-timeseries-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.4: Time series plot of uropod length in postlarval shrimp. Points represent measurements of individual shrimp, and are colored by the month in which they were captured.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="graphics---abundance-and-size-boxplots" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="graphics---abundance-and-size-boxplots"><span class="header-section-number">1.3</span> Graphics - Abundance and Size Boxplots</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-abund-size" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-abund-size-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="raw_postlarv_files/figure-html/fig-abund-size-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-abund-size-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.5: Boxplots representing shrimp size and abundance Note the log10-scaled y-axes.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>So even though we’re seeing that pattern in brown shrimp of being so much bigger early in the year and smaller later, they’re just really not all that common later in the year.</p>
+</section>
+<section id="tabular-summary-of-abundance" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="tabular-summary-of-abundance"><span class="header-section-number">1.4</span> Tabular summary of abundance</h2>
+<details>
+<summary>
+Click to expand
+</summary>
 <div class="cell">
 <div id="tbl-abundance" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -749,11 +835,16 @@ Table&nbsp;1.1: Abundance data frame summary
 </figure>
 </div>
 </div>
+</details>
 </section>
-<section id="tabular-summaries-of-size" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="tabular-summaries-of-size"><span class="header-section-number">1.3</span> Tabular summaries of size</h2>
-<section id="brown-shrimp" class="level3" data-number="1.3.1">
-<h3 data-number="1.3.1" class="anchored" data-anchor-id="brown-shrimp"><span class="header-section-number">1.3.1</span> Brown Shrimp</h3>
+<section id="tabular-summaries-of-size" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="tabular-summaries-of-size"><span class="header-section-number">1.5</span> Tabular summaries of size</h2>
+<section id="brown-shrimp" class="level3" data-number="1.5.1">
+<h3 data-number="1.5.1" class="anchored" data-anchor-id="brown-shrimp"><span class="header-section-number">1.5.1</span> Brown Shrimp</h3>
+<details>
+<summary>
+Click to expand
+</summary>
 <div class="cell">
 <div id="tbl-size-brown" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1074,9 +1165,14 @@ Table&nbsp;1.2: Brown shrimp size summary
 </figure>
 </div>
 </div>
+</details>
 </section>
-<section id="white-shrimp" class="level3" data-number="1.3.2">
-<h3 data-number="1.3.2" class="anchored" data-anchor-id="white-shrimp"><span class="header-section-number">1.3.2</span> White Shrimp</h3>
+<section id="white-shrimp" class="level3" data-number="1.5.2">
+<h3 data-number="1.5.2" class="anchored" data-anchor-id="white-shrimp"><span class="header-section-number">1.5.2</span> White Shrimp</h3>
+<details>
+<summary>
+Click to expand
+</summary>
 <div class="cell">
 <div id="tbl-size-white" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1397,88 +1493,29 @@ Table&nbsp;1.3: White shrimp size summary
 </figure>
 </div>
 </div>
+</details>
 </section>
 </section>
-<section id="graphics---size-distributions" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="graphics---size-distributions"><span class="header-section-number">1.4</span> Graphics - Size Distributions</h2>
-<p>In these plots, there is a panel for each shrimp species. Size is represented on the y-axis, and a cloud of points called a “beeswarm” has representation for every data point. Each point is colored by the numeric month in which the individual was caught, allowing us to see differences in size at different parts of the year and life-cycle.</p>
-<p>There are three different measures of size in this dataset: Rostrum length, Telson length, and Uropod length. A graph is below for each.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-beeswarm-rostrum" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-beeswarm-rostrum-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="raw_postlarv_files/figure-html/fig-beeswarm-rostrum-1.png" class="img-fluid figure-img" width="672">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-beeswarm-rostrum-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.1: Beeswarm plot of rostrum length in postlarval shrimp. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center.
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-beeswarm-telson" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-beeswarm-telson-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="raw_postlarv_files/figure-html/fig-beeswarm-telson-1.png" class="img-fluid figure-img" width="672">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-beeswarm-telson-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.2: Beeswarm plot of telson length in postlarval shrimp. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center.
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-beeswarm-uropod" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-beeswarm-uropod-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="raw_postlarv_files/figure-html/fig-beeswarm-uropod-1.png" class="img-fluid figure-img" width="672">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-beeswarm-uropod-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.3: Beeswarm plot of uropod length in postlarval shrimp. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center.
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>With brown shrimp, looks like we’ve got a couple of size classes in here - bigger shrimp earlier in the year, and smaller ones that are mostly later months.</p>
-<p>The plot below shows the entire time series, with date (as year-month) along the x-axis and uropod length on the y-axis. Points are again colored by month.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-length-timeseries" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-length-timeseries-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="raw_postlarv_files/figure-html/fig-length-timeseries-1.png" class="img-fluid figure-img" width="672">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-length-timeseries-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.4: Time series plot of uropod length in postlarval shrimp. Points represent measurements of individual shrimp, and are colored by the month in which they were captured.
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="graphics---abundance-and-size-boxplots" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="graphics---abundance-and-size-boxplots"><span class="header-section-number">1.5</span> Graphics - Abundance and Size Boxplots</h2>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-abund-size" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-abund-size-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="raw_postlarv_files/figure-html/fig-abund-size-1.png" class="img-fluid figure-img" width="672">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-abund-size-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.5: Boxplots representing shrimp size and abundance Note the log10-scaled y-axes.
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>So even though we’re seeing that pattern in brown shrimp of being so much bigger early in the year and smaller later, they’re just really not all that common later in the year.</p>
+<section id="about" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="about"><span class="header-section-number">1.6</span> About</h2>
+<p><strong>Input <code>.qmd</code> file</strong> for this section was:</p>
+<p>raw_postlarv.qmd</p>
+<p><strong>Input data file(s):</strong></p>
+<ul>
+<li><code>Penaeus_PostLarvae_NInlet_1981_2017_wide_kac.csv</code></li>
+<li><code>Penaeus_Postlarval_Lengths_NInlet_1981 - 2017.xlsx</code></li>
+</ul>
+<p><strong>Generated data file(s):</strong> Modified data frames were written to <code>postlarval_dfs.RData</code>:</p>
+<ul>
+<li><code>postlarv_abund</code></li>
+<li><code>postlarv_size</code></li>
+</ul>
+<p><strong>Modifications to data:</strong></p>
+<ul>
+<li>minor re-naming: inserted underscores rather than spaces; changed <code>Shrimp Species</code> to <code>Species</code>.</li>
+</ul>
+<p><strong>Other notes about data:</strong></p>
+<p>none</p>
 
 
 </section>
