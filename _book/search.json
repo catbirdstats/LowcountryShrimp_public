@@ -242,7 +242,40 @@
     "href": "raw_ad_seamap.html",
     "title": "4  Adults - fisheries-independent",
     "section": "",
-    "text": "SEAMAP info here",
+    "text": "4.1 Datasets\nThere are two SEAMAP files: one of events, and one of catch data.\nLooks like when no shrimp were caught in a net, the species is left blank and count and weight are both 0. So I’ll widen the data frame, filling in 0s for NAs. Then lengthen back out so 0s are all accounted for.\nAlso filtering to “INNER” depth zone.\nWeight and count were both recorded, even in subsamples, BUT “when large numbers of a species occurred in the processed catch”, all individuals were weighed; a subsample was processed for abundance (typically 32-64 individuals); and count was estimated from the weight.\nFOR THAT REASON I will use weights in my analyses, because it is the most likely piece to have been measured rather than estimated.",
+    "crumbs": [
+      "Shrimp Data Exploration",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Adults - fisheries-independent</span>"
+    ]
+  },
+  {
+    "objectID": "raw_ad_seamap.html#graphics---abundancelandingscpue-boxplots",
+    "href": "raw_ad_seamap.html#graphics---abundancelandingscpue-boxplots",
+    "title": "4  Adults - fisheries-independent",
+    "section": "4.2 Graphics - Abundance/Landings/CPUE Boxplots",
+    "text": "4.2 Graphics - Abundance/Landings/CPUE Boxplots\nSTILL IN PROGRESS",
+    "crumbs": [
+      "Shrimp Data Exploration",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Adults - fisheries-independent</span>"
+    ]
+  },
+  {
+    "objectID": "raw_ad_seamap.html#tabular-summaries-of-abundance",
+    "href": "raw_ad_seamap.html#tabular-summaries-of-abundance",
+    "title": "4  Adults - fisheries-independent",
+    "section": "4.3 Tabular summaries of abundance",
+    "text": "4.3 Tabular summaries of abundance\n\nBrown Shrimp\n\n\nClick to expand\n\n\n\n\n\nTable 4.1: Brown shrimp SEAMAP summary\n\n\n\n\nData summary\n\n\nName\nfilter(adsm_long, species…\n\n\nNumber of rows\n11310\n\n\nNumber of columns\n9\n\n\n_______________________\n\n\n\nColumn type frequency:\n\n\n\ncharacter\n2\n\n\nDate\n1\n\n\nnumeric\n6\n\n\n________________________\n\n\n\nGroup variables\nNone\n\n\n\nVariable type: character\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nempty\nn_unique\nwhitespace\n\n\n\n\nRegion\n0\n1\n7\n14\n0\n4\n0\n\n\nspecies\n0\n1\n5\n5\n0\n1\n0\n\n\n\nVariable type: Date\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nmedian\nn_unique\n\n\n\n\nDate\n0\n1\n1989-04-12\n2022-11-16\n2005-07-19\n994\n\n\n\nVariable type: numeric\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmean\nsd\np0\np25\np50\np75\np100\n\n\n\n\nYear\n0\n1\n2004.80\n9.08\n1989\n1997\n2005\n2012.00\n2022.0\n\n\nMonth\n0\n1\n7.30\n2.41\n4\n5\n7\n10.00\n11.0\n\n\nEvent\n0\n1\n2005105.07\n9090.43\n1989001\n1997302\n2005309\n2012542.50\n2022559.0\n\n\nCollection\n0\n1\n20048332.61\n90798.12\n19890001\n19970302\n20050310\n20120542.75\n20220559.0\n\n\nWeight\n0\n1\n0.18\n0.92\n0\n0\n0\n0.03\n30.4\n\n\nCount\n0\n1\n11.64\n69.76\n0\n0\n0\n2.00\n2983.0\n\n\n\n\n\n\n\n\n\n\n\nWhite Shrimp\n\n\nClick to expand\n\n\n\n\n\nTable 4.2: White shrimp SEAMAP summary\n\n\n\n\nData summary\n\n\nName\nfilter(adsm_long, species…\n\n\nNumber of rows\n11310\n\n\nNumber of columns\n9\n\n\n_______________________\n\n\n\nColumn type frequency:\n\n\n\ncharacter\n2\n\n\nDate\n1\n\n\nnumeric\n6\n\n\n________________________\n\n\n\nGroup variables\nNone\n\n\n\nVariable type: character\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nempty\nn_unique\nwhitespace\n\n\n\n\nRegion\n0\n1\n7\n14\n0\n4\n0\n\n\nspecies\n0\n1\n5\n5\n0\n1\n0\n\n\n\nVariable type: Date\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nmedian\nn_unique\n\n\n\n\nDate\n0\n1\n1989-04-12\n2022-11-16\n2005-07-19\n994\n\n\n\nVariable type: numeric\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmean\nsd\np0\np25\np50\np75\np100\n\n\n\n\nYear\n0\n1\n2004.80\n9.08\n1989\n1997\n2005\n2012.00\n2022.00\n\n\nMonth\n0\n1\n7.30\n2.41\n4\n5\n7\n10.00\n11.00\n\n\nEvent\n0\n1\n2005105.07\n9090.43\n1989001\n1997302\n2005309\n2012542.50\n2022559.00\n\n\nCollection\n0\n1\n20048332.61\n90798.12\n19890001\n19970302\n20050310\n20120542.75\n20220559.00\n\n\nWeight\n1\n1\n1.00\n2.86\n0\n0\n0\n0.46\n44.07\n\n\nCount\n0\n1\n36.95\n116.85\n0\n0\n0\n15.00\n3641.00",
+    "crumbs": [
+      "Shrimp Data Exploration",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Adults - fisheries-independent</span>"
+    ]
+  },
+  {
+    "objectID": "raw_ad_seamap.html#about",
+    "href": "raw_ad_seamap.html#about",
+    "title": "4  Adults - fisheries-independent",
+    "section": "4.4 About",
+    "text": "4.4 About\nInput .qmd file for this section was:\nraw_ad_seamap.qmd\nInput data file(s):\n\nSEAMAP_ShrimpCatches_19892022.csv\n\nGenerated data file(s): Modified data frames were written to adultSeamap_dfs.RData:\n\nseamap - the unfiltered data frame\nadsm_wide\nadsm_long\n\nModifications to data:\n\nChanged Species from provided names to ‘brown’, ‘white’, and ‘pink’.\n\nFor adsm_long and adsm_wide data frames, filtered to only the “INNER” depth zone and filled in NAs with 0s, because when nothing was caught in a net, both columns in the original data were left blank.\n\nOther notes about data:\n\nContains 4 states: GA, NC, SC, FL",
     "crumbs": [
       "Shrimp Data Exploration",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Adults - fisheries-independent</span>"

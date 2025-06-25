@@ -9,11 +9,13 @@ execute:
   message: false
   error: true
   cache: false
+  enabled: true
   
   
 book:
   title: "Lowcountry Shrimp Dataset Deep Dive"
-  date: "6/10/2025"
+  date: today
+  date-format: long
   chapters:
     - index.qmd
     - part: shrimp_data_exploration.qmd

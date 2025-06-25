@@ -2,3 +2,239 @@
 
 SEAMAP info here  
 
+About the Coastal Trawl Survey: https://seamap.org/seamap-sa-coastal-trawl/  
+
+Some excerpts:  
+
+-  The standardized gear used since 1987 is a pair of 75 ft (22.9 m) mongoose-type Falcon trawl nets (manufactured by Beaufort Marine Supply, Beaufort, SC) without Turtle Excluder Devices. The body of the trawl net was constructed of #15 net twine with 47 mm stretch mesh.  
+-  Historically, the catch from each net was processed separately and assigned a unique collection number, with data from both nets at each station pooled for analysis to form a standard unit of effort (tow). Beginning in 2021, only the catch from one net was processed with the tail bag of the other net fished untied.  
+-  three sampling seasons: Spring (April - May), Summer (July - August), and Fall (September - November).
+
+So it will probably be best to average to the event, because we've got events in 2022 with only one collection (prior to 2022, it was 2 collections per event).  
+
+Starting in 1989, which is when this file starts, sampling was pretty consistent - seasonally rather than monthly; daytime; 75ft nets.  
+
+There's also some inner vs. outer depth zone stuff to check. See below -  14,576 rows are from "inner" and only 534 from "outer", so will remove "outer" completely.    
+
+NC, SC, GA, and FL are present in this dataset.  
+
+
+## Datasets
+
+There are two SEAMAP files: one of events, and one of catch data.  
+
+```{r}
+library(tidyverse)
+library(patchwork)
+library(readxl)
+library(ggbeeswarm)
+
+source("functions.R")
+
+in_path <- here::here("data", "raw", "ad_seamap")
+
+surv <- "SEAMAP"
+```
+
+```{r}
+seamap <- read.csv(here::here(in_path, "SEAMAP_ShrimpCatches_19892022.csv"))
+```
+
+```{r}
+# rename, make dates, deal with columns
+sm <- seamap |> 
+    select(Date = DATE,
+           Event = EVENTNAME,
+           Collection = COLLECTIONNUMBER,
+           Species = SPECIESCOMMONNAME,
+           Count = NUMBERTOTAL,
+           Weight = SPECIESTOTALWEIGHT,
+           DepthZone = DEPTHZONE,
+           Region = REGION) |> 
+    mutate(Date = lubridate::mdy(Date),
+           Year = lubridate::year(Date),
+           Month = lubridate::month(Date),
+           Species = case_when(str_detect(Species, "BROWN") ~ "brown",
+                               str_detect(Species, "WHITE") ~ "white",
+                               str_detect(Species, "PINK") ~ "pink",
+                               .default = "noneMaybe"))
+
+```
+
+Looks like when no shrimp were caught in a net, the species is left blank and count and weight are both 0. So I'll widen the data frame, filling in 0s for NAs. Then lengthen back out so 0s are all accounted for.  
+
+Also filtering to "INNER" depth zone.  
+
+```{r}
+adsm_wide <- sm |> 
+    filter(DepthZone == "INNER") |> 
+    select(Date, Year, Month, Region, Event, Collection, Species, Weight, Count) |> 
+    pivot_wider(names_from = Species,
+                values_from = c(Weight, Count),
+                values_fill = 0) |> 
+    select(-ends_with("noneMaybe"))
+
+adsm_long <- pivot_longer(adsm_wide,
+                        cols = c(all_of(starts_with("Weight")),
+                                 all_of(starts_with("Count"))),
+                        names_to = c(".value", "species"),
+                        names_sep = "_")
+
+```
+
+Weight and count were both recorded, even in subsamples, BUT "when large numbers of a species occurred in the processed catch", all individuals were weighed; a subsample was processed for abundance (typically 32-64 individuals); and count was estimated from the weight.  
+
+FOR THAT REASON I will use weights in my analyses, because it is the most likely piece to have been measured rather than estimated.  
+
+
+
+```{r}
+# save to use later
+save(seamap, adsm_long, adsm_wide,
+     file = here::here("data",
+                       "intermediate",
+                       "adultSeamap_dfs.RData"),
+     compress = "xz")
+```
+
+
+## Graphics - Abundance/Landings/CPUE Boxplots  
+
+**STILL IN PROGRESS**  
+
+```{r}
+ggplot(adsm_long,
+       aes(x = factor(Month),
+           y = (Weight+1),
+           fill = Month)) +
+    geom_boxplot() +
+    facet_wrap(~species, scales = "free_y", ncol = 1) +
+    scale_y_log10() +
+    khroma::scale_fill_YlOrBr() +
+    labs(title = "SEAMAP Shrimp Biomass per Collection") +
+    theme(legend.position = "none")
+
+ggplot(adsm_long,
+       aes(x = factor(Month),
+           y = (Count+1),
+           fill = Month)) +
+    geom_boxplot() +
+    facet_wrap(~species, scales = "free_y", ncol = 1) +
+    scale_y_log10() +
+    khroma::scale_fill_YlOrBr() +
+    labs(title = "SEAMAP Shrimp Abundance per Collection") +
+    theme(legend.position = "none")
+
+
+ggplot(adsm_long,
+       aes(x = factor(Month),
+           y = (Weight+1),
+           fill = Month)) +
+    geom_boxplot() +
+    facet_grid(Region ~ species) +
+    scale_y_log10() +
+    khroma::scale_fill_YlOrBr() +
+    labs(title = "SEAMAP Shrimp Biomass per Collection") +
+    theme(legend.position = "none")
+
+ggplot(adsm_long,
+       aes(x = factor(Month),
+           y = (Count+1),
+           fill = Month)) +
+    geom_boxplot() +
+    facet_grid(Region ~ species) +
+    scale_y_log10() +
+    khroma::scale_fill_YlOrBr() +
+    labs(title = "SEAMAP Shrimp Counts per Collection") +
+    theme(legend.position = "none")
+```
+
+
+```{r}
+p1 <- adsm_long |> 
+    mutate(pseudo.date = lubridate::ymd(paste(Year, Month, "01"))) |> 
+    ggplot() + 
+    geom_boxplot(aes(x = factor(pseudo.date),
+                     y = Weight,
+                   fill = Month),
+               size = 2) +
+    facet_grid(Region~species) +
+    # scale_y_log10() +
+    khroma::scale_fill_YlOrBr() +
+    labs(title = "Annual Landings via NMFS",
+         subtitle = "by species x state",
+         x = "Year",
+         y = "10,000 Pounds") +
+    theme(legend.position = "none")
+
+
+```
+
+
+
+## Tabular summaries of abundance
+
+#### Brown Shrimp  
+
+<details>
+
+::: {.content-visible when-format="html"}
+<summary>Click to expand</summary>
+:::
+
+```{r}
+#| label: tbl-brown
+#| tbl-cap: "Brown shrimp SEAMAP summary"
+adsm_long |> 
+    filter(species == "brown") |> 
+    skimr::skim_without_charts()
+```
+
+</details>
+
+#### White Shrimp  
+
+<details>
+
+::: {.content-visible when-format="html"}
+<summary>Click to expand</summary>
+:::
+
+```{r}
+#| label: tbl-white
+#| tbl-cap: "White shrimp SEAMAP summary"
+adsm_long |> 
+    filter(species == "white") |> 
+    skimr::skim_without_charts()
+```
+
+</details>
+
+
+
+
+## About
+
+**Input `.qmd` file** for this section was:
+
+`r xfun::with_ext(knitr::current_input(), "qmd")`
+
+**Input data file(s):**
+
+-   `SEAMAP_ShrimpCatches_19892022.csv`  
+
+**Generated data file(s):** Modified data frames were written to `adultSeamap_dfs.RData`:
+
+-   `seamap` - the unfiltered data frame
+-   `adsm_wide`
+-   `adsm_long`
+
+
+**Modifications to data:**
+
+-   Changed `Species` from provided names to 'brown', 'white', and 'pink'.\
+-   For `adsm_long` and `adsm_wide` data frames, filtered to only the "INNER" depth zone and filled in NAs with 0s, because when nothing was caught in a net, both columns in the original data were left blank.    
+
+**Other notes about data:**
+
+-   Contains 4 states: GA, NC, SC, FL  
