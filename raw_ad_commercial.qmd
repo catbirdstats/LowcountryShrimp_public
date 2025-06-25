@@ -1,3 +1,377 @@
 # Adults - landings and trip tickets  
 
 Commercial data here  
+
+
+## Datasets
+
+There are three files that represent commercial fisheries data for adult shrimp: Landings, from NMFS, at two different frequencies (annual for both species, and for white shrimp, fall vs. winter-spring-summer); and trip tickets, by 2-month blocks for both species.  
+
+For brown shrimp, calendar year is fine. White shrimp have different life cycles, and we are interested in spawning adults vs. non-spawning adults for each 'shrimp year'; so we obtained the head-off white shrimp data file, split into seasons.  
+
+```{r}
+library(tidyverse)
+library(patchwork)
+library(readxl)
+library(ggbeeswarm)
+
+source("functions.R")
+
+in_path <- here::here("data", "raw", "ad_commercial")
+
+surv_tripTicks <- "Trip Tickets"
+surv_NMFS_annual <- "NMFS Annual Landings"  # use for brown shrimp
+surv_NMFS_seasonal <- "NMFS Seasonal Landings"  # use for white shrimp
+```
+
+```{r}
+# Trip Ticket Abundances
+tripTick_abund <- readxl::read_xlsx(here::here(in_path,
+                                               "Nonconfidential Shrimp landings by species area year two month block.xlsx"),
+                                    sheet = "Nonconfidential Shrimp landings") 
+
+# Trip Ticket locations
+# based on assignments from Kim during exploratory mapping
+tripTick_locs <- read.csv(here::here(in_path,
+                                     "Nonconfidential Shrimp landings areas.csv")) |> 
+    select(Area.name, State)
+
+
+# Annual Landings (focus on Brown)
+landings_annual <- read.csv(here::here(in_path,
+                            "Shrimp Landings NC SC GA from NMFS.csv")) 
+
+
+# Seasonal Landings (White)
+landings_seas <- read.csv(here::here(in_path,
+                                     "scga_landings_headOff_whiteShrimp_byseason.csv"))
+```
+
+```{r}
+# deal with column types, naming, etc.
+tripTick_abund <- tripTick_abund |> 
+    mutate(Species = case_match(Common.Name,
+                                "NORTHERN PINK" ~ "pink",
+                                "NORTHERN BROWN" ~ "brown",
+                                "NORTHERN WHITE" ~ "white",
+                                "PENAEID" ~ "Penaeid"),
+           CPUE_approx = annland / numdeal,
+           Wave = case_match(WAVE,
+                             1 ~ "1 Jan-Feb",
+                             2 ~ "2 Mar-Apr",
+                             3 ~ "3 May-Jun",
+                             4 ~ "4 Jul-Aug",
+                             5 ~ "5 Sep-Oct",
+                             6 ~ "6 Nov-Dec"),
+           Wave_start = case_match(WAVE,      # so it can show up approximately correctly in time series graphs
+                                        1 ~ 1,
+                                        2 ~ 3,
+                                        3 ~ 5,
+                                        4 ~ 7,
+                                        5 ~ 9,
+                                        6 ~ 11))  |> 
+    # join states
+    left_join(tripTick_locs, by = "Area.name")
+
+
+landings_annual <- landings_annual |> 
+    mutate(Species = case_match(NMFS.Name,
+                                "SHRIMP, NORTHERN BROWN " ~ "brown",
+                                "SHRIMP, NORTHERN PINK " ~ "pink",
+                                "SHRIMP, NORTHERN WHITE " ~ "white",
+                                "SHRIMPS, PENAEID **" ~ "Penaeid"),
+           Pounds = parse_number(Pounds),
+           Dollars = parse_number(Dollars),
+           Millions_of_dollars = Dollars / 1000000,
+           TensofThousands_Pounds = Pounds / 10000)
+
+landings_seas <- landings_seas  |> 
+    mutate(Species = "white",
+           Months = case_match(season,
+                               "Fall" ~ "2 Aug-Dec",
+                               "Win_Spr_Sum" ~ "1 Jan-Jul"),
+           Period = case_match(season,                   # because Win/Spr/Sum is earlier in the year than Fall, but it shows up later when sorted alphabetically
+                               "Fall" ~ 2,
+                               "Win_Spr_Sum" ~ 1)) |> 
+    arrange(Year, Period) |> 
+    select(-X)
+```
+
+
+
+```{r}
+# save to use later
+save(landings_annual, landings_seas,
+     tripTick_abund,
+     file = here::here("data",
+                       "intermediate",
+                       "adultCommercial_dfs.RData"),
+     compress = "xz")
+```
+
+
+## Graphics - Abundance/Landings/CPUE Boxplots
+
+```{r}
+p1 <- landings_annual |> 
+    filter(Species %in% c("brown", "white", "pink")) |> 
+    ggplot() + 
+    geom_point(aes(x = Year,
+                     y = TensofThousands_Pounds,
+                   col = Species),
+               size = 2) +
+    facet_grid(State~Species) +
+    # scale_y_log10() +
+    khroma::scale_color_highcontrast() +
+    labs(title = "Annual Landings via NMFS",
+         subtitle = "by species x state",
+         x = "Year",
+         y = "10,000 Pounds") +
+    theme(legend.position = "none")
+
+p2 <- tripTick_abund |> 
+    filter(Species %in% c("brown", "white", "pink"),
+           State %in% c("FL", "GA", "NC", "SC")) |> 
+    mutate(pseudo.date = lubridate::ymd(paste(Year, Wave_start, "-01")),
+           CPUE_approx = CPUE_approx + 1) |> 
+    ggplot() + 
+    geom_point(aes(x = pseudo.date,
+                     y = CPUE_approx,
+                   col = Species),
+               size = 2) +
+    facet_grid(State~Species, scales = "free_y") +
+    # scale_y_log10() +
+    khroma::scale_color_highcontrast() +
+    labs(title = "Trip Ticket landings per number reporting",
+         subtitle = "Note free y-scales",
+         x = "Year",
+         y = "CPUE") +
+    theme(legend.position = "none")
+
+p3 <- tripTick_abund |> 
+    filter(Species %in% c("brown", "white", "pink"),
+           State %in% c("FL", "GA", "NC", "SC")) |> 
+    mutate(pseudo.date = lubridate::ymd(paste(Year, Wave_start, "-01")),
+           CPUE_approx = CPUE_approx + 1) |> 
+    ggplot() + 
+    geom_point(aes(x = pseudo.date,
+                     y = CPUE_approx,
+                   col = Species),
+               size = 2) +
+    facet_grid(State~Species) +
+    scale_y_log10() +
+    khroma::scale_color_highcontrast() +
+    labs(title = "Trip Ticket landings per number reporting",
+         subtitle = "Note log10 y-axis scale",
+         x = "Year",
+         y = "CPUE") +
+    theme(legend.position = "none")
+
+p4 <- landings_seas |> 
+    mutate(TensofThousands_Pounds = lbs_headOff / 10000) |> 
+    ggplot() + 
+    geom_point(aes(x = Year,
+                     y = TensofThousands_Pounds,
+                   col = Months),
+               size = 2) +
+    facet_wrap(~Months, ncol = 1) +
+    # scale_y_log10() +
+    khroma::scale_color_highcontrast() +
+    labs(title = "White Shrimp landings by season",
+         subtitle = "GA + SC combined, head-off weight",
+         x = "Year",
+         y = "10,000 Pounds") +
+    theme(legend.position = "none")
+
+p5 <- landings_seas |> 
+    mutate(TensofThousands_Pounds = lbs_headOff / 10000,
+           pseudo.month = case_match(Period,
+                                     1 ~ 3,
+                                     2 ~ 10),
+           pseudo.date = lubridate::ymd(paste(Year, pseudo.month, "01"))) |> 
+    ggplot() + 
+    geom_line(aes(x = pseudo.date,
+                  y = TensofThousands_Pounds),
+              col = "gray70") +
+    geom_point(aes(x = pseudo.date,
+                     y = TensofThousands_Pounds,
+                   col = Months),
+               size = 2) +
+    # facet_wrap(~Months, ncol = 1) +
+    # scale_y_log10() +
+    khroma::scale_color_highcontrast() +
+    labs(title = "White Shrimp landings by season",
+         subtitle = "GA + SC combined, head-off weight",
+         x = "Year",
+         y = "10,000 Pounds",
+         col = "Time period") +
+    theme_bw()
+```
+
+```{r}
+#| label: fig-landings-annual
+#| fig-cap: "Time series plots of annual landings by species and state."
+
+p1
+
+```
+
+```{r}
+#| label: fig-landings-free-axes
+#| fig-cap: "Time series plots of estimated CPUE by species and state, from trip ticket data. This plot uses free y-axes for overall context. Large differences probably signal changes in trip ticket collection and reporting, as states are in charge of their programs and may implement changes."
+
+p2  
+
+```
+
+```{r}
+#| label: fig-landings-log-axes
+#| fig-cap: "Time series plots of estimated CPUE by species and state, from trip ticket data. This plot is the same as that above, but it uses log-10 axes for easier comparison, especially at the low abundances. Large differences probably signal changes in trip ticket collection and reporting, as states are in charge of their programs and may implement changes."
+
+p3 
+
+```
+
+```{r}
+#| label: fig-landings-seasonal-faceted
+#| fig-cap: "Time series plots of white shrimp landings, faceted by season (1 Jan-Jul represents spring spawning adults; 2 Aug-Dec represents fall non-spawning adults)."
+
+p4
+
+```
+
+```{r}
+#| label: fig-landings-seasonal-onepanel
+#| fig-cap: "Time series plots of white shrimp landings, colored by season (1 Jan-Jul represents spring spawning adults; 2 Aug-Dec represents fall non-spawning adults) but in the same panel and connected with a line. Jan-Jul points have been placed at March 1st each year, and Aug-Dec points placed at October 1st of each year."
+
+p5 
+
+```
+
+## Tabular summaries of abundance
+
+#### Annual Landings (NMFS)  
+
+##### Brown Shrimp  
+
+<details>
+
+::: {.content-visible when-format="html"}
+<summary>Click to expand</summary>
+:::
+
+```{r}
+#| label: tbl-NMFS-brown
+#| tbl-cap: "Brown shrimp annual landings summary"
+landings_annual |> 
+    filter(Species == "brown") |> 
+    skimr::skim_without_charts()
+```
+
+</details>
+
+##### White Shrimp  
+
+<details>
+
+::: {.content-visible when-format="html"}
+<summary>Click to expand</summary>
+:::
+
+```{r}
+#| label: tbl-NMFS-white
+#| tbl-cap: "White shrimp annual landings summary"
+landings_annual |> 
+    filter(Species == "white") |> 
+    skimr::skim_without_charts()
+```
+
+</details>
+
+
+#### Trip Ticket Landings   
+
+##### Brown Shrimp  
+
+<details>
+
+::: {.content-visible when-format="html"}
+<summary>Click to expand</summary>
+:::
+
+```{r}
+#| label: tbl-tripTicks-brown
+#| tbl-cap: "Brown shrimp trip tickets summary"
+tripTick_abund |> 
+    filter(Species == "brown") |> 
+    skimr::skim_without_charts()
+```
+
+</details>
+
+##### White Shrimp  
+
+<details>
+
+::: {.content-visible when-format="html"}
+<summary>Click to expand</summary>
+:::
+
+```{r}
+#| label: tbl-tripTicks-white
+#| tbl-cap: "White shrimp trip tickets summary"
+tripTick_abund |> 
+    filter(Species == "white") |> 
+    skimr::skim_without_charts()
+```
+
+</details>
+
+#### Seasonal White Shrimp Landings   
+
+<details>
+
+::: {.content-visible when-format="html"}
+<summary>Click to expand</summary>
+:::
+
+```{r}
+#| label: tbl-abund-seas
+#| tbl-cap: "White Shrimp (SC + GA) seasonal landings."
+landings_seas |> 
+    skimr::skim_without_charts()
+```
+
+</details>
+
+
+
+## About
+
+**Input `.qmd` file** for this section was:
+
+`r xfun::with_ext(knitr::current_input(), "qmd")`
+
+**Input data file(s):**
+
+-   `Nonconfidential Shrimp landings by species area year two month block.xlsx` - Trip Tickets.  Commercial shrimp landings in NC, SC, GA, and FL, by 2-month block, as reported by commercial fishers and seafood processors. From state trip ticket data. per the data provider, this dataset probably best if we're interested in estimating CPUE.  " Trip tickets, which have area fished, came online at different times (GA 1999, SC 2003, NC 1994).  That is causing the differences.  Also NC didn’t always differentiate among the species (I think 96 to 98).  " 
+-   `Shrimp Landings NC SC GA from NMFS.csv` - both species, calendar year level (okay for brown shrimp, not white).  Annual commercial shrimp landings in NC, SC, and GA, as reported by commercial fishers and seafood processors, and downloaded from https://www.fisheries.noaa.gov/foss/f?p=215:200::::::    per the data provider, this dataset is probably the better one for total landings.
+-   `scga_landings_headOff_whiteShrimp_byseason.csv` - white shrimp, by Fall vs. Winter-Spring-Summer. Combined white shrimp landings for SC and GA by two 'seasons'. The Fall is defined as Aug-Dec and the Win_Spr_Sum is defined as Jan-July. As such, these two seasons can be combined to come up with 'Annual' landings.
+
+**Generated data file(s):** Modified data frames were written to `adultCommercial_dfs.RData`:
+
+-   `landings_annual`
+-   `landings_seas`
+-   `tripTick_abund`
+
+
+**Modifications to data:**
+
+-   All files: changed `Species` from provided names to 'brown', 'white', and 'pink'.\
+-   Trip Tickets file: Calculated `CPUE_approx` as landings / number of dealers (number of dealers and number of fishers were the same). Made two new columns for two-month `WAVE`: `Wave` to identify the months, e.g. `1 Jan-Feb`, `2 Mar-Apr`, etc.; and `Wave_start` to identify the first month numerically, for better plotting of time series, e.g. Wave 1 (Jan-Feb) is assigned 1; Wave 2 (Mar-Apr) is assigned 3; etc. Added a column for `State`, based on mapping the lat/longs of each named location in the file during earlier exploration.\
+-   Annual Landings from NMFS file: both `Pounds` and `Dollars` were read in as character due to commas in the number formatting; parsed these to numeric. Then calculated versions where the numbers will be smaller: `Millions_of_Dollars` and `TensofThousands_Pounds`.  
+-   Seasonal head-off landings of white shrimp: added two columns for better ordering, because 'Win_Spr_Sum' is Jan-July, and 'Fall' is Aug-Dec of each year. Added `Months` to show this, and `Period` where Fall is 1 and Win_Spr_Sum is 2. Otherwise Fall appears first in the data frame due to alphabetical ordering; but chronologically it should be 2nd.  
+
+**Other notes about data:**
+
+-   `landings_seas` only represents two states: GA and SC. The annual landings and trip ticket data frames also include NC.  

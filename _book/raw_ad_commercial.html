@@ -327,7 +327,16 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#datasets" id="toc-datasets" class="nav-link active" data-scroll-target="#datasets"><span class="header-section-number">5.1</span> Datasets</a></li>
+  <li><a href="#graphics---abundancelandingscpue-boxplots" id="toc-graphics---abundancelandingscpue-boxplots" class="nav-link" data-scroll-target="#graphics---abundancelandingscpue-boxplots"><span class="header-section-number">5.2</span> Graphics - Abundance/Landings/CPUE Boxplots</a></li>
+  <li><a href="#tabular-summaries-of-abundance" id="toc-tabular-summaries-of-abundance" class="nav-link" data-scroll-target="#tabular-summaries-of-abundance"><span class="header-section-number">5.3</span> Tabular summaries of abundance</a></li>
+  <li><a href="#about" id="toc-about" class="nav-link" data-scroll-target="#about"><span class="header-section-number">5.4</span> About</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -352,8 +361,1352 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>Commercial data here</p>
+<section id="datasets" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="datasets"><span class="header-section-number">5.1</span> Datasets</h2>
+<p>There are three files that represent commercial fisheries data for adult shrimp: Landings, from NMFS, at two different frequencies (annual for both species, and for white shrimp, fall vs.&nbsp;winter-spring-summer); and trip tickets, by 2-month blocks for both species.</p>
+<p>For brown shrimp, calendar year is fine. White shrimp have different life cycles, and we are interested in spawning adults vs.&nbsp;non-spawning adults for each ‘shrimp year’; so we obtained the head-off white shrimp data file, split into seasons.</p>
+</section>
+<section id="graphics---abundancelandingscpue-boxplots" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="graphics---abundancelandingscpue-boxplots"><span class="header-section-number">5.2</span> Graphics - Abundance/Landings/CPUE Boxplots</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-landings-annual" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-landings-annual-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="raw_ad_commercial_files/figure-html/fig-landings-annual-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-landings-annual-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.1: Time series plots of annual landings by species and state.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-landings-free-axes" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-landings-free-axes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="raw_ad_commercial_files/figure-html/fig-landings-free-axes-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-landings-free-axes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.2: Time series plots of estimated CPUE by species and state, from trip ticket data. This plot uses free y-axes for overall context. Large differences probably signal changes in trip ticket collection and reporting, as states are in charge of their programs and may implement changes.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-landings-log-axes" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-landings-log-axes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="raw_ad_commercial_files/figure-html/fig-landings-log-axes-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-landings-log-axes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.3: Time series plots of estimated CPUE by species and state, from trip ticket data. This plot is the same as that above, but it uses log-10 axes for easier comparison, especially at the low abundances. Large differences probably signal changes in trip ticket collection and reporting, as states are in charge of their programs and may implement changes.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-landings-seasonal-faceted" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-landings-seasonal-faceted-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="raw_ad_commercial_files/figure-html/fig-landings-seasonal-faceted-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-landings-seasonal-faceted-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.4: Time series plots of white shrimp landings, faceted by season (1 Jan-Jul represents spring spawning adults; 2 Aug-Dec represents fall non-spawning adults).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-landings-seasonal-onepanel" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-landings-seasonal-onepanel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="raw_ad_commercial_files/figure-html/fig-landings-seasonal-onepanel-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-landings-seasonal-onepanel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.5: Time series plots of white shrimp landings, colored by season (1 Jan-Jul represents spring spawning adults; 2 Aug-Dec represents fall non-spawning adults) but in the same panel and connected with a line. Jan-Jul points have been placed at March 1st each year, and Aug-Dec points placed at October 1st of each year.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="tabular-summaries-of-abundance" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="tabular-summaries-of-abundance"><span class="header-section-number">5.3</span> Tabular summaries of abundance</h2>
+<section id="annual-landings-nmfs" class="level4">
+<h4 class="anchored" data-anchor-id="annual-landings-nmfs">Annual Landings (NMFS)</h4>
+<section id="brown-shrimp" class="level5">
+<h5 class="anchored" data-anchor-id="brown-shrimp">Brown Shrimp</h5>
+<details>
+<summary>
+Click to expand
+</summary>
+<div class="cell">
+<div id="tbl-NMFS-brown" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-NMFS-brown-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.1: Brown shrimp annual landings summary
+</figcaption>
+<div aria-describedby="tbl-NMFS-brown-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">filter(landings_annual, S…</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">120</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 13%">
+<col style="width: 18%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">max</th>
+<th style="text-align: right;">empty</th>
+<th style="text-align: right;">n_unique</th>
+<th style="text-align: right;">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">State</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">NMFS.Name</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Collection</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Confidentiality</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Species</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 8%">
+<col style="width: 11%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 7%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Year</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1998.78</td>
+<td style="text-align: right;">12.31</td>
+<td style="text-align: right;">1978.00</td>
+<td style="text-align: right;">1988.00</td>
+<td style="text-align: right;">1999.50</td>
+<td style="text-align: right;">2009.25</td>
+<td style="text-align: right;">2019.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Pounds</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2059941.38</td>
+<td style="text-align: right;">1872035.59</td>
+<td style="text-align: right;">41907.00</td>
+<td style="text-align: right;">765917.75</td>
+<td style="text-align: right;">1427067.50</td>
+<td style="text-align: right;">2720053.75</td>
+<td style="text-align: right;">10378157.00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Dollars</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4039632.02</td>
+<td style="text-align: right;">3692856.66</td>
+<td style="text-align: right;">59049.00</td>
+<td style="text-align: right;">1461823.75</td>
+<td style="text-align: right;">2876552.00</td>
+<td style="text-align: right;">4983011.25</td>
+<td style="text-align: right;">18847514.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Millions_of_dollars</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.04</td>
+<td style="text-align: right;">3.69</td>
+<td style="text-align: right;">0.06</td>
+<td style="text-align: right;">1.46</td>
+<td style="text-align: right;">2.88</td>
+<td style="text-align: right;">4.98</td>
+<td style="text-align: right;">18.85</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TensofThousands_Pounds</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">205.99</td>
+<td style="text-align: right;">187.20</td>
+<td style="text-align: right;">4.19</td>
+<td style="text-align: right;">76.59</td>
+<td style="text-align: right;">142.71</td>
+<td style="text-align: right;">272.01</td>
+<td style="text-align: right;">1037.82</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</details>
+</section>
+<section id="white-shrimp" class="level5">
+<h5 class="anchored" data-anchor-id="white-shrimp">White Shrimp</h5>
+<details>
+<summary>
+Click to expand
+</summary>
+<div class="cell">
+<div id="tbl-NMFS-white" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-NMFS-white-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.2: White shrimp annual landings summary
+</figcaption>
+<div aria-describedby="tbl-NMFS-white-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">filter(landings_annual, S…</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">120</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 13%">
+<col style="width: 18%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">max</th>
+<th style="text-align: right;">empty</th>
+<th style="text-align: right;">n_unique</th>
+<th style="text-align: right;">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">State</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">NMFS.Name</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Collection</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Confidentiality</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Species</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 8%">
+<col style="width: 11%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 7%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 9%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Year</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1998.78</td>
+<td style="text-align: right;">12.31</td>
+<td style="text-align: right;">1978.00</td>
+<td style="text-align: right;">1988.00</td>
+<td style="text-align: right;">1999.50</td>
+<td style="text-align: right;">2009.25</td>
+<td style="text-align: right;">2019.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Pounds</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3372708.22</td>
+<td style="text-align: right;">2171286.62</td>
+<td style="text-align: right;">11372.00</td>
+<td style="text-align: right;">1743573.75</td>
+<td style="text-align: right;">3144572.50</td>
+<td style="text-align: right;">4590372.75</td>
+<td style="text-align: right;">9472533.00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Dollars</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">8334883.54</td>
+<td style="text-align: right;">5549245.49</td>
+<td style="text-align: right;">25119.00</td>
+<td style="text-align: right;">4402430.75</td>
+<td style="text-align: right;">7460425.00</td>
+<td style="text-align: right;">11911377.50</td>
+<td style="text-align: right;">23688259.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Millions_of_dollars</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">8.33</td>
+<td style="text-align: right;">5.55</td>
+<td style="text-align: right;">0.03</td>
+<td style="text-align: right;">4.40</td>
+<td style="text-align: right;">7.46</td>
+<td style="text-align: right;">11.91</td>
+<td style="text-align: right;">23.69</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TensofThousands_Pounds</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">337.27</td>
+<td style="text-align: right;">217.13</td>
+<td style="text-align: right;">1.14</td>
+<td style="text-align: right;">174.36</td>
+<td style="text-align: right;">314.46</td>
+<td style="text-align: right;">459.04</td>
+<td style="text-align: right;">947.25</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</details>
+</section>
+</section>
+<section id="trip-ticket-landings" class="level4">
+<h4 class="anchored" data-anchor-id="trip-ticket-landings">Trip Ticket Landings</h4>
+<section id="brown-shrimp-1" class="level5">
+<h5 class="anchored" data-anchor-id="brown-shrimp-1">Brown Shrimp</h5>
+<details>
+<summary>
+Click to expand
+</summary>
+<div class="cell">
+<div id="tbl-tripTicks-brown" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-tripTicks-brown-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.3: Brown shrimp trip tickets summary
+</figcaption>
+<div aria-describedby="tbl-tripTicks-brown-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">filter(tripTick_abund, Sp…</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">983</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 13%">
+<col style="width: 19%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">max</th>
+<th style="text-align: right;">empty</th>
+<th style="text-align: right;">n_unique</th>
+<th style="text-align: right;">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Area.name</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">46</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Common.Name</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Species</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Wave</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">State</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">237</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 9%">
+<col style="width: 13%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 7%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 9%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">object</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1883.32</td>
+<td style="text-align: right;">1036.12</td>
+<td style="text-align: right;">2.00</td>
+<td style="text-align: right;">1032.00</td>
+<td style="text-align: right;">1952.00</td>
+<td style="text-align: right;">2785.00</td>
+<td style="text-align: right;">3573.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Year</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2004.77</td>
+<td style="text-align: right;">10.94</td>
+<td style="text-align: right;">1978.00</td>
+<td style="text-align: right;">1998.00</td>
+<td style="text-align: right;">2007.00</td>
+<td style="text-align: right;">2014.00</td>
+<td style="text-align: right;">2020.00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">WAVE</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3.91</td>
+<td style="text-align: right;">1.24</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">3.00</td>
+<td style="text-align: right;">4.00</td>
+<td style="text-align: right;">5.00</td>
+<td style="text-align: right;">6.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Lat</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">32.18</td>
+<td style="text-align: right;">1.93</td>
+<td style="text-align: right;">28.53</td>
+<td style="text-align: right;">30.50</td>
+<td style="text-align: right;">32.24</td>
+<td style="text-align: right;">34.27</td>
+<td style="text-align: right;">35.43</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Long</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-78.66</td>
+<td style="text-align: right;">1.75</td>
+<td style="text-align: right;">-81.21</td>
+<td style="text-align: right;">-80.35</td>
+<td style="text-align: right;">-78.25</td>
+<td style="text-align: right;">-77.36</td>
+<td style="text-align: right;">-75.68</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">annland</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">287816.95</td>
+<td style="text-align: right;">768368.26</td>
+<td style="text-align: right;">24.00</td>
+<td style="text-align: right;">10378.01</td>
+<td style="text-align: right;">41119.21</td>
+<td style="text-align: right;">167878.98</td>
+<td style="text-align: right;">8084396.00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numdeal</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">14777.14</td>
+<td style="text-align: right;">67470.92</td>
+<td style="text-align: right;">3.00</td>
+<td style="text-align: right;">161.00</td>
+<td style="text-align: right;">900.00</td>
+<td style="text-align: right;">4312.00</td>
+<td style="text-align: right;">919803.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">numfisher</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">14777.14</td>
+<td style="text-align: right;">67470.92</td>
+<td style="text-align: right;">3.00</td>
+<td style="text-align: right;">161.00</td>
+<td style="text-align: right;">900.00</td>
+<td style="text-align: right;">4312.00</td>
+<td style="text-align: right;">919803.00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CPUE_approx</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">140.18</td>
+<td style="text-align: right;">294.14</td>
+<td style="text-align: right;">0.52</td>
+<td style="text-align: right;">13.27</td>
+<td style="text-align: right;">42.87</td>
+<td style="text-align: right;">149.40</td>
+<td style="text-align: right;">4847.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Wave_start</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.81</td>
+<td style="text-align: right;">2.49</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">5.00</td>
+<td style="text-align: right;">7.00</td>
+<td style="text-align: right;">9.00</td>
+<td style="text-align: right;">11.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</details>
+</section>
+<section id="white-shrimp-1" class="level5">
+<h5 class="anchored" data-anchor-id="white-shrimp-1">White Shrimp</h5>
+<details>
+<summary>
+Click to expand
+</summary>
+<div class="cell">
+<div id="tbl-tripTicks-white" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-tripTicks-white-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.4: White shrimp trip tickets summary
+</figcaption>
+<div aria-describedby="tbl-tripTicks-white-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">filter(tripTick_abund, Sp…</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">1636</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 13%">
+<col style="width: 19%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">max</th>
+<th style="text-align: right;">empty</th>
+<th style="text-align: right;">n_unique</th>
+<th style="text-align: right;">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Area.name</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">46</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Common.Name</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Species</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Wave</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">State</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">256</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 9%">
+<col style="width: 13%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 7%">
+<col style="width: 8%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">object</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1889.27</td>
+<td style="text-align: right;">1018.10</td>
+<td style="text-align: right;">6.00</td>
+<td style="text-align: right;">1056.25</td>
+<td style="text-align: right;">1938.50</td>
+<td style="text-align: right;">2755.75</td>
+<td style="text-align: right;">3575.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Year</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2004.90</td>
+<td style="text-align: right;">10.65</td>
+<td style="text-align: right;">1978.00</td>
+<td style="text-align: right;">1998.00</td>
+<td style="text-align: right;">2006.00</td>
+<td style="text-align: right;">2014.00</td>
+<td style="text-align: right;">2020.00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">WAVE</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3.87</td>
+<td style="text-align: right;">1.68</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">3.00</td>
+<td style="text-align: right;">4.00</td>
+<td style="text-align: right;">5.00</td>
+<td style="text-align: right;">6.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Lat</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">31.77</td>
+<td style="text-align: right;">1.92</td>
+<td style="text-align: right;">25.25</td>
+<td style="text-align: right;">30.50</td>
+<td style="text-align: right;">31.33</td>
+<td style="text-align: right;">33.19</td>
+<td style="text-align: right;">35.43</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Long</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-79.26</td>
+<td style="text-align: right;">1.76</td>
+<td style="text-align: right;">-81.21</td>
+<td style="text-align: right;">-80.50</td>
+<td style="text-align: right;">-80.34</td>
+<td style="text-align: right;">-78.25</td>
+<td style="text-align: right;">-75.68</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">annland</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">349093.95</td>
+<td style="text-align: right;">796531.34</td>
+<td style="text-align: right;">32.24</td>
+<td style="text-align: right;">29626.52</td>
+<td style="text-align: right;">108025.30</td>
+<td style="text-align: right;">314248.95</td>
+<td style="text-align: right;">12391609.78</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numdeal</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">15000.49</td>
+<td style="text-align: right;">47907.43</td>
+<td style="text-align: right;">16.00</td>
+<td style="text-align: right;">309.75</td>
+<td style="text-align: right;">1330.00</td>
+<td style="text-align: right;">8266.50</td>
+<td style="text-align: right;">648442.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">numfisher</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">15000.49</td>
+<td style="text-align: right;">47907.43</td>
+<td style="text-align: right;">16.00</td>
+<td style="text-align: right;">309.75</td>
+<td style="text-align: right;">1330.00</td>
+<td style="text-align: right;">8266.50</td>
+<td style="text-align: right;">648442.00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CPUE_approx</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">145.03</td>
+<td style="text-align: right;">281.83</td>
+<td style="text-align: right;">0.92</td>
+<td style="text-align: right;">19.60</td>
+<td style="text-align: right;">52.89</td>
+<td style="text-align: right;">156.18</td>
+<td style="text-align: right;">5202.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Wave_start</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.75</td>
+<td style="text-align: right;">3.35</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">5.00</td>
+<td style="text-align: right;">7.00</td>
+<td style="text-align: right;">9.00</td>
+<td style="text-align: right;">11.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</details>
+</section>
+</section>
+<section id="seasonal-white-shrimp-landings" class="level4">
+<h4 class="anchored" data-anchor-id="seasonal-white-shrimp-landings">Seasonal White Shrimp Landings</h4>
+<details>
+<summary>
+Click to expand
+</summary>
+<div class="cell">
+<div id="tbl-abund-seas" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-abund-seas-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.5: White Shrimp (SC + GA) seasonal landings.
+</figcaption>
+<div aria-describedby="tbl-abund-seas-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">landings_seas</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">90</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 13%">
+<col style="width: 19%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">max</th>
+<th style="text-align: right;">empty</th>
+<th style="text-align: right;">n_unique</th>
+<th style="text-align: right;">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">season</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Species</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Months</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 10%">
+<col style="width: 14%">
+<col style="width: 10%">
+<col style="width: 11%">
+<col style="width: 6%">
+<col style="width: 8%">
+<col style="width: 10%">
+<col style="width: 8%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Year</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2001.0</td>
+<td style="text-align: right;">13.06</td>
+<td style="text-align: right;">1979</td>
+<td style="text-align: right;">1990</td>
+<td style="text-align: right;">2001.0</td>
+<td style="text-align: right;">2012</td>
+<td style="text-align: right;">2023</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">lbs_headOff</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2593141.3</td>
+<td style="text-align: right;">1799455.64</td>
+<td style="text-align: right;">74022</td>
+<td style="text-align: right;">1169931</td>
+<td style="text-align: right;">2164551.5</td>
+<td style="text-align: right;">3542747</td>
+<td style="text-align: right;">8639831</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Period</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">0.50</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</details>
+</section>
+</section>
+<section id="about" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="about"><span class="header-section-number">5.4</span> About</h2>
+<p><strong>Input <code>.qmd</code> file</strong> for this section was:</p>
+<p>raw_ad_commercial.qmd</p>
+<p><strong>Input data file(s):</strong></p>
+<ul>
+<li><code>Nonconfidential Shrimp landings by species area year two month block.xlsx</code> - Trip Tickets. Commercial shrimp landings in NC, SC, GA, and FL, by 2-month block, as reported by commercial fishers and seafood processors. From state trip ticket data. per the data provider, this dataset probably best if we’re interested in estimating CPUE. ” Trip tickets, which have area fished, came online at different times (GA 1999, SC 2003, NC 1994). That is causing the differences. Also NC didn’t always differentiate among the species (I think 96 to 98). ”</li>
+<li><code>Shrimp Landings NC SC GA from NMFS.csv</code> - both species, calendar year level (okay for brown shrimp, not white). Annual commercial shrimp landings in NC, SC, and GA, as reported by commercial fishers and seafood processors, and downloaded from https://www.fisheries.noaa.gov/foss/f?p=215:200:::::: per the data provider, this dataset is probably the better one for total landings.</li>
+<li><code>scga_landings_headOff_whiteShrimp_byseason.csv</code> - white shrimp, by Fall vs.&nbsp;Winter-Spring-Summer. Combined white shrimp landings for SC and GA by two ‘seasons’. The Fall is defined as Aug-Dec and the Win_Spr_Sum is defined as Jan-July. As such, these two seasons can be combined to come up with ‘Annual’ landings.</li>
+</ul>
+<p><strong>Generated data file(s):</strong> Modified data frames were written to <code>adultCommercial_dfs.RData</code>:</p>
+<ul>
+<li><code>landings_annual</code></li>
+<li><code>landings_seas</code></li>
+<li><code>tripTick_abund</code></li>
+</ul>
+<p><strong>Modifications to data:</strong></p>
+<ul>
+<li>All files: changed <code>Species</code> from provided names to ‘brown’, ‘white’, and ‘pink’.<br>
+</li>
+<li>Trip Tickets file: Calculated <code>CPUE_approx</code> as landings / number of dealers (number of dealers and number of fishers were the same). Made two new columns for two-month <code>WAVE</code>: <code>Wave</code> to identify the months, e.g.&nbsp;<code>1 Jan-Feb</code>, <code>2 Mar-Apr</code>, etc.; and <code>Wave_start</code> to identify the first month numerically, for better plotting of time series, e.g.&nbsp;Wave 1 (Jan-Feb) is assigned 1; Wave 2 (Mar-Apr) is assigned 3; etc. Added a column for <code>State</code>, based on mapping the lat/longs of each named location in the file during earlier exploration.<br>
+</li>
+<li>Annual Landings from NMFS file: both <code>Pounds</code> and <code>Dollars</code> were read in as character due to commas in the number formatting; parsed these to numeric. Then calculated versions where the numbers will be smaller: <code>Millions_of_Dollars</code> and <code>TensofThousands_Pounds</code>.<br>
+</li>
+<li>Seasonal head-off landings of white shrimp: added two columns for better ordering, because ‘Win_Spr_Sum’ is Jan-July, and ‘Fall’ is Aug-Dec of each year. Added <code>Months</code> to show this, and <code>Period</code> where Fall is 1 and Win_Spr_Sum is 2. Otherwise Fall appears first in the data frame due to alphabetical ordering; but chronologically it should be 2nd.</li>
+</ul>
+<p><strong>Other notes about data:</strong></p>
+<ul>
+<li><code>landings_seas</code> only represents two states: GA and SC. The annual landings and trip ticket data frames also include NC.</li>
+</ul>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
