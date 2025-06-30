@@ -284,27 +284,27 @@ skimr::skim_without_charts(sz_ol_wht)
 
 ## About  
 
-**Input `.qmd` file** for this section was:
+**Input `.qmd` file** for this section was:  **`r xfun::with_ext(knitr::current_input(), "qmd")`** and can be found in the main directory.  
 
-`r xfun::with_ext(knitr::current_input(), "qmd")`
-
-**Input data file(s):**
+**Input data file(s)**  - as-used; can be found in `data/raw/juv`:  
 
 -   `SCDNR_CreekTrawlShrimpCPUE.csv`
 -   `SCDNR_CreekTrawlShrimpSize.csv`
 -   `Oyster Landing Seine Shrimp Dataset - 1984-2023 (BWP, 2025-04-24)(kac 2025-06-02).csv`
 
-**Generated data file(s):** Modified data frames were written to `juvenile_dfs.RData`:
-
--   `juv_sc_cpue`
--   `juv_sc_size`
--   `juv_ol_count`
--   `juv_ol_size`
 
 **Modifications to data:**
 
 -   All files: changed `Species` from provided scientific names to 'brown', 'white', and 'pink'.\
 -   Oyster Landing file: removed 'DataGap' from temp, salinity, and weight columns and turned these to numeric. Split data into counts data frame and sizes data frame. Pivoted sizes to long format.\
+
+
+**Generated data file(s):**  Data frames were modified as described above, and written to `data/intermediate/juvenile_dfs.RData` (the single `.RData` file contains multiple data frames):
+
+-   `juv_sc_cpue`
+-   `juv_sc_size`
+-   `juv_ol_count`
+-   `juv_ol_size`
 
 
 **Other notes about data:**

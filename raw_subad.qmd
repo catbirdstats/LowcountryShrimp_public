@@ -268,11 +268,9 @@ skimr::skim_without_charts(sz_sc_wht)
 
 ## About
 
-**Input `.qmd` file** for this section was:
+**Input `.qmd` file** for this section was:  **`r xfun::with_ext(knitr::current_input(), "qmd")`**  and can be found in the main directory.  
 
-`r xfun::with_ext(knitr::current_input(), "qmd")`
-
-**Input data file(s):**
+**Input data file(s)** - as-used; can be found in `data/raw/subad`:
 
 -   `GADNR_EMTS_PenaeidShrimp_Brown_Count_thru2021.xlsx`
 -   `GADNR_EMTS_PenaeidShrimp_White_Count_thru2021.xlsx`
@@ -281,18 +279,22 @@ skimr::skim_without_charts(sz_sc_wht)
 -   `SCDNR_EstuarineTrawlShrimpCPUE.csv`
 -   `SCDNR_EstuarineTrawlShrimpSize.csv`
 
-**Generated data file(s):** Modified data frames were written to `subadult_dfs.RData`:
-
--   `subad_ga_count`
--   `subad_ga_size`
--   `subad_sc_cpue`
--   `subad_sc_size`
 
 **Modifications to data:**
 
 -   All files: changed `Species` from provided scientific names to 'brown', 'white', and 'pink'.\
 -   GA counts file: extracted date from the Reference Number, as date was not its own field.\
 -   SC size file: filtered data to remove lengths \>1000. There were 3 such rows.
+
+
+**Generated data file(s):**  Data frames were modified as described above, and written to `data/intermediate/subadult_dfs.RData` (the single `.RData` file contains multiple data frames):
+
+-   `subad_ga_count`
+-   `subad_ga_size`
+-   `subad_sc_cpue`
+-   `subad_sc_size`
+
+
 
 **Other notes about data:**
 

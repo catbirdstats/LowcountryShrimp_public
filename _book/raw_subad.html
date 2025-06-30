@@ -1917,9 +1917,8 @@ Table&nbsp;3.6: White shrimp (SC) size summary
 </section>
 <section id="about" class="level2" data-number="3.6">
 <h2 data-number="3.6" class="anchored" data-anchor-id="about"><span class="header-section-number">3.6</span> About</h2>
-<p><strong>Input <code>.qmd</code> file</strong> for this section was:</p>
-<p>raw_subad.qmd</p>
-<p><strong>Input data file(s):</strong></p>
+<p><strong>Input <code>.qmd</code> file</strong> for this section was: <strong>raw_subad.qmd</strong> and can be found in the main directory.</p>
+<p><strong>Input data file(s)</strong> - as-used; can be found in <code>data/raw/subad</code>:</p>
 <ul>
 <li><code>GADNR_EMTS_PenaeidShrimp_Brown_Count_thru2021.xlsx</code></li>
 <li><code>GADNR_EMTS_PenaeidShrimp_White_Count_thru2021.xlsx</code></li>
@@ -1928,13 +1927,6 @@ Table&nbsp;3.6: White shrimp (SC) size summary
 <li><code>SCDNR_EstuarineTrawlShrimpCPUE.csv</code></li>
 <li><code>SCDNR_EstuarineTrawlShrimpSize.csv</code></li>
 </ul>
-<p><strong>Generated data file(s):</strong> Modified data frames were written to <code>subadult_dfs.RData</code>:</p>
-<ul>
-<li><code>subad_ga_count</code></li>
-<li><code>subad_ga_size</code></li>
-<li><code>subad_sc_cpue</code></li>
-<li><code>subad_sc_size</code></li>
-</ul>
 <p><strong>Modifications to data:</strong></p>
 <ul>
 <li>All files: changed <code>Species</code> from provided scientific names to ‘brown’, ‘white’, and ‘pink’.<br>
@@ -1942,6 +1934,13 @@ Table&nbsp;3.6: White shrimp (SC) size summary
 <li>GA counts file: extracted date from the Reference Number, as date was not its own field.<br>
 </li>
 <li>SC size file: filtered data to remove lengths &gt;1000. There were 3 such rows.</li>
+</ul>
+<p><strong>Generated data file(s):</strong> Data frames were modified as described above, and written to <code>data/intermediate/subadult_dfs.RData</code> (the single <code>.RData</code> file contains multiple data frames):</p>
+<ul>
+<li><code>subad_ga_count</code></li>
+<li><code>subad_ga_size</code></li>
+<li><code>subad_sc_cpue</code></li>
+<li><code>subad_sc_size</code></li>
 </ul>
 <p><strong>Other notes about data:</strong></p>
 <ul>

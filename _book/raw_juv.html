@@ -2158,20 +2158,12 @@ Table&nbsp;2.6: White shrimp (Oyster Landing) size summary
 </section>
 <section id="about" class="level2" data-number="2.6">
 <h2 data-number="2.6" class="anchored" data-anchor-id="about"><span class="header-section-number">2.6</span> About</h2>
-<p><strong>Input <code>.qmd</code> file</strong> for this section was:</p>
-<p>raw_juv.qmd</p>
-<p><strong>Input data file(s):</strong></p>
+<p><strong>Input <code>.qmd</code> file</strong> for this section was: <strong>raw_juv.qmd</strong> and can be found in the main directory.</p>
+<p><strong>Input data file(s)</strong> - as-used; can be found in <code>data/raw/juv</code>:</p>
 <ul>
 <li><code>SCDNR_CreekTrawlShrimpCPUE.csv</code></li>
 <li><code>SCDNR_CreekTrawlShrimpSize.csv</code></li>
 <li><code>Oyster Landing Seine Shrimp Dataset - 1984-2023 (BWP, 2025-04-24)(kac 2025-06-02).csv</code></li>
-</ul>
-<p><strong>Generated data file(s):</strong> Modified data frames were written to <code>juvenile_dfs.RData</code>:</p>
-<ul>
-<li><code>juv_sc_cpue</code></li>
-<li><code>juv_sc_size</code></li>
-<li><code>juv_ol_count</code></li>
-<li><code>juv_ol_size</code></li>
 </ul>
 <p><strong>Modifications to data:</strong></p>
 <ul>
@@ -2179,6 +2171,13 @@ Table&nbsp;2.6: White shrimp (Oyster Landing) size summary
 </li>
 <li>Oyster Landing file: removed ‘DataGap’ from temp, salinity, and weight columns and turned these to numeric. Split data into counts data frame and sizes data frame. Pivoted sizes to long format.<br>
 </li>
+</ul>
+<p><strong>Generated data file(s):</strong> Data frames were modified as described above, and written to <code>data/intermediate/juvenile_dfs.RData</code> (the single <code>.RData</code> file contains multiple data frames):</p>
+<ul>
+<li><code>juv_sc_cpue</code></li>
+<li><code>juv_sc_size</code></li>
+<li><code>juv_ol_count</code></li>
+<li><code>juv_ol_size</code></li>
 </ul>
 <p><strong>Other notes about data:</strong></p>
 <ul>

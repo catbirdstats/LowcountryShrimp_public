@@ -217,25 +217,23 @@ adsm_long |>
 
 ## About
 
-**Input `.qmd` file** for this section was:
+**Input `.qmd` file** for this section was: **`r xfun::with_ext(knitr::current_input(), "qmd")`** and can be found in the main directory.  
 
-`r xfun::with_ext(knitr::current_input(), "qmd")`
-
-**Input data file(s):**
+**Input data file(s)** - as-used; can be found in `data/raw/ad_seamap`: 
 
 -   `SEAMAP_ShrimpCatches_19892022.csv`  
-
-**Generated data file(s):** Modified data frames were written to `adultSeamap_dfs.RData`:
-
--   `seamap` - the unfiltered data frame
--   `adsm_wide`
--   `adsm_long`
-
 
 **Modifications to data:**
 
 -   Changed `Species` from provided names to 'brown', 'white', and 'pink'.\
 -   For `adsm_long` and `adsm_wide` data frames, filtered to only the "INNER" depth zone and filled in NAs with 0s, because when nothing was caught in a net, both columns in the original data were left blank.    
+
+**Generated data file(s):**  Data frames were modified as described above, and written to `data/intermediate/adultSeamap_dfs.RData` (the single `.RData` file contains multiple data frames):
+
+-   `seamap` - the unfiltered data frame
+-   `adsm_wide`
+-   `adsm_long`
+
 
 **Other notes about data:**
 

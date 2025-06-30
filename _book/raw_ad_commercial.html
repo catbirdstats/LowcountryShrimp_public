@@ -1679,19 +1679,12 @@ Table&nbsp;5.5: White Shrimp (SC + GA) seasonal landings.
 </section>
 <section id="about" class="level2" data-number="5.4">
 <h2 data-number="5.4" class="anchored" data-anchor-id="about"><span class="header-section-number">5.4</span> About</h2>
-<p><strong>Input <code>.qmd</code> file</strong> for this section was:</p>
-<p>raw_ad_commercial.qmd</p>
-<p><strong>Input data file(s):</strong></p>
+<p><strong>Input <code>.qmd</code> file</strong> for this section was: <strong>raw_ad_commercial.qmd</strong> and can be found in the main directory.</p>
+<p><strong>Input data file(s)</strong> - as-used; can be found in <code>data/raw/ad_commercial</code>:</p>
 <ul>
 <li><code>Nonconfidential Shrimp landings by species area year two month block.xlsx</code> - Trip Tickets. Commercial shrimp landings in NC, SC, GA, and FL, by 2-month block, as reported by commercial fishers and seafood processors. From state trip ticket data. per the data provider, this dataset probably best if we’re interested in estimating CPUE. ” Trip tickets, which have area fished, came online at different times (GA 1999, SC 2003, NC 1994). That is causing the differences. Also NC didn’t always differentiate among the species (I think 96 to 98). ”</li>
 <li><code>Shrimp Landings NC SC GA from NMFS.csv</code> - both species, calendar year level (okay for brown shrimp, not white). Annual commercial shrimp landings in NC, SC, and GA, as reported by commercial fishers and seafood processors, and downloaded from https://www.fisheries.noaa.gov/foss/f?p=215:200:::::: per the data provider, this dataset is probably the better one for total landings.</li>
 <li><code>scga_landings_headOff_whiteShrimp_byseason.csv</code> - white shrimp, by Fall vs.&nbsp;Winter-Spring-Summer. Combined white shrimp landings for SC and GA by two ‘seasons’. The Fall is defined as Aug-Dec and the Win_Spr_Sum is defined as Jan-July. As such, these two seasons can be combined to come up with ‘Annual’ landings.</li>
-</ul>
-<p><strong>Generated data file(s):</strong> Modified data frames were written to <code>adultCommercial_dfs.RData</code>:</p>
-<ul>
-<li><code>landings_annual</code></li>
-<li><code>landings_seas</code></li>
-<li><code>tripTick_abund</code></li>
 </ul>
 <p><strong>Modifications to data:</strong></p>
 <ul>
@@ -1702,6 +1695,12 @@ Table&nbsp;5.5: White Shrimp (SC + GA) seasonal landings.
 <li>Annual Landings from NMFS file: both <code>Pounds</code> and <code>Dollars</code> were read in as character due to commas in the number formatting; parsed these to numeric. Then calculated versions where the numbers will be smaller: <code>Millions_of_Dollars</code> and <code>Millions_of_Pounds</code>.<br>
 </li>
 <li>Seasonal head-off landings of white shrimp: added two columns for better ordering, because ‘Win_Spr_Sum’ is Jan-July, and ‘Fall’ is Aug-Dec of each year. Added <code>Months</code> to show this, and <code>Period</code> where Fall is 1 and Win_Spr_Sum is 2. Otherwise Fall appears first in the data frame due to alphabetical ordering; but chronologically it should be 2nd.</li>
+</ul>
+<p><strong>Generated data file(s):</strong> Data frames were modified as described above, and written to <code>data/intermediate/adultCommercial_dfs.RData</code> (the single <code>.RData</code> file contains multiple data frames):</p>
+<ul>
+<li><code>landings_annual</code></li>
+<li><code>landings_seas</code></li>
+<li><code>tripTick_abund</code></li>
 </ul>
 <p><strong>Other notes about data:</strong></p>
 <ul>
