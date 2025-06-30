@@ -16,6 +16,9 @@ book:
   title: "Lowcountry Shrimp Dataset Deep Dive"
   date: today
   date-format: long
+  repo-url: https://github.com/catbirdstats/LowcountryShrimp_public
+  repo-actions: [source]
+  repo-link-target: "_blank"
   chapters:
     - index.qmd
     - part: shrimp_data_exploration.qmd
