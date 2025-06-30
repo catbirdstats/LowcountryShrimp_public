@@ -16,6 +16,8 @@ Starting in 1989, which is when this file starts, sampling was pretty consistent
 
 There's also some inner vs. outer depth zone stuff to check. See below -  14,576 rows are from "inner" and only 534 from "outer", so will remove "outer" completely.    
 
+More on depth zones, from the Figure 1 caption on the Coastal Trawl website linked above: "The first map shows what's going on, and has this in the caption: "....Inner (shallow) strata are sampled during all seasons (1990-present). Outer (deep) strata were sampled south in Spring (green) and north in Fall (yellow) from 1990-2000. In 1989, both depth zones were sampled over the entire latitudinal range in Spring and Fall."
+
 NC, SC, GA, and FL are present in this dataset.  
 
 

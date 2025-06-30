@@ -83,7 +83,7 @@ landings_annual <- landings_annual |>
            Pounds = parse_number(Pounds),
            Dollars = parse_number(Dollars),
            Millions_of_dollars = Dollars / 1000000,
-           TensofThousands_Pounds = Pounds / 10000)
+           Millions_of_Pounds = Pounds / 1000000)
 
 landings_seas <- landings_seas  |> 
     mutate(Species = "white",
@@ -117,7 +117,7 @@ p1 <- landings_annual |>
     filter(Species %in% c("brown", "white", "pink")) |> 
     ggplot() + 
     geom_point(aes(x = Year,
-                     y = TensofThousands_Pounds,
+                     y = Millions_of_Pounds,
                    col = Species),
                size = 2) +
     facet_grid(State~Species) +
@@ -126,7 +126,7 @@ p1 <- landings_annual |>
     labs(title = "Annual Landings via NMFS",
          subtitle = "by species x state",
          x = "Year",
-         y = "10,000 Pounds") +
+         y = "Million Pounds") +
     theme(legend.position = "none")
 
 p2 <- tripTick_abund |> 
@@ -168,10 +168,10 @@ p3 <- tripTick_abund |>
     theme(legend.position = "none")
 
 p4 <- landings_seas |> 
-    mutate(TensofThousands_Pounds = lbs_headOff / 10000) |> 
+    mutate(Millions_of_Pounds = lbs_headOff / 1000000) |> 
     ggplot() + 
     geom_point(aes(x = Year,
-                     y = TensofThousands_Pounds,
+                     y = Millions_of_Pounds,
                    col = Months),
                size = 2) +
     facet_wrap(~Months, ncol = 1) +
@@ -180,21 +180,21 @@ p4 <- landings_seas |>
     labs(title = "White Shrimp landings by season",
          subtitle = "GA + SC combined, head-off weight",
          x = "Year",
-         y = "10,000 Pounds") +
+         y = "Million Pounds") +
     theme(legend.position = "none")
 
 p5 <- landings_seas |> 
-    mutate(TensofThousands_Pounds = lbs_headOff / 10000,
+    mutate(Millions_of_Pounds = lbs_headOff / 1000000,
            pseudo.month = case_match(Period,
                                      1 ~ 3,
                                      2 ~ 10),
            pseudo.date = lubridate::ymd(paste(Year, pseudo.month, "01"))) |> 
     ggplot() + 
     geom_line(aes(x = pseudo.date,
-                  y = TensofThousands_Pounds),
+                  y = Millions_of_Pounds),
               col = "gray70") +
     geom_point(aes(x = pseudo.date,
-                     y = TensofThousands_Pounds,
+                     y = Millions_of_Pounds,
                    col = Months),
                size = 2) +
     # facet_wrap(~Months, ncol = 1) +
@@ -203,7 +203,7 @@ p5 <- landings_seas |>
     labs(title = "White Shrimp landings by season",
          subtitle = "GA + SC combined, head-off weight",
          x = "Year",
-         y = "10,000 Pounds",
+         y = "Million Pounds",
          col = "Time period") +
     theme_bw()
 ```
@@ -369,7 +369,7 @@ landings_seas |>
 
 -   All files: changed `Species` from provided names to 'brown', 'white', and 'pink'.\
 -   Trip Tickets file: Calculated `CPUE_approx` as landings / number of dealers (number of dealers and number of fishers were the same). Made two new columns for two-month `WAVE`: `Wave` to identify the months, e.g. `1 Jan-Feb`, `2 Mar-Apr`, etc.; and `Wave_start` to identify the first month numerically, for better plotting of time series, e.g. Wave 1 (Jan-Feb) is assigned 1; Wave 2 (Mar-Apr) is assigned 3; etc. Added a column for `State`, based on mapping the lat/longs of each named location in the file during earlier exploration.\
--   Annual Landings from NMFS file: both `Pounds` and `Dollars` were read in as character due to commas in the number formatting; parsed these to numeric. Then calculated versions where the numbers will be smaller: `Millions_of_Dollars` and `TensofThousands_Pounds`.  
+-   Annual Landings from NMFS file: both `Pounds` and `Dollars` were read in as character due to commas in the number formatting; parsed these to numeric. Then calculated versions where the numbers will be smaller: `Millions_of_Dollars` and `Millions_of_Pounds`.  
 -   Seasonal head-off landings of white shrimp: added two columns for better ordering, because 'Win_Spr_Sum' is Jan-July, and 'Fall' is Aug-Dec of each year. Added `Months` to show this, and `Period` where Fall is 1 and Win_Spr_Sum is 2. Otherwise Fall appears first in the data frame due to alphabetical ordering; but chronologically it should be 2nd.  
 
 **Other notes about data:**

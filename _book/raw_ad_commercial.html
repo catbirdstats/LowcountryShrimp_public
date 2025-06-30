@@ -578,16 +578,16 @@ Table&nbsp;5.1: Brown shrimp annual landings summary
 <p><strong>Variable type: numeric</strong></p>
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <colgroup>
-<col style="width: 18%">
+<col style="width: 16%">
 <col style="width: 8%">
 <col style="width: 11%">
-<col style="width: 8%">
-<col style="width: 8%">
-<col style="width: 7%">
-<col style="width: 8%">
-<col style="width: 8%">
-<col style="width: 8%">
 <col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 7%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 10%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -653,16 +653,16 @@ Table&nbsp;5.1: Brown shrimp annual landings summary
 <td style="text-align: right;">18.85</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">TensofThousands_Pounds</td>
+<td style="text-align: left;">Millions_of_Pounds</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">205.99</td>
-<td style="text-align: right;">187.20</td>
-<td style="text-align: right;">4.19</td>
-<td style="text-align: right;">76.59</td>
-<td style="text-align: right;">142.71</td>
-<td style="text-align: right;">272.01</td>
-<td style="text-align: right;">1037.82</td>
+<td style="text-align: right;">2.06</td>
+<td style="text-align: right;">1.87</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.77</td>
+<td style="text-align: right;">1.43</td>
+<td style="text-align: right;">2.72</td>
+<td style="text-align: right;">10.38</td>
 </tr>
 </tbody>
 </table>
@@ -808,14 +808,14 @@ Table&nbsp;5.2: White shrimp annual landings summary
 <p><strong>Variable type: numeric</strong></p>
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <colgroup>
-<col style="width: 18%">
+<col style="width: 16%">
 <col style="width: 8%">
 <col style="width: 11%">
-<col style="width: 8%">
-<col style="width: 8%">
+<col style="width: 9%">
+<col style="width: 9%">
 <col style="width: 7%">
-<col style="width: 8%">
-<col style="width: 8%">
+<col style="width: 9%">
+<col style="width: 9%">
 <col style="width: 9%">
 <col style="width: 9%">
 </colgroup>
@@ -883,16 +883,16 @@ Table&nbsp;5.2: White shrimp annual landings summary
 <td style="text-align: right;">23.69</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">TensofThousands_Pounds</td>
+<td style="text-align: left;">Millions_of_Pounds</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">337.27</td>
-<td style="text-align: right;">217.13</td>
-<td style="text-align: right;">1.14</td>
-<td style="text-align: right;">174.36</td>
-<td style="text-align: right;">314.46</td>
-<td style="text-align: right;">459.04</td>
-<td style="text-align: right;">947.25</td>
+<td style="text-align: right;">3.37</td>
+<td style="text-align: right;">2.17</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;">1.74</td>
+<td style="text-align: right;">3.14</td>
+<td style="text-align: right;">4.59</td>
+<td style="text-align: right;">9.47</td>
 </tr>
 </tbody>
 </table>
@@ -1696,7 +1696,7 @@ Table&nbsp;5.5: White Shrimp (SC + GA) seasonal landings.
 </li>
 <li>Trip Tickets file: Calculated <code>CPUE_approx</code> as landings / number of dealers (number of dealers and number of fishers were the same). Made two new columns for two-month <code>WAVE</code>: <code>Wave</code> to identify the months, e.g.&nbsp;<code>1 Jan-Feb</code>, <code>2 Mar-Apr</code>, etc.; and <code>Wave_start</code> to identify the first month numerically, for better plotting of time series, e.g.&nbsp;Wave 1 (Jan-Feb) is assigned 1; Wave 2 (Mar-Apr) is assigned 3; etc. Added a column for <code>State</code>, based on mapping the lat/longs of each named location in the file during earlier exploration.<br>
 </li>
-<li>Annual Landings from NMFS file: both <code>Pounds</code> and <code>Dollars</code> were read in as character due to commas in the number formatting; parsed these to numeric. Then calculated versions where the numbers will be smaller: <code>Millions_of_Dollars</code> and <code>TensofThousands_Pounds</code>.<br>
+<li>Annual Landings from NMFS file: both <code>Pounds</code> and <code>Dollars</code> were read in as character due to commas in the number formatting; parsed these to numeric. Then calculated versions where the numbers will be smaller: <code>Millions_of_Dollars</code> and <code>Millions_of_Pounds</code>.<br>
 </li>
 <li>Seasonal head-off landings of white shrimp: added two columns for better ordering, because ‘Win_Spr_Sum’ is Jan-July, and ‘Fall’ is Aug-Dec of each year. Added <code>Months</code> to show this, and <code>Period</code> where Fall is 1 and Win_Spr_Sum is 2. Otherwise Fall appears first in the data frame due to alphabetical ordering; but chronologically it should be 2nd.</li>
 </ul>
