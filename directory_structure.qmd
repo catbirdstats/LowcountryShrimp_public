@@ -21,6 +21,7 @@ This chapter primarily exists to guide other members of the working group in mod
   -  shrimp year (based on month or season); these files will also contain a column for the abundance index  
 
 The older version of the processed data folder has the following subfolders:  
+
 -  *01 Survey level* - averaged to month and then shrimp year, per survey. ALL files have the same columns: survey, species, life_stage, shrimp_year, abundance_measure, abundance, sqrt_abundance  
 -  *02 Life Stage level* - averaged survey results to shrimp year x life stage, if relevant
 Again all files have same columns. Survey, species, life_stage, shrimp_year, abundance, abundance_measure (if average of two surveys, will be told here), abundance, sqrt_abundance  

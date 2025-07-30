@@ -1,11 +1,13 @@
 # Shrimp Year Abundance Index Explanation {#sec-shrimpyearexpl}
 
-The concept of **shrimp year** is somewhat complicated - a detailed explanation is below. If you prefer, jump straight to @fig-wintershrimpyears.
+The concept of **shrimp year** is somewhat complicated - a detailed explanation is below. If you prefer, jump straight to @tbl-shrimpYearAssignment and/or @fig-wintershrimpyears.
 
 ```{r}
 library(dplyr)
 library(ggplot2)
 library(patchwork)
+library(tibble)
+library(gt)
 ```
 
 ## Shrimp Year
@@ -20,7 +22,54 @@ We use **shrimp year** to represent a single cohort of shrimp, and assign the ca
 
 Each survey in this project, based on its location of sampling, is expected to primarily catch a single life stage of each shrimp. Based on the month of sampling, the targeted life stage, and the shrimp species, we assigned shrimp year to each sampling event based on the following:
 
-**insert tables here of shrimp year definitions by life stage**
+### Table based on sample date and life stage  
+
+**need to give it some formatting love, but this aligns with assignment**  
+
+```{r}
+#| label: tbl-shrimpYearAssignment
+#| tbl-cap: "Shrimp year assignments, based on month and calendar year of sampling, by species and life stage. 'year' represents the calendar year of sample date. 'year - 1' represents the calendar year prior to the sample date (e.g. 2004 when sample date is 2005). 'year + 1' represents the calendar year after the sample date (e.g. 2006 when sample date is 2005)."
+
+shrimp_table <- tribble(
+  ~Month, ~BS_Postlarvae, ~BS_Juvenile, ~BS_Subadult, ~BS_Adult,
+           ~WS_Postlarvae, ~WS_Juvenile, ~WS_Subadult, ~WS_Adult,
+  "1 - Jan", "year", "year", "year", "year", "year", "year", "year - 1", "year - 1",
+  "2 - Feb", "year", "year", "year", "year", "year", "year", "year - 1", "year - 1",
+  "3 - Mar", "year", "year", "year", "year", "year", "year", "year - 1", "year - 1",
+  "4 - Apr", "year", "year", "year", "year", "year", "year", "year - 1", "year - 1",
+  "5 - May", "year", "year", "year", "year", "year", "year", "year - 1", "year - 1",
+  "6 - Jun", "removed", "year", "year", "year", "year", "year", "year - 1", "year - 1",
+  "7 - Jul", "removed", "year", "year", "year", "year", "year", "year", "year",
+  "8 - Aug", "removed", "year", "year", "year", "year", "year", "year", "year",
+  "9 - Sep", "removed", "year + 1", "year + 1", "year", "year", "year", "year", "year",
+  "10 - Oct", "removed", "year + 1", "year + 1", "year", "year", "year", "year", "year",
+  "11 - Nov", "removed", "year + 1", "year + 1", "year", "year", "year", "year", "year",
+  "12 - Dec", "removed", "year + 1", "year + 1", "year", "year", "year", "year", "year"
+)
+
+# Step 2: Create the gt table
+shrimp_table |> 
+  gt() |> 
+  tab_spanner(
+    label = "Brown Shrimp",
+    columns = BS_Postlarvae:BS_Adult
+  ) |>
+  tab_spanner(
+    label = "White Shrimp",
+    columns = WS_Postlarvae:WS_Adult
+  ) |>
+  cols_label(
+    BS_Postlarvae = "Postlarvae",
+    BS_Juvenile = "Juvenile",
+    BS_Subadult = "Subadult",
+    BS_Adult = "Adult",
+    WS_Postlarvae = "Postlarvae",
+    WS_Juvenile = "Juvenile",
+    WS_Subadult = "Subadult",
+    WS_Adult = "Adult"
+  ) 
+```
+
 
 ### Environmental data
 
@@ -34,7 +83,7 @@ Again, we need to aggregate data. **Winter** here is defined as December through
 
 **this will be what Kim showed the group at some point in the past, with 2 or 3 calendar years worth of data**
 
-**need to actually process the data though**
+**need to actually process the data though** and use quarto's `embed` functionality to show it here  
 
 ![Temperature and abundance data, colored by shrimp year, with irrelevant life stages grayed out.](winters-shrimpYears-markedup.png){#fig-wintershrimpyears width="9.43in"}
 
