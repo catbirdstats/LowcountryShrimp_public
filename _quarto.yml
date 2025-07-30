@@ -9,6 +9,7 @@ execute:
   message: false
   error: true
   cache: false
+  freeze: true
   enabled: true
   
   
@@ -19,8 +20,13 @@ book:
   repo-url: https://github.com/catbirdstats/LowcountryShrimp_public
   repo-actions: [source]
   repo-link-target: "_blank"
+  cover-image: Lowcountry-Shrimp-Collaborative Color.png
   chapters:
     - index.qmd
+    - part: "Definitions and Structure"
+      chapters: 
+        - shrimp_year_explanations.qmd
+        - directory_structure.qmd
     - part: shrimp_data_exploration.qmd
       chapters: 
         - raw_postlarv.qmd
@@ -33,9 +39,6 @@ book:
       chapters: 
         - raw_wtemp.qmd
         - raw_sal.qmd  
-    - part: "Shrimp Year Definition"
-      chapters: 
-        - shrimp_year_explanations.qmd
     - part: "Summarizing to Abundance Index"
       chapters:
         - process_postlarv.qmd
@@ -53,9 +56,6 @@ book:
         - rel_temp_thresholds.qmd  
         - rel_sal.qmd  
         - rel_regression_models.qmd  
-  appendices:
-    - app_dictionaries_raw.qmd
-    - app_dictionaries_processed.qmd
 
 bibliography: references.bib
 

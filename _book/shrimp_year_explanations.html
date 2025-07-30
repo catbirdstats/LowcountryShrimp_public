@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Lowcountry Shrimp Dataset Deep Dive - 9&nbsp; Shrimp Year Explanations</title>
+<title>Lowcountry Shrimp Dataset Deep Dive - 1&nbsp; Shrimp Year Abundance Index Explanation</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./process_postlarv.html" rel="next">
-<link href="./raw_sal.html" rel="prev">
+<link href="./directory_structure.html" rel="next">
+<link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -81,7 +81,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./shrimp_year_explanations.html">Shrimp Year Definition</a></li><li class="breadcrumb-item"><a href="./shrimp_year_explanations.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Shrimp Year Explanations</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./shrimp_year_explanations.html">Definitions and Structure</a></li><li class="breadcrumb-item"><a href="./shrimp_year_explanations.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Shrimp Year Abundance Index Explanation</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -117,8 +117,8 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./shrimp_data_exploration.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Shrimp Data Exploration</span></a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Definitions and Structure</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -126,46 +126,22 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./raw_postlarv.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Postlarvae</span></span></a>
+  <a href="./shrimp_year_explanations.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Shrimp Year Abundance Index Explanation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./raw_juv.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Juveniles</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./raw_subad.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Subadults</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./raw_ad_seamap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Adults - fisheries-independent</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./raw_ad_commercial.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Adults - landings and trip tickets</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./raw_food_sources.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Food sources (benthic cores)</span></span></a>
+  <a href="./directory_structure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Processing and Directory Structure</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
- <span class="menu-text">Environmental Data Exploration</span></a>
+            <a href="./shrimp_data_exploration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Shrimp Data Exploration</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -173,14 +149,38 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./raw_wtemp.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Water Temperature at Charleston Harbor</span></span></a>
+  <a href="./raw_postlarv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Postlarvae</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./raw_sal.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Salinity</span></span></a>
+  <a href="./raw_juv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Juveniles</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./raw_subad.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Subadults</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./raw_ad_seamap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Adults - fisheries-independent</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./raw_ad_commercial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Adults - landings and trip tickets</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./raw_food_sources.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Food sources (benthic cores)</span></span></a>
   </div>
 </li>
       </ul>
@@ -188,7 +188,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
- <span class="menu-text">Shrimp Year Definition</span></a>
+ <span class="menu-text">Environmental Data Exploration</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -196,8 +196,14 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./shrimp_year_explanations.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Shrimp Year Explanations</span></span></a>
+  <a href="./raw_wtemp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Water Temperature at Charleston Harbor</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./raw_sal.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Salinity</span></span></a>
   </div>
 </li>
       </ul>
@@ -214,37 +220,37 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./process_postlarv.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Postlarval Stage</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Postlarval Stage</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./process_juv.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Juvenile</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Juvenile</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./process_subad.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Subadults</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Subadults</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./process_ad_seamap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Adults - fishery-independent</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Adults - fishery-independent</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./process_ad_commercial.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Adults - landings and trip tickets</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Adults - landings and trip tickets</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./process_food_sources.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Food sources (benthic cores)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Food sources (benthic cores)</span></span></a>
   </div>
 </li>
       </ul>
@@ -261,13 +267,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./process_wtemp.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Water Temperature at Charleston Harbor</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Water Temperature at Charleston Harbor</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./process_sal.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Salinity</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Salinity</span></span></a>
   </div>
 </li>
       </ul>
@@ -284,42 +290,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rel_temp_thresholds.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Temperature thresholds</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Temperature thresholds</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rel_sal.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Nursery Period Salinity</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Nursery Period Salinity</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rel_regression_models.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Regression Models</span></span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true">
- <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./app_dictionaries_raw.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Data Dictionaries - raw datasets</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./app_dictionaries_processed.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Data Dictionaries - processed data</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Regression Models</span></span></a>
   </div>
 </li>
       </ul>
@@ -330,14 +313,25 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#shrimp-year" id="toc-shrimp-year" class="nav-link active" data-scroll-target="#shrimp-year"><span class="header-section-number">1.1</span> Shrimp Year</a>
+  <ul class="collapse">
+  <li><a href="#environmental-data" id="toc-environmental-data" class="nav-link" data-scroll-target="#environmental-data"><span class="header-section-number">1.1.1</span> Environmental data</a></li>
+  </ul></li>
+  <li><a href="#graphic-of-abundances-temperatures-and-assigned-shrimp-years" id="toc-graphic-of-abundances-temperatures-and-assigned-shrimp-years" class="nav-link" data-scroll-target="#graphic-of-abundances-temperatures-and-assigned-shrimp-years"><span class="header-section-number">1.2</span> Graphic of abundances, temperatures, and assigned shrimp years</a></li>
+  <li><a href="#abundance-index" id="toc-abundance-index" class="nav-link" data-scroll-target="#abundance-index"><span class="header-section-number">1.3</span> Abundance Index</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/catbirdstats/LowcountryShrimp_public/blob/main/shrimp_year_explanations.qmd" target="_blank" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./shrimp_year_explanations.html">Shrimp Year Definition</a></li><li class="breadcrumb-item"><a href="./shrimp_year_explanations.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Shrimp Year Explanations</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./shrimp_year_explanations.html">Definitions and Structure</a></li><li class="breadcrumb-item"><a href="./shrimp_year_explanations.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Shrimp Year Abundance Index Explanation</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Shrimp Year Explanations</span></h1>
+<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Shrimp Year Abundance Index Explanation</span></h1>
 </div>
 
 
@@ -354,9 +348,59 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Here we show how we defined ‘shrimp year’ for each species, and what that actually means in the context of winter temperatures.</p>
+<p>The concept of <strong>shrimp year</strong> is somewhat complicated - a detailed explanation is below. If you prefer, jump straight to <a href="#fig-wintershrimpyears" class="quarto-xref">Figure&nbsp;<span>1.1</span></a>.</p>
+<section id="shrimp-year" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="shrimp-year"><span class="header-section-number">1.1</span> Shrimp Year</h2>
+<p>When examining long-term datasets, it is convenient, if not necessary, to perform some aggregation of data to means or totals over some representative length of time (e.g.&nbsp;monthly mean temperature, annual precipitation total, monthly or annual totals of money spent on [anything related to budgets]).</p>
+<p>In this project, we want to be able to link different life stages of shrimp to each other, and ask questions like “if postlarvae did well this year, did juveniles also do well? does that hold all the way through adults, and fisheries landings?”</p>
+<p>Animal life cycles, incoveniently for us, do not necessarily align with calendar years. It may be (and for brown shrimp generally is the case) that young are spawned early in a calendar year and are adults late in that calendar year. However, white shrimp (and many other species) may be spawned in the middle or late part of a calendar year, and not be adults until the next calendar year. So, in order to relate those adults to the earlier life stages, we cannot use calendar year to represent the cohort of shrimp.</p>
+<p>We use <strong>shrimp year</strong> to represent a single cohort of shrimp, and assign the calendar year in which that group of shrimp will live most of their lives. For brown shrimp, the shrimp year is the calendar year in which the individuals will show up in the fishery. For white shrimp, it is the year in which they go through most life stages; though adults will bleed into (and spawn in) the following calendar year.</p>
+<p>Each survey in this project, based on its location of sampling, is expected to primarily catch a single life stage of each shrimp. Based on the month of sampling, the targeted life stage, and the shrimp species, we assigned shrimp year to each sampling event based on the following:</p>
+<p><strong>insert tables here of shrimp year definitions by life stage</strong></p>
+<section id="environmental-data" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="environmental-data"><span class="header-section-number">1.1.1</span> Environmental data</h3>
+<p>Winter temperatures and cold spells can impact shrimp growth and/or survival, and understanding these dynamics is important to shrimp fishery managers. Salinity during early life stages may also impact shrimp, and these effects extend to later stages of the life cycle.</p>
+<p>Again, we need to aggregate data. <strong>Winter</strong> here is defined as December through February. For brown shrimp, the shrimp year impacted by winter temperatures is the calendar year containing that January and February. For white shrimp, we have assigned each winter metric separately to two life stages, as they occur in different years: postlarval winters and adult winters. Subadults and adults will be impacted by winter temperatures occurring a year after the winter temperatures that affect the postlarval and juvenile stages. See <a href="#fig-wintershrimpyears" class="quarto-xref">Figure&nbsp;<span>1.1</span></a>. <strong>Nursery period</strong> is defined separately for each species, based on Batchelder et al.&nbsp;2024*: April through July for brown shrimp, and June through October for white shrimp.</p>
+<p>*Batchelder, L., Stone, J., Kimball, M., Pfirrmann, B., &amp; Dunn, R. (2024). Phenology of penaeid shrimp nursery habitat use: Trends and environmental drivers over four decades. Marine Ecology Progress Series, 751, 79–95. https://doi.org/10.3354/meps14741</p>
+</section>
+</section>
+<section id="graphic-of-abundances-temperatures-and-assigned-shrimp-years" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="graphic-of-abundances-temperatures-and-assigned-shrimp-years"><span class="header-section-number">1.2</span> Graphic of abundances, temperatures, and assigned shrimp years</h2>
+<p><strong>this will be what Kim showed the group at some point in the past, with 2 or 3 calendar years worth of data</strong></p>
+<p><strong>need to actually process the data though</strong></p>
+<div id="fig-wintershrimpyears" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-wintershrimpyears-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="winters-shrimpYears-markedup.png" class="img-fluid figure-img" style="width:9.43in">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wintershrimpyears-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.1: Temperature and abundance data, colored by shrimp year, with irrelevant life stages grayed out.
+</figcaption>
+</figure>
+</div>
+<p><strong>group may want to insert conceptual diagram too when that is completed</strong></p>
+</section>
+<section id="abundance-index" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="abundance-index"><span class="header-section-number">1.3</span> Abundance Index</h2>
+<p>This project brought together a number of surveys by different organizations, with different methods, and different ways of quantifying shrimp abundance. In order to make these numbers comparable, while accounting for possible variation in the number of sampling stations and sample dates over time, we have adjusted abundance metrics to an index using the following steps. More details for individual datasets will be provided in that life stage’s chapter in the “Summarizing to Abundance Index” portion of this book.</p>
+<p>For each survey:</p>
+<ol type="1">
+<li><p>Assign shrimp year to each sample, based on month and species.</p></li>
+<li><p>If a sampling event (site/station on a date) had replicates, average them.</p></li>
+<li><p>Average data across all sites/stations on a sample day.</p></li>
+<li><p>Average data across all sampling dates within each month = average abundance for the month.</p></li>
+<li><p>Add the monthly averages, to get a total abundance for each shrimp year. This absorbs variability in timing for a year.</p></li>
+<li><p>From total abundance per shrimp year, derive an index:</p>
+<ol type="a">
+<li><p>Take the square root of total abundance (deals some with extreme high numbers).</p></li>
+<li><p>Mean-center the result from (1) across all shrimp years for the dataset.</p></li>
+<li><p>Divide by the standard deviation across all shrimp years for the datset.</p></li>
+</ol></li>
+</ol>
+<p><strong>talk about multiple datasets and how they were combined</strong></p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -770,13 +814,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./raw_sal.html" class="pagination-link" aria-label="Salinity">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Salinity</span></span>
+      <a href="./index.html" class="pagination-link" aria-label="Summary">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Summary</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./process_postlarv.html" class="pagination-link" aria-label="Postlarval Stage">
-        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Postlarval Stage</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./directory_structure.html" class="pagination-link" aria-label="Data Processing and Directory Structure">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Processing and Directory Structure</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -785,4 +829,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/catbirdstats/LowcountryShrimp_public/blob/main/shrimp_year_explanations.qmd" target="_blank" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/catbirdstats/LowcountryShrimp_public/blob/main/shrimp_year_explanations.qmd" target="_blank" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></div></div></footer></body></html>

@@ -1,0 +1,34 @@
+# Data Processing and Directory Structure  {#sec-structure}  
+
+```{r}
+
+```
+
+
+This chapter primarily exists to guide other members of the working group in modifying, updating, or extracting information from this book.  
+
+
+## Directory organization  
+-  `_quarto.yml` is the main ‘table of contents’ of all .qmd files in order. Each chapter also has an 'About' section at the bottom identifying the exact file used to generate it, as well as details about the input and output datasets for the chapter.  
+-  `_book/` is the subfolder with output files. Open any .html in here and you'll have access to the full structure. The pdf output is also in this directory. 
+
+## Data, data, data  
+
+-  `data/raw` = time series, unmodified  
+-  `data/intermediate` = time series with some simplifications for reporting and summarizing; generally outputs from the "Data Exploration" chapters of this book  
+-  `data/processed` - as of this writing, I haven't processed data yet. This folder will contain data that are aggregated to different levels:  
+  -  month or season  
+  -  shrimp year (based on month or season); these files will also contain a column for the abundance index  
+
+The older version of the processed data folder has the following subfolders:  
+-  *01 Survey level* - averaged to month and then shrimp year, per survey. ALL files have the same columns: survey, species, life_stage, shrimp_year, abundance_measure, abundance, sqrt_abundance  
+-  *02 Life Stage level* - averaged survey results to shrimp year x life stage, if relevant
+Again all files have same columns. Survey, species, life_stage, shrimp_year, abundance, abundance_measure (if average of two surveys, will be told here), abundance, sqrt_abundance  
+-  *03 Combined abundance* - combined all abundance files and calculated abundance index  
+-  *04 Environmental Survey level*  
+-  *05 Combined environmental*  
+
+
+## About
+
+**Input `.qmd` file** for this section was:  **`r xfun::with_ext(knitr::current_input(), "qmd")`**  and can be found in the main directory.  
