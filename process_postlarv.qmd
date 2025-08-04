@@ -62,7 +62,10 @@ postlarv_yearly <- postlarv_abund_monthly |>
     summarize(.by = c(survey, species, life_stage, shrimp_year, abundance_measure),
               abundance = sum(abundance, na.rm = TRUE)) |> 
     mutate(sqrt_abundance = sqrt(abundance)) |> 
-    select(all_of(sel_order_annual))
+    select(all_of(sel_order_annual)) |> 
+    group_by(species) |> 
+    mutate(abundanceIndex_fullTimePeriod = as.vector(scale(sqrt_abundance))) |> 
+    ungroup()
 ```
 
 
