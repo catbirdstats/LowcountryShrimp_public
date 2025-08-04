@@ -1,5 +1,7 @@
 # Postlarval Stage  
 
+Setup  
+
 ```{r}
 library(dplyr)
 library(tidyr)
@@ -8,9 +10,8 @@ source(here::here("functions.R"))
 
 in_path <- here::here("data", "intermediate")
 out_path <- here::here("data", "processed")
-```
 
-```{r}
+
 load(here::here(in_path, "postlarval_dfs.RData"))
 
 postlarv_abund <- postlarv_abund |> 
@@ -27,6 +28,8 @@ postlarv_abund <- postlarv_abund |>
                  names_to = "species",
                  values_to = "density")
 ```
+
+#### Compiling to monthly  
 
 ```{r}
 # compile to monthly
@@ -52,6 +55,7 @@ postlarv_abund_monthly <- postlarv_abund_monthly |>
     select(all_of(sel_order_monthly))
 ```
 
+#### Compiling to shrimp year  
 
 ```{r}
 # annual file - by shrimp year
@@ -68,6 +72,7 @@ postlarv_yearly <- postlarv_abund_monthly |>
     ungroup()
 ```
 
+#### Saving files out  
 
 ```{r}
 # write out

@@ -4,7 +4,6 @@ project:
 number-depth: 2
 
 execute:
-  echo: false
   warning: false
   message: false
   error: true
@@ -62,8 +61,11 @@ bibliography: references.bib
 format:
   html:
     theme: cosmo
+    echo: true
+    code-fold: true
   pdf:
     documentclass: scrreprt
+    echo: false
     fig-pos: "H"
     tbl-pos: "H"
 

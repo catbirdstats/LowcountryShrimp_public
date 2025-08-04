@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -351,6 +385,16 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>The concept of <strong>shrimp year</strong> is somewhat complicated - a detailed explanation is below. If you prefer, jump straight to <a href="#tbl-shrimpYearAssignment" class="quarto-xref">Table&nbsp;<span>1.1</span></a> and/or <a href="#fig-wintershrimpyears" class="quarto-xref">Figure&nbsp;<span>1.1</span></a>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
 <section id="shrimp-year" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="shrimp-year"><span class="header-section-number">1.1</span> Shrimp Year</h2>
 <p>When examining long-term datasets, it is convenient, if not necessary, to perform some aggregation of data to means or totals over some representative length of time (e.g.&nbsp;monthly mean temperature, annual precipitation total, monthly or annual totals of money spent on [anything related to budgets]).</p>
@@ -362,6 +406,47 @@ ul.task-list li input[type="checkbox"] {
 <h3 class="anchored" data-anchor-id="table-based-on-sample-date-and-life-stage">Table based on sample date and life stage</h3>
 <p><strong>need to give it some formatting love, but this aligns with assignment</strong></p>
 <div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>shrimp_table <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>Month, <span class="sc">~</span>BS_Postlarvae, <span class="sc">~</span>BS_Juvenile, <span class="sc">~</span>BS_Subadult, <span class="sc">~</span>BS_Adult,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>           <span class="sc">~</span>WS_Postlarvae, <span class="sc">~</span>WS_Juvenile, <span class="sc">~</span>WS_Subadult, <span class="sc">~</span>WS_Adult,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"1 - Jan"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year - 1"</span>, <span class="st">"year - 1"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2 - Feb"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year - 1"</span>, <span class="st">"year - 1"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"3 - Mar"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year - 1"</span>, <span class="st">"year - 1"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"4 - Apr"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year - 1"</span>, <span class="st">"year - 1"</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"5 - May"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year - 1"</span>, <span class="st">"year - 1"</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"6 - Jun"</span>, <span class="st">"removed"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year - 1"</span>, <span class="st">"year - 1"</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"7 - Jul"</span>, <span class="st">"removed"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"8 - Aug"</span>, <span class="st">"removed"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"9 - Sep"</span>, <span class="st">"removed"</span>, <span class="st">"year + 1"</span>, <span class="st">"year + 1"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"10 - Oct"</span>, <span class="st">"removed"</span>, <span class="st">"year + 1"</span>, <span class="st">"year + 1"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"11 - Nov"</span>, <span class="st">"removed"</span>, <span class="st">"year + 1"</span>, <span class="st">"year + 1"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"12 - Dec"</span>, <span class="st">"removed"</span>, <span class="st">"year + 1"</span>, <span class="st">"year + 1"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span>, <span class="st">"year"</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Create the gt table</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>shrimp_table <span class="sc">|&gt;</span> </span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">"Brown Shrimp"</span>,</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> BS_Postlarvae<span class="sc">:</span>BS_Adult</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">"White Shrimp"</span>,</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> WS_Postlarvae<span class="sc">:</span>WS_Adult</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">BS_Postlarvae =</span> <span class="st">"Postlarvae"</span>,</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">BS_Juvenile =</span> <span class="st">"Juvenile"</span>,</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">BS_Subadult =</span> <span class="st">"Subadult"</span>,</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">BS_Adult =</span> <span class="st">"Adult"</span>,</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">WS_Postlarvae =</span> <span class="st">"Postlarvae"</span>,</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">WS_Juvenile =</span> <span class="st">"Juvenile"</span>,</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">WS_Subadult =</span> <span class="st">"Subadult"</span>,</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">WS_Adult =</span> <span class="st">"Adult"</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div id="tbl-shrimpYearAssignment" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-shrimpYearAssignment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -369,23 +454,23 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
 </figcaption>
 <div aria-describedby="tbl-shrimpYearAssignment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="ajnjiarwkh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ajnjiarwkh table {
+<div id="rkfaajketr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#rkfaajketr table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ajnjiarwkh thead, #ajnjiarwkh tbody, #ajnjiarwkh tfoot, #ajnjiarwkh tr, #ajnjiarwkh td, #ajnjiarwkh th {
+#rkfaajketr thead, #rkfaajketr tbody, #rkfaajketr tfoot, #rkfaajketr tr, #rkfaajketr td, #rkfaajketr th {
   border-style: none;
 }
 
-#ajnjiarwkh p {
+#rkfaajketr p {
   margin: 0;
   padding: 0;
 }
 
-#ajnjiarwkh .gt_table {
+#rkfaajketr .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -411,12 +496,12 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   border-left-color: #D3D3D3;
 }
 
-#ajnjiarwkh .gt_caption {
+#rkfaajketr .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ajnjiarwkh .gt_title {
+#rkfaajketr .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -428,7 +513,7 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   border-bottom-width: 0;
 }
 
-#ajnjiarwkh .gt_subtitle {
+#rkfaajketr .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -440,7 +525,7 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   border-top-width: 0;
 }
 
-#ajnjiarwkh .gt_heading {
+#rkfaajketr .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -452,13 +537,13 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   border-right-color: #D3D3D3;
 }
 
-#ajnjiarwkh .gt_bottom_border {
+#rkfaajketr .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ajnjiarwkh .gt_col_headings {
+#rkfaajketr .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -473,7 +558,7 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   border-right-color: #D3D3D3;
 }
 
-#ajnjiarwkh .gt_col_heading {
+#rkfaajketr .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -493,7 +578,7 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   overflow-x: hidden;
 }
 
-#ajnjiarwkh .gt_column_spanner_outer {
+#rkfaajketr .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -505,15 +590,15 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   padding-right: 4px;
 }
 
-#ajnjiarwkh .gt_column_spanner_outer:first-child {
+#rkfaajketr .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ajnjiarwkh .gt_column_spanner_outer:last-child {
+#rkfaajketr .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ajnjiarwkh .gt_column_spanner {
+#rkfaajketr .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -525,11 +610,11 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   width: 100%;
 }
 
-#ajnjiarwkh .gt_spanner_row {
+#rkfaajketr .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ajnjiarwkh .gt_group_heading {
+#rkfaajketr .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -555,7 +640,7 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   text-align: left;
 }
 
-#ajnjiarwkh .gt_empty_group_heading {
+#rkfaajketr .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -570,15 +655,15 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   vertical-align: middle;
 }
 
-#ajnjiarwkh .gt_from_md > :first-child {
+#rkfaajketr .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ajnjiarwkh .gt_from_md > :last-child {
+#rkfaajketr .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ajnjiarwkh .gt_row {
+#rkfaajketr .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -597,7 +682,7 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   overflow-x: hidden;
 }
 
-#ajnjiarwkh .gt_stub {
+#rkfaajketr .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -610,7 +695,7 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   padding-right: 5px;
 }
 
-#ajnjiarwkh .gt_stub_row_group {
+#rkfaajketr .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -624,15 +709,15 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   vertical-align: top;
 }
 
-#ajnjiarwkh .gt_row_group_first td {
+#rkfaajketr .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ajnjiarwkh .gt_row_group_first th {
+#rkfaajketr .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ajnjiarwkh .gt_summary_row {
+#rkfaajketr .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -642,16 +727,16 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   padding-right: 5px;
 }
 
-#ajnjiarwkh .gt_first_summary_row {
+#rkfaajketr .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ajnjiarwkh .gt_first_summary_row.thick {
+#rkfaajketr .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ajnjiarwkh .gt_last_summary_row {
+#rkfaajketr .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -661,7 +746,7 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   border-bottom-color: #D3D3D3;
 }
 
-#ajnjiarwkh .gt_grand_summary_row {
+#rkfaajketr .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -671,7 +756,7 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   padding-right: 5px;
 }
 
-#ajnjiarwkh .gt_first_grand_summary_row {
+#rkfaajketr .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -681,7 +766,7 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   border-top-color: #D3D3D3;
 }
 
-#ajnjiarwkh .gt_last_grand_summary_row_top {
+#rkfaajketr .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -691,11 +776,11 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   border-bottom-color: #D3D3D3;
 }
 
-#ajnjiarwkh .gt_striped {
+#rkfaajketr .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ajnjiarwkh .gt_table_body {
+#rkfaajketr .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -704,7 +789,7 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   border-bottom-color: #D3D3D3;
 }
 
-#ajnjiarwkh .gt_footnotes {
+#rkfaajketr .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -718,7 +803,7 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   border-right-color: #D3D3D3;
 }
 
-#ajnjiarwkh .gt_footnote {
+#rkfaajketr .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -727,7 +812,7 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   padding-right: 5px;
 }
 
-#ajnjiarwkh .gt_sourcenotes {
+#rkfaajketr .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -741,7 +826,7 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   border-right-color: #D3D3D3;
 }
 
-#ajnjiarwkh .gt_sourcenote {
+#rkfaajketr .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -749,72 +834,72 @@ Table&nbsp;1.1: Shrimp year assignments, based on month and calendar year of sam
   padding-right: 5px;
 }
 
-#ajnjiarwkh .gt_left {
+#rkfaajketr .gt_left {
   text-align: left;
 }
 
-#ajnjiarwkh .gt_center {
+#rkfaajketr .gt_center {
   text-align: center;
 }
 
-#ajnjiarwkh .gt_right {
+#rkfaajketr .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ajnjiarwkh .gt_font_normal {
+#rkfaajketr .gt_font_normal {
   font-weight: normal;
 }
 
-#ajnjiarwkh .gt_font_bold {
+#rkfaajketr .gt_font_bold {
   font-weight: bold;
 }
 
-#ajnjiarwkh .gt_font_italic {
+#rkfaajketr .gt_font_italic {
   font-style: italic;
 }
 
-#ajnjiarwkh .gt_super {
+#rkfaajketr .gt_super {
   font-size: 65%;
 }
 
-#ajnjiarwkh .gt_footnote_marks {
+#rkfaajketr .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ajnjiarwkh .gt_asterisk {
+#rkfaajketr .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ajnjiarwkh .gt_indent_1 {
+#rkfaajketr .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ajnjiarwkh .gt_indent_2 {
+#rkfaajketr .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ajnjiarwkh .gt_indent_3 {
+#rkfaajketr .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ajnjiarwkh .gt_indent_4 {
+#rkfaajketr .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ajnjiarwkh .gt_indent_5 {
+#rkfaajketr .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ajnjiarwkh .katex-display {
+#rkfaajketr .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ajnjiarwkh div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#rkfaajketr div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>

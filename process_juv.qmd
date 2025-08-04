@@ -1,5 +1,195 @@
 # Juvenile  
 
-Datasets .....  
+There are two datasets that represent juveniles: SCDNR's Creek Trawls, and NIW NERR's Oyster Landing seines. 
 
-Multiple datasets here; abundances and sizes also present  
+Setup 
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+source(here::here("functions.R"))
+
+in_path <- here::here("data", "intermediate")
+out_path <- here::here("data", "processed")
+
+load(here::here(in_path, "juvenile_dfs.RData"))
+```
+
+
+#### SC Creek Trawls - compile to monthly  
+
+```{r}
+names(juv_sc_cpue) <- tolower(names(juv_sc_cpue))
+juv_sc_cpue <- filter(juv_sc_cpue,
+                      species %in% c("brown", "white"))
+
+# SC Creek Trawls
+# compile to monthly
+
+# no replicates to average; just go straight to monthly avg
+juv_cpue_monthly <- juv_sc_cpue |> 
+    summarize(.by = c(year, month, species),
+              cpue = mean(cpue, na.rm = TRUE)) |> 
+    mutate(survey = "SC Creek Trawls",
+           life_stage = "juvenile",
+           abundance_measure = "CPUE",
+           abundance = cpue)
+
+juv_cpue_monthly <- add_cohorts(juv_cpue_monthly, "juvenile") |> 
+    select(all_of(sel_order_monthly))
+```
+
+#### Oyster Landing - compile to monthly  
+
+```{r}
+# Oyster Landing
+# compile to monthly
+
+names(juv_ol_count) <- tolower(names(juv_ol_count))
+
+# no replicates to deal with
+
+juv_ol_monthly <- juv_ol_count |> 
+    summarize(.by = c(year, month, species),
+              count = mean(count, na.rm = TRUE)) |> 
+    mutate(survey = "OysterLanding",
+           life_stage = "juvenile",
+           abundance_measure = "count",
+           abundance = count)
+
+juv_ol_monthly <- add_cohorts(juv_ol_monthly, "juvenile") |> 
+    arrange(year, month, species) |> 
+    select(all_of(sel_order_monthly))
+```
+
+#### Combine monthly data frames  
+
+```{r}
+juv_monthly_combined <- bind_rows(juv_cpue_monthly,
+                                  juv_ol_monthly) |> 
+    arrange(year, month, species, survey)
+```
+
+Make sure numbers are generally on the same scale before averaging.  
+
+```{r}
+#| label: fig-juvCombined
+#| fig-cap: "Jittered graphic of the square-root of abundance by species and survey. The different surveys used different measures of abundance (SC Creek Trawls used CPUE; Oyster Landing used count) but they appear to be on the same scale, so averaging them should be fine."
+ggplot(juv_monthly_combined,
+       aes(x = species, y = sqrt(abundance), col = survey)) +
+    geom_jitter()
+```
+
+## Compile to Shrimp Year  
+
+First, get annual totals by survey.   
+
+
+```{r}
+# annual file - by shrimp year
+# removing late postlarvae here - shrimp_year of 9999
+juv_combined_byShrimpYear <- juv_monthly_combined |> 
+    group_by(life_stage, survey, species, shrimp_year, abundance_measure) |> 
+    summarize(abundance = sum(abundance, na.rm = TRUE)) |> 
+    ungroup() |> 
+    mutate(sqrt_abundance = sqrt(abundance)) |> 
+    select(all_of(sel_order_annual)) |> 
+    arrange(shrimp_year, species, survey)
+```
+
+Now average the annual values across surveys.
+
+```{r}
+juv_combined_byShrimpYear_averaged <- juv_combined_byShrimpYear |> 
+    group_by(species, life_stage, shrimp_year) |> 
+    summarize(abundance = mean(abundance, na.rm = TRUE)) |> 
+    ungroup() |> 
+    mutate(sqrt_abundance = sqrt(abundance),
+           survey = "SC Creek Trawls and OL Seines",
+           abundance_measure = "mean across surveys; count matched CPUE in magnitude") |> 
+    select(all_of(sel_order_annual))
+```
+
+#### Write out.  
+
+```{r}
+# write out
+
+# monthly
+write.csv(juv_monthly_combined,
+          here::here(out_path, "juvenile_bySurveyAndMonth.csv"))
+# yearly
+write.csv(juv_combined_byShrimpYear,
+          here::here(out_path, "juvenile_bySurveyAndShrimpYear.csv"))
+write.csv(juv_combined_byShrimpYear_averaged,
+          here::here(out_path, "juvenile_byShrimpYear.csv"))
+```
+
+
+## Tabular summaries of output datasets  
+
+### Monthly  
+
+<details>
+
+::: {.content-visible when-format="html"}
+<summary>Click to expand</summary>
+:::
+
+```{r}
+#| label: tbl-monthlyJuvSC
+#| tbl-cap: "Summary of monthly juvenile abundance data, SC Creek Trawls"
+skimr::skim_without_charts(juv_cpue_monthly)
+```
+
+```{r}
+#| label: tbl-monthlyJuvOL
+#| tbl-cap: "Summary of monthly juvenile abundance data, Oyster Landing"
+skimr::skim_without_charts(juv_ol_monthly)
+```
+
+</details>
+
+### Yearly  
+
+<details>
+
+::: {.content-visible when-format="html"}
+<summary>Click to expand</summary>
+:::
+
+```{r}
+#| label: tbl-yearlyJuv
+#| tbl-cap: "Summary of juvenile abundance data by shrimp year, after averaging SC and OL surveys."
+skimr::skim_without_charts(juv_combined_byShrimpYear_averaged)
+```
+
+</details>
+
+## About
+
+**Input `.qmd` file** for this section was: **`r xfun::with_ext(knitr::current_input(), "qmd")`** and can be found in the main directory.  
+
+**Input data file(s)** - in `data/intermediate/juvenile_dfs.RData` (the single `.RData` file contains multiple data frames):
+
+-   `juv_sc_cpue`
+-   `juv_sc_size`
+-   `juv_ol_count`
+-   `juv_ol_size`
+
+
+**Modifications to data:**
+
+
+
+**Generated data file(s):**  - fully processed files are in the `data/processed` directory:  
+
+-  `juvenile_bySurveyAndMonth.csv` is summarized to species and month within year, by survey.  
+-  `juvenile_bySurveyAndShrimpYear.csv` is summarized to species and shrimp year, by survey. 
+-  `juvenile_byShrimpYear.csv` is summarized to species and shrimp year, as the average shrimp-year abundance across the two surveys. This is the file that will be used in further analyses.  
+
+**Other notes about data:**
+
+- none
