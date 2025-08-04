@@ -60,39 +60,21 @@ add_cohorts <- function(df, lifestage){
     
     if(lifestage == "postlarvae"){
         df <- df |> 
-            dplyr::mutate(born_year = case_when(species == "brown" & month <= 5 ~ paste0(year, ", early"),
-                                                species == "brown" & month >= 6 ~ paste0(year, ", late"),
-                                                species == "white" & month <= 4 ~ paste0(year, ", early"),
-                                                species == "white" & month <= 10 ~ paste0(year, ", mid"),
-                                                species == "white" & month > 10 ~ paste0(year, ", late"),
-                                                .default = NA_character_),
-                          shrimp_year = case_when(species == "brown" & month <= 5 ~ year,
+            dplyr::mutate(shrimp_year = case_when(species == "brown" & month <= 5 ~ year,
                                                   species == "brown" ~ 9999,
                                                   species == "white" ~ year,
                                                   .default = NA_integer_))
         return(df)
     } else if(lifestage == "juvenile"){
         df <- df |> 
-            dplyr::mutate(born_year = case_when(species == "brown" & month <= 3 ~ paste0(year-1, ", late"),
-                                                species == "brown" & month <= 8 ~ paste0(year, ", early"),
-                                                species == "brown" & month >= 9 ~ paste0(year, ", late"),
-                                                species == "white" & month <= 5 ~ paste0(year-1, ", late"),
-                                                species == "white" & month >= 6 ~ paste0(year, ", mid"),
-                                                .default = NA_character_),
-                          shrimp_year = case_when(species == "brown" & month <= 8 ~ year,
+            dplyr::mutate(shrimp_year = case_when(species == "brown" & month <= 8 ~ year,
                                                   species == "brown" & month >= 9 ~ year + 1,
                                                   species == "white" ~ year,
                                                   .default = NA_integer_))
         return(df)
     } else if(lifestage == "subadult"){
         df <- df |> 
-            dplyr::mutate(born_year = case_when(species == "brown" & month <= 5 ~ paste0(year-1, ", late"),
-                                                species == "brown" & month <= 8 ~ paste0(year, ", early"),
-                                                species == "brown" & month >= 9 ~ paste0(year, ", late"),
-                                                species == "white" & month <= 7 ~ paste0(year-1, ", late"),
-                                                species == "white" & month >= 8 ~ paste0(year, ", mid"),
-                                                .default = NA_character_),
-                          shrimp_year = case_when(species == "brown" & month <= 8 ~ year,
+            dplyr::mutate(shrimp_year = case_when(species == "brown" & month <= 8 ~ year,
                                                   species == "brown" ~ year + 1,
                                                   species == "white" & month <= 6 ~ year - 1,
                                                   species == "white" & month >= 7 ~ year,
@@ -100,11 +82,7 @@ add_cohorts <- function(df, lifestage){
         return(df)
     } else if(lifestage == "adult"){
         df <- df |> 
-            dplyr::mutate(born_year = case_when(species == "brown" ~ as.character(year),
-                                                species == "white" & month <= 7 ~ paste0(year-1, ", late"),
-                                                species == "white" & month >= 8 ~ paste0(year, ", mid"),
-                                                .default = NA_character_),
-                          shrimp_year = case_when(species == "brown" ~ year,
+            dplyr::mutate(shrimp_year = case_when(species == "brown" ~ year,
                                                   species == "white" & month <= 6 ~ year - 1,
                                                   species == "white" & month >= 7 ~ year,
                                                   .default = NA_integer_))
@@ -116,3 +94,14 @@ add_cohorts <- function(df, lifestage){
 
 # if desired, to check the function:
 # source(here::here("R", "tests.R"))
+
+
+# column selection order ----
+# not really functions; objects that I want in the environment
+sel_order_monthly <- c("survey", "species", "life_stage", 
+                       "year", "month", "shrimp_year",
+                       "abundance_measure", "abundance")
+sel_order_annual <- c("survey", "species", "life_stage", 
+                      "shrimp_year",
+                      "abundance_measure", "abundance",
+                      "sqrt_abundance")

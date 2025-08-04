@@ -1,7 +1,7 @@
 project:
   type: book
 
-number-depth: 3
+number-depth: 2
 
 execute:
   echo: false
@@ -9,7 +9,7 @@ execute:
   message: false
   error: true
   cache: false
-  freeze: true
+  freeze: auto
   enabled: true
   
   
