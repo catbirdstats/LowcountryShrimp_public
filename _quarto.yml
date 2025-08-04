@@ -33,7 +33,6 @@ book:
         - raw_subad.qmd
         - raw_ad_seamap.qmd
         - raw_ad_commercial.qmd
-        - raw_food_sources.qmd
     - part: "Environmental Data Exploration"
       chapters: 
         - raw_wtemp.qmd
@@ -45,7 +44,6 @@ book:
         - process_subad.qmd
         - process_ad_seamap.qmd
         - process_ad_commercial.qmd
-        - process_food_sources.qmd  
     - part: "Summarizing Environmental Data"
       chapters:
         - process_wtemp.qmd

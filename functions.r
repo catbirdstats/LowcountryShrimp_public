@@ -105,3 +105,7 @@ sel_order_annual <- c("survey", "species", "life_stage",
                       "shrimp_year",
                       "abundance_measure", "abundance",
                       "sqrt_abundance")
+
+# common time period definition ----
+# for trimming files
+common_shrimpYears <- seq(1989, 2017)

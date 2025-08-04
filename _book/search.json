@@ -425,223 +425,212 @@
     ]
   },
   {
-    "objectID": "raw_food_sources.html",
-    "href": "raw_food_sources.html",
-    "title": "8  Food sources (benthic cores)",
-    "section": "",
-    "text": "Stuff here",
-    "crumbs": [
-      "Shrimp Data Exploration",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Food sources (benthic cores)</span>"
-    ]
-  },
-  {
     "objectID": "raw_wtemp.html",
     "href": "raw_wtemp.html",
-    "title": "9  Water Temperature at Charleston Harbor",
+    "title": "8  Water Temperature at Charleston Harbor",
     "section": "",
     "text": "stuff",
     "crumbs": [
       "Environmental Data Exploration",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Water Temperature at Charleston Harbor</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Water Temperature at Charleston Harbor</span>"
     ]
   },
   {
     "objectID": "raw_sal.html",
     "href": "raw_sal.html",
-    "title": "10  Salinity",
+    "title": "9  Salinity",
     "section": "",
     "text": "from SCDNR trawls",
     "crumbs": [
       "Environmental Data Exploration",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Salinity</span>"
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Salinity</span>"
     ]
   },
   {
     "objectID": "process_postlarv.html",
     "href": "process_postlarv.html",
-    "title": "11  Postlarval Stage",
+    "title": "10  Postlarval Stage",
     "section": "",
-    "text": "Compiling to monthly\nCode\n# compile to monthly\n\n# first average replicates for each sample\npostlarv_abund_monthly &lt;- postlarv_abund |&gt; \n    summarize(.by = c(year, month, day, sample, species),\n              density = mean(density, na.rm = TRUE)) |&gt; \n    # now go up to month\n    summarize(.by = c(year, month, species),\n              density = mean(density, na.rm = TRUE)) |&gt; \n    arrange(year, month, species) |&gt; \n    mutate(survey = \"NInlet\",\n           life_stage = \"postlarval\",\n           abundance_measure = \"density\",\n           abundance = density) |&gt; \n    filter(year != 1900,\n           species %in% c(\"brown\", \"white\"))\n\npostlarv_abund_monthly &lt;- add_cohorts(postlarv_abund_monthly, \"postlarvae\")\n\npostlarv_abund_monthly &lt;- postlarv_abund_monthly |&gt; \n    select(all_of(sel_order_monthly))",
+    "text": "Setup\nCode\nlibrary(dplyr)\nlibrary(tidyr)\n\nsource(here::here(\"functions.R\"))\n\nin_path &lt;- here::here(\"data\", \"intermediate\")\nout_path &lt;- here::here(\"data\", \"processed\", \"byLifeStage\")\nout_path_detailed &lt;- here::here(out_path, \"moreDetailed\")\n\n\nload(here::here(in_path, \"postlarval_dfs.RData\"))\n\npostlarv_abund &lt;- postlarv_abund |&gt; \n    select(sample, replicate, date, \n           year, month, day,\n           total.ppl = total_ppl_density,\n           brown = brown_density,\n           white = white_density,\n           pink = pink_density) |&gt; \n    mutate(date = lubridate::mdy(date),\n           across(c(total.ppl:pink),\n                  as.numeric)) |&gt; \n    pivot_longer(c(brown, white, pink),\n                 names_to = \"species\",\n                 values_to = \"density\")",
     "crumbs": [
       "Summarizing to Abundance Index",
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Postlarval Stage</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Postlarval Stage</span>"
     ]
   },
   {
     "objectID": "process_postlarv.html#tabular-summaries-of-output-datasets",
     "href": "process_postlarv.html#tabular-summaries-of-output-datasets",
-    "title": "11  Postlarval Stage",
-    "section": "11.1 Tabular summaries of output datasets",
-    "text": "11.1 Tabular summaries of output datasets\n\nMonthly\n\n\nClick to expand\n\n\n\nCode\nskimr::skim_without_charts(postlarv_abund_monthly)\n\n\n\n\nTable 11.1: Summary of monthly postlarval abundance data\n\n\n\n\nData summary\n\n\nName\npostlarv_abund_monthly\n\n\nNumber of rows\n888\n\n\nNumber of columns\n8\n\n\n_______________________\n\n\n\nColumn type frequency:\n\n\n\ncharacter\n4\n\n\nnumeric\n4\n\n\n________________________\n\n\n\nGroup variables\nNone\n\n\n\nVariable type: character\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nempty\nn_unique\nwhitespace\n\n\n\n\nsurvey\n0\n1\n6\n6\n0\n1\n0\n\n\nspecies\n0\n1\n5\n5\n0\n2\n0\n\n\nlife_stage\n0\n1\n10\n10\n0\n1\n0\n\n\nabundance_measure\n0\n1\n7\n7\n0\n1\n0\n\n\n\nVariable type: numeric\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmean\nsd\np0\np25\np50\np75\np100\n\n\n\n\nyear\n0\n1\n1999.00\n10.68\n1981\n1990.00\n1999.0\n2008.00\n2017.00\n\n\nmonth\n0\n1\n6.50\n3.45\n1\n3.75\n6.5\n9.25\n12.00\n\n\nshrimp_year\n0\n1\n4332.33\n3638.30\n1981\n1994.00\n2007.0\n9999.00\n9999.00\n\n\nabundance\n0\n1\n0.05\n0.17\n0\n0.00\n0.0\n0.03\n3.27\n\n\n\n\n\n\n\n\n\n\n\nYearly\n\n\nClick to expand\n\n\n\nCode\nskimr::skim_without_charts(postlarv_yearly)\n\n\n\n\nTable 11.2: Summary of postlarval abundance data by shrimp year\n\n\n\n\nData summary\n\n\nName\npostlarv_yearly\n\n\nNumber of rows\n74\n\n\nNumber of columns\n8\n\n\n_______________________\n\n\n\nColumn type frequency:\n\n\n\ncharacter\n4\n\n\nnumeric\n4\n\n\n________________________\n\n\n\nGroup variables\nNone\n\n\n\nVariable type: character\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nempty\nn_unique\nwhitespace\n\n\n\n\nsurvey\n0\n1\n6\n6\n0\n1\n0\n\n\nspecies\n0\n1\n5\n5\n0\n2\n0\n\n\nlife_stage\n0\n1\n10\n10\n0\n1\n0\n\n\nabundance_measure\n0\n1\n7\n7\n0\n1\n0\n\n\n\nVariable type: numeric\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmean\nsd\np0\np25\np50\np75\np100\n\n\n\n\nshrimp_year\n0\n1\n1999.00\n10.75\n1981.00\n1990.00\n1999.00\n2008.00\n2017.00\n\n\nabundance\n0\n1\n0.54\n0.64\n0.01\n0.13\n0.33\n0.82\n4.01\n\n\nsqrt_abundance\n0\n1\n0.64\n0.37\n0.11\n0.36\n0.57\n0.91\n2.00\n\n\nabundanceIndex_fullTimePeriod\n0\n1\n0.00\n0.99\n-1.42\n-0.73\n-0.14\n0.57\n3.32",
+    "title": "10  Postlarval Stage",
+    "section": "10.1 Tabular summaries of output datasets",
+    "text": "10.1 Tabular summaries of output datasets\n\nMonthly\n\n\nClick to expand\n\n\n\nCode\nskimr::skim_without_charts(postlarv_abund_monthly)\n\n\n\n\nTable 10.1: Summary of monthly postlarval abundance data\n\n\n\n\nData summary\n\n\nName\npostlarv_abund_monthly\n\n\nNumber of rows\n888\n\n\nNumber of columns\n8\n\n\n_______________________\n\n\n\nColumn type frequency:\n\n\n\ncharacter\n4\n\n\nnumeric\n4\n\n\n________________________\n\n\n\nGroup variables\nNone\n\n\n\nVariable type: character\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nempty\nn_unique\nwhitespace\n\n\n\n\nsurvey\n0\n1\n6\n6\n0\n1\n0\n\n\nspecies\n0\n1\n5\n5\n0\n2\n0\n\n\nlife_stage\n0\n1\n10\n10\n0\n1\n0\n\n\nabundance_measure\n0\n1\n7\n7\n0\n1\n0\n\n\n\nVariable type: numeric\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmean\nsd\np0\np25\np50\np75\np100\n\n\n\n\nyear\n0\n1\n1999.00\n10.68\n1981\n1990.00\n1999.0\n2008.00\n2017.00\n\n\nmonth\n0\n1\n6.50\n3.45\n1\n3.75\n6.5\n9.25\n12.00\n\n\nshrimp_year\n0\n1\n4332.33\n3638.30\n1981\n1994.00\n2007.0\n9999.00\n9999.00\n\n\nabundance\n0\n1\n0.05\n0.17\n0\n0.00\n0.0\n0.03\n3.27\n\n\n\n\n\n\n\n\n\n\n\nYearly\n\n\nClick to expand\n\n\n\nCode\nskimr::skim_without_charts(postlarv_yearly)\n\n\n\n\nTable 10.2: Summary of postlarval abundance data by shrimp year\n\n\n\n\nData summary\n\n\nName\npostlarv_yearly\n\n\nNumber of rows\n74\n\n\nNumber of columns\n9\n\n\n_______________________\n\n\n\nColumn type frequency:\n\n\n\ncharacter\n4\n\n\nnumeric\n5\n\n\n________________________\n\n\n\nGroup variables\nNone\n\n\n\nVariable type: character\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nempty\nn_unique\nwhitespace\n\n\n\n\nsurvey\n0\n1\n6\n6\n0\n1\n0\n\n\nspecies\n0\n1\n5\n5\n0\n2\n0\n\n\nlife_stage\n0\n1\n10\n10\n0\n1\n0\n\n\nabundance_measure\n0\n1\n7\n7\n0\n1\n0\n\n\n\nVariable type: numeric\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmean\nsd\np0\np25\np50\np75\np100\n\n\n\n\nshrimp_year\n0\n1.00\n1999.00\n10.75\n1981.00\n1990.00\n1999.00\n2008.00\n2017.00\n\n\nabundance\n0\n1.00\n0.54\n0.64\n0.01\n0.13\n0.33\n0.82\n4.01\n\n\nsqrt_abundance\n0\n1.00\n0.64\n0.37\n0.11\n0.36\n0.57\n0.91\n2.00\n\n\nabundanceIndex_fullTimePeriod\n0\n1.00\n0.00\n0.99\n-1.42\n-0.73\n-0.14\n0.57\n3.32\n\n\nabundanceIndex_commonTimePeriod\n16\n0.78\n0.00\n0.99\n-1.49\n-0.78\n-0.17\n0.48\n3.25",
     "crumbs": [
       "Summarizing to Abundance Index",
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Postlarval Stage</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Postlarval Stage</span>"
     ]
   },
   {
     "objectID": "process_postlarv.html#about",
     "href": "process_postlarv.html#about",
-    "title": "11  Postlarval Stage",
-    "section": "11.2 About",
-    "text": "11.2 About\nInput .qmd file for this section was: process_postlarv.qmd and can be found in the main directory.\nInput data file(s) - in data/intermediate/postlarval_dfs.RData (the single .RData file contains multiple data frames):\n\npostlarv_abund\npostlarv_size (this data frame was ignored)\n\nModifications to data:\n\nthere were some ‘year’ entries of 1900. These were removed. No data or dates were associated with these rows; presumably they were extra rows in the spreadsheet to aid in data entry.\n\nremoved data for pink shrimp.\n\nGenerated data file(s): - fully processed files are in the data/processed directory:\n\npostlarval_byMonth.csv is summarized to species and month within year.\n\npostlarval_byShrimpYear.csv is summarized to species and shrimp year.\n\nOther notes about data:\n\nthere were some ‘year’ entries of 1900. These were removed. No data or dates were associated with these rows; presumably they were extra rows in the spreadsheet to aid in data entry.",
+    "title": "10  Postlarval Stage",
+    "section": "10.2 About",
+    "text": "10.2 About\nInput .qmd file for this section was: process_postlarv.qmd and can be found in the main directory.\nInput data file(s) - in data/intermediate/postlarval_dfs.RData (the single .RData file contains multiple data frames):\n\npostlarv_abund\npostlarv_size (this data frame was ignored)\n\nModifications to data:\n\nthere were some ‘year’ entries of 1900. These were removed. No data or dates were associated with these rows; presumably they were extra rows in the spreadsheet to aid in data entry.\n\nremoved data for pink shrimp.\n\nGenerated data file(s): - fully processed files are in the data/processed directory:\n\npostlarval_byMonth.csv is summarized to species and month within year.\n\npostlarval_byShrimpYear.csv is summarized to species and shrimp year.\n\nOther notes about data:\n\nthere were some ‘year’ entries of 1900. These were removed. No data or dates were associated with these rows; presumably they were extra rows in the spreadsheet to aid in data entry.",
     "crumbs": [
       "Summarizing to Abundance Index",
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Postlarval Stage</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Postlarval Stage</span>"
     ]
   },
   {
     "objectID": "process_juv.html",
     "href": "process_juv.html",
-    "title": "12  Juvenile",
+    "title": "11  Juvenile",
     "section": "",
-    "text": "SC Creek Trawls - compile to monthly\nCode\nnames(juv_sc_cpue) &lt;- tolower(names(juv_sc_cpue))\njuv_sc_cpue &lt;- filter(juv_sc_cpue,\n                      species %in% c(\"brown\", \"white\"))\n\n# SC Creek Trawls\n# compile to monthly\n\n# no replicates to average; just go straight to monthly avg\njuv_cpue_monthly &lt;- juv_sc_cpue |&gt; \n    summarize(.by = c(year, month, species),\n              cpue = mean(cpue, na.rm = TRUE)) |&gt; \n    mutate(survey = \"SC Creek Trawls\",\n           life_stage = \"juvenile\",\n           abundance_measure = \"CPUE\",\n           abundance = cpue)\n\njuv_cpue_monthly &lt;- add_cohorts(juv_cpue_monthly, \"juvenile\") |&gt; \n    select(all_of(sel_order_monthly))",
+    "text": "Setup\nCode\nlibrary(dplyr)\nlibrary(tidyr)\nlibrary(ggplot2)\n\nsource(here::here(\"functions.R\"))\n\nin_path &lt;- here::here(\"data\", \"intermediate\")\nout_path &lt;- here::here(\"data\", \"processed\", \"byLifeStage\")\nout_path_detailed &lt;- here::here(out_path, \"moreDetailed\")\n\nload(here::here(in_path, \"juvenile_dfs.RData\"))",
     "crumbs": [
       "Summarizing to Abundance Index",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Juvenile</span>"
-    ]
-  },
-  {
-    "objectID": "process_juv.html#compile-to-shrimp-year",
-    "href": "process_juv.html#compile-to-shrimp-year",
-    "title": "12  Juvenile",
-    "section": "12.1 Compile to Shrimp Year",
-    "text": "12.1 Compile to Shrimp Year\nFirst, get annual totals by survey.\n\n\nCode\n# annual file - by shrimp year\n# removing late postlarvae here - shrimp_year of 9999\njuv_combined_byShrimpYear &lt;- juv_monthly_combined |&gt; \n    group_by(life_stage, survey, species, shrimp_year, abundance_measure) |&gt; \n    summarize(abundance = sum(abundance, na.rm = TRUE)) |&gt; \n    ungroup() |&gt; \n    mutate(sqrt_abundance = sqrt(abundance)) |&gt; \n    select(all_of(sel_order_annual)) |&gt; \n    arrange(shrimp_year, species, survey)\n\n\nNow average the annual values across surveys.\n\n\nCode\njuv_combined_byShrimpYear_averaged &lt;- juv_combined_byShrimpYear |&gt; \n    group_by(species, life_stage, shrimp_year) |&gt; \n    summarize(abundance = mean(abundance, na.rm = TRUE)) |&gt; \n    ungroup() |&gt; \n    mutate(sqrt_abundance = sqrt(abundance),\n           survey = \"SC Creek Trawls and OL Seines\",\n           abundance_measure = \"mean across surveys; count matched CPUE in magnitude\") |&gt; \n    select(all_of(sel_order_annual))\n\n\n\nWrite out.\n\n\nCode\n# write out\n\n# monthly\nwrite.csv(juv_monthly_combined,\n          here::here(out_path, \"juvenile_bySurveyAndMonth.csv\"))\n# yearly\nwrite.csv(juv_combined_byShrimpYear,\n          here::here(out_path, \"juvenile_bySurveyAndShrimpYear.csv\"))\nwrite.csv(juv_combined_byShrimpYear_averaged,\n          here::here(out_path, \"juvenile_byShrimpYear.csv\"))",
-    "crumbs": [
-      "Summarizing to Abundance Index",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Juvenile</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Juvenile</span>"
     ]
   },
   {
     "objectID": "process_juv.html#tabular-summaries-of-output-datasets",
     "href": "process_juv.html#tabular-summaries-of-output-datasets",
-    "title": "12  Juvenile",
-    "section": "12.2 Tabular summaries of output datasets",
-    "text": "12.2 Tabular summaries of output datasets\n\nMonthly\n\n\nClick to expand\n\n\n\nCode\nskimr::skim_without_charts(juv_cpue_monthly)\n\n\n\n\nTable 12.1: Summary of monthly juvenile abundance data, SC Creek Trawls\n\n\n\n\nData summary\n\n\nName\njuv_cpue_monthly\n\n\nNumber of rows\n472\n\n\nNumber of columns\n8\n\n\n_______________________\n\n\n\nColumn type frequency:\n\n\n\ncharacter\n4\n\n\nnumeric\n4\n\n\n________________________\n\n\n\nGroup variables\nNone\n\n\n\nVariable type: character\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nempty\nn_unique\nwhitespace\n\n\n\n\nsurvey\n0\n1\n15\n15\n0\n1\n0\n\n\nspecies\n0\n1\n5\n5\n0\n2\n0\n\n\nlife_stage\n0\n1\n8\n8\n0\n1\n0\n\n\nabundance_measure\n0\n1\n4\n4\n0\n1\n0\n\n\n\nVariable type: numeric\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmean\nsd\np0\np25\np50\np75\np100\n\n\n\n\nyear\n0\n1\n2003.24\n14.06\n1980\n1991.00\n2003.0\n2017.00\n2023.00\n\n\nmonth\n0\n1\n6.85\n2.11\n1\n5.00\n7.0\n8.00\n12.00\n\n\nshrimp_year\n0\n1\n2003.34\n14.08\n1980\n1991.00\n2003.0\n2017.00\n2024.00\n\n\nabundance\n0\n1\n718.67\n2074.63\n0\n0.43\n56.2\n481.33\n23051.64\n\n\n\n\n\n\n\n\n\n\nCode\nskimr::skim_without_charts(juv_ol_monthly)\n\n\n\n\nTable 12.2: Summary of monthly juvenile abundance data, Oyster Landing\n\n\n\n\nData summary\n\n\nName\njuv_ol_monthly\n\n\nNumber of rows\n914\n\n\nNumber of columns\n8\n\n\n_______________________\n\n\n\nColumn type frequency:\n\n\n\ncharacter\n4\n\n\nnumeric\n4\n\n\n________________________\n\n\n\nGroup variables\nNone\n\n\n\nVariable type: character\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nempty\nn_unique\nwhitespace\n\n\n\n\nsurvey\n0\n1\n13\n13\n0\n1\n0\n\n\nspecies\n0\n1\n5\n5\n0\n2\n0\n\n\nlife_stage\n0\n1\n8\n8\n0\n1\n0\n\n\nabundance_measure\n0\n1\n5\n5\n0\n1\n0\n\n\n\nVariable type: numeric\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmean\nsd\np0\np25\np50\np75\np100\n\n\n\n\nyear\n0\n1.00\n2002.96\n11.55\n1984\n1993\n2003.0\n2012.00\n2023\n\n\nmonth\n0\n1.00\n6.59\n3.35\n1\n4\n7.0\n9.00\n12\n\n\nshrimp_year\n0\n1.00\n2003.12\n11.56\n1984\n1993\n2003.0\n2013.00\n2024\n\n\nabundance\n130\n0.86\n363.37\n1086.03\n0\n0\n0.5\n101.12\n11318\n\n\n\n\n\n\n\n\n\n\n\nYearly\n\n\nClick to expand\n\n\n\nCode\nskimr::skim_without_charts(juv_combined_byShrimpYear_averaged)\n\n\n\n\nTable 12.3: Summary of juvenile abundance data by shrimp year, after averaging SC and OL surveys.\n\n\n\n\nData summary\n\n\nName\njuv_combined_byShrimpYear…\n\n\nNumber of rows\n89\n\n\nNumber of columns\n7\n\n\n_______________________\n\n\n\nColumn type frequency:\n\n\n\ncharacter\n4\n\n\nnumeric\n3\n\n\n________________________\n\n\n\nGroup variables\nNone\n\n\n\nVariable type: character\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nempty\nn_unique\nwhitespace\n\n\n\n\nsurvey\n0\n1\n29\n29\n0\n1\n0\n\n\nspecies\n0\n1\n5\n5\n0\n2\n0\n\n\nlife_stage\n0\n1\n8\n8\n0\n1\n0\n\n\nabundance_measure\n0\n1\n52\n52\n0\n1\n0\n\n\n\nVariable type: numeric\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmean\nsd\np0\np25\np50\np75\np100\n\n\n\n\nshrimp_year\n0\n1\n2001.75\n12.92\n1980.00\n1991.00\n2002.00\n2013.00\n2024.00\n\n\nabundance\n0\n1\n3565.68\n4478.64\n0.43\n594.59\n1849.46\n4813.75\n24709.21\n\n\nsqrt_abundance\n0\n1\n50.12\n32.65\n0.65\n24.38\n43.01\n69.38\n157.19",
+    "title": "11  Juvenile",
+    "section": "11.1 Tabular summaries of output datasets",
+    "text": "11.1 Tabular summaries of output datasets\n\nMonthly\n\n\nClick to expand\n\n\n\nCode\nskimr::skim_without_charts(juv_cpue_monthly)\n\n\n\n\nTable 11.1: Summary of monthly juvenile abundance data, SC Creek Trawls\n\n\n\n\nData summary\n\n\nName\njuv_cpue_monthly\n\n\nNumber of rows\n472\n\n\nNumber of columns\n8\n\n\n_______________________\n\n\n\nColumn type frequency:\n\n\n\ncharacter\n4\n\n\nnumeric\n4\n\n\n________________________\n\n\n\nGroup variables\nNone\n\n\n\nVariable type: character\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nempty\nn_unique\nwhitespace\n\n\n\n\nsurvey\n0\n1\n15\n15\n0\n1\n0\n\n\nspecies\n0\n1\n5\n5\n0\n2\n0\n\n\nlife_stage\n0\n1\n8\n8\n0\n1\n0\n\n\nabundance_measure\n0\n1\n4\n4\n0\n1\n0\n\n\n\nVariable type: numeric\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmean\nsd\np0\np25\np50\np75\np100\n\n\n\n\nyear\n0\n1\n2003.24\n14.06\n1980\n1991.00\n2003.0\n2017.00\n2023.00\n\n\nmonth\n0\n1\n6.85\n2.11\n1\n5.00\n7.0\n8.00\n12.00\n\n\nshrimp_year\n0\n1\n2003.34\n14.08\n1980\n1991.00\n2003.0\n2017.00\n2024.00\n\n\nabundance\n0\n1\n718.67\n2074.63\n0\n0.43\n56.2\n481.33\n23051.64\n\n\n\n\n\n\n\n\n\n\nCode\nskimr::skim_without_charts(juv_ol_monthly)\n\n\n\n\nTable 11.2: Summary of monthly juvenile abundance data, Oyster Landing\n\n\n\n\nData summary\n\n\nName\njuv_ol_monthly\n\n\nNumber of rows\n914\n\n\nNumber of columns\n8\n\n\n_______________________\n\n\n\nColumn type frequency:\n\n\n\ncharacter\n4\n\n\nnumeric\n4\n\n\n________________________\n\n\n\nGroup variables\nNone\n\n\n\nVariable type: character\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nempty\nn_unique\nwhitespace\n\n\n\n\nsurvey\n0\n1\n13\n13\n0\n1\n0\n\n\nspecies\n0\n1\n5\n5\n0\n2\n0\n\n\nlife_stage\n0\n1\n8\n8\n0\n1\n0\n\n\nabundance_measure\n0\n1\n5\n5\n0\n1\n0\n\n\n\nVariable type: numeric\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmean\nsd\np0\np25\np50\np75\np100\n\n\n\n\nyear\n0\n1.00\n2002.96\n11.55\n1984\n1993\n2003.0\n2012.00\n2023\n\n\nmonth\n0\n1.00\n6.59\n3.35\n1\n4\n7.0\n9.00\n12\n\n\nshrimp_year\n0\n1.00\n2003.12\n11.56\n1984\n1993\n2003.0\n2013.00\n2024\n\n\nabundance\n130\n0.86\n363.37\n1086.03\n0\n0\n0.5\n101.12\n11318\n\n\n\n\n\n\n\n\n\n\n\nYearly\n\n\nClick to expand\n\n\n\nCode\nskimr::skim_without_charts(juv_combined_byShrimpYear_averaged)\n\n\n\n\nTable 11.3: Summary of juvenile abundance data by shrimp year, after averaging SC and OL surveys.\n\n\n\n\nData summary\n\n\nName\njuv_combined_byShrimpYear…\n\n\nNumber of rows\n89\n\n\nNumber of columns\n9\n\n\n_______________________\n\n\n\nColumn type frequency:\n\n\n\ncharacter\n4\n\n\nnumeric\n5\n\n\n________________________\n\n\n\nGroup variables\nNone\n\n\n\nVariable type: character\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nempty\nn_unique\nwhitespace\n\n\n\n\nsurvey\n0\n1\n29\n29\n0\n1\n0\n\n\nspecies\n0\n1\n5\n5\n0\n2\n0\n\n\nlife_stage\n0\n1\n8\n8\n0\n1\n0\n\n\nabundance_measure\n0\n1\n52\n52\n0\n1\n0\n\n\n\nVariable type: numeric\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmean\nsd\np0\np25\np50\np75\np100\n\n\n\n\nshrimp_year\n0\n1.00\n2001.75\n12.92\n1980.00\n1991.00\n2002.00\n2013.00\n2024.00\n\n\nabundance\n0\n1.00\n3565.68\n4478.64\n0.43\n594.59\n1849.46\n4813.75\n24709.21\n\n\nsqrt_abundance\n0\n1.00\n50.12\n32.65\n0.65\n24.38\n43.01\n69.38\n157.19\n\n\nabundanceIndex_fullTimePeriod\n0\n1.00\n0.00\n0.99\n-1.94\n-0.62\n-0.15\n0.55\n2.62\n\n\nabundanceIndex_commonTimePeriod\n31\n0.65\n0.00\n0.99\n-1.91\n-0.64\n-0.17\n0.61\n2.52",
     "crumbs": [
       "Summarizing to Abundance Index",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Juvenile</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Juvenile</span>"
     ]
   },
   {
     "objectID": "process_juv.html#about",
     "href": "process_juv.html#about",
-    "title": "12  Juvenile",
-    "section": "12.3 About",
-    "text": "12.3 About\nInput .qmd file for this section was: process_juv.qmd and can be found in the main directory.\nInput data file(s) - in data/intermediate/juvenile_dfs.RData (the single .RData file contains multiple data frames):\n\njuv_sc_cpue\njuv_sc_size\njuv_ol_count\njuv_ol_size\n\nModifications to data:\nGenerated data file(s): - fully processed files are in the data/processed directory:\n\njuvenile_bySurveyAndMonth.csv is summarized to species and month within year, by survey.\n\njuvenile_bySurveyAndShrimpYear.csv is summarized to species and shrimp year, by survey.\njuvenile_byShrimpYear.csv is summarized to species and shrimp year, as the average shrimp-year abundance across the two surveys. This is the file that will be used in further analyses.\n\nOther notes about data:\n\nnone",
+    "title": "11  Juvenile",
+    "section": "11.2 About",
+    "text": "11.2 About\nInput .qmd file for this section was: process_juv.qmd and can be found in the main directory.\nInput data file(s) - in data/intermediate/juvenile_dfs.RData (the single .RData file contains multiple data frames):\n\njuv_sc_cpue\njuv_sc_size\njuv_ol_count\njuv_ol_size\n\nModifications to data:\nGenerated data file(s): - fully processed files are in the data/processed directory:\n\njuvenile_bySurveyAndMonth.csv is summarized to species and month within year, by survey.\n\njuvenile_bySurveyAndShrimpYear.csv is summarized to species and shrimp year, by survey.\njuvenile_byShrimpYear.csv is summarized to species and shrimp year, as the average shrimp-year abundance across the two surveys. This is the file that will be used in further analyses.\n\nOther notes about data:\n\nnone",
     "crumbs": [
       "Summarizing to Abundance Index",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Juvenile</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Juvenile</span>"
     ]
   },
   {
     "objectID": "process_subad.html",
     "href": "process_subad.html",
-    "title": "13  Subadults",
+    "title": "12  Subadults",
     "section": "",
-    "text": "Stuff here ….",
+    "text": "Setup\nCode\nlibrary(dplyr)\nlibrary(tidyr)\nlibrary(ggplot2)\n\nsource(here::here(\"functions.R\"))\n\nin_path &lt;- here::here(\"data\", \"intermediate\")\nout_path &lt;- here::here(\"data\", \"processed\", \"byLifeStage\")\nout_path_detailed &lt;- here::here(out_path, \"moreDetailed\")\n\nload(here::here(in_path, \"subadult_dfs.RData\"))",
     "crumbs": [
       "Summarizing to Abundance Index",
-      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Subadults</span>"
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Subadults</span>"
+    ]
+  },
+  {
+    "objectID": "process_subad.html#tabular-summaries-of-output-datasets",
+    "href": "process_subad.html#tabular-summaries-of-output-datasets",
+    "title": "12  Subadults",
+    "section": "12.1 Tabular summaries of output datasets",
+    "text": "12.1 Tabular summaries of output datasets\n\nMonthly\n\n\nClick to expand\n\n\n\nCode\nskimr::skim_without_charts(subad_ga_monthly)\n\n\n\n\nTable 12.1: Summary of monthly subadult abundance data, GA trawls\n\n\n\n\nData summary\n\n\nName\nsubad_ga_monthly\n\n\nNumber of rows\n1054\n\n\nNumber of columns\n8\n\n\n_______________________\n\n\n\nColumn type frequency:\n\n\n\ncharacter\n4\n\n\nnumeric\n4\n\n\n________________________\n\n\n\nGroup variables\nNone\n\n\n\nVariable type: character\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nempty\nn_unique\nwhitespace\n\n\n\n\nsurvey\n0\n1\n7\n7\n0\n1\n0\n\n\nspecies\n0\n1\n5\n5\n0\n2\n0\n\n\nlife_stage\n0\n1\n8\n8\n0\n1\n0\n\n\nabundance_measure\n0\n1\n12\n12\n0\n1\n0\n\n\n\nVariable type: numeric\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmean\nsd\np0\np25\np50\np75\np100\n\n\n\n\nyear\n0\n1\n1998.82\n13.00\n1975\n1988.00\n1999.00\n2010.00\n2021.00\n\n\nmonth\n0\n1\n6.51\n3.45\n1\n4.00\n6.00\n9.00\n12.00\n\n\nshrimp_year\n0\n1\n1998.74\n13.00\n1975\n1988.00\n1999.00\n2010.00\n2022.00\n\n\nabundance\n0\n1\n1575.14\n3021.84\n0\n2.09\n426.06\n2368.71\n59513.63\n\n\n\n\n\n\n\n\n\nCode\nskimr::skim_without_charts(sub_sc_monthly)\n\n\n\n\nTable 12.2: Summary of monthly juvenile abundance data, SC Estuarine Trawls\n\n\n\nError: object 'sub_sc_monthly' not found\n\n\n\n\n\n\n\nYearly\n\n\nClick to expand\n\n\n\nCode\nskimr::skim_without_charts(subad_combined_byShrimpYear)\n\n\n\n\nTable 12.3: Summary of subadult abundance data by shrimp year, after normalizing then averaging GA and SC surveys.\n\n\n\n\nData summary\n\n\nName\nsubad_combined_byShrimpYe…\n\n\nNumber of rows\n98\n\n\nNumber of columns\n8\n\n\n_______________________\n\n\n\nColumn type frequency:\n\n\n\ncharacter\n4\n\n\nnumeric\n4\n\n\n________________________\n\n\n\nGroup variables\nNone\n\n\n\nVariable type: character\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nempty\nn_unique\nwhitespace\n\n\n\n\nsurvey\n0\n1\n17\n17\n0\n1\n0\n\n\nspecies\n0\n1\n5\n5\n0\n2\n0\n\n\nlife_stage\n0\n1\n8\n8\n0\n1\n0\n\n\nabundance_measure\n0\n1\n50\n50\n0\n1\n0\n\n\n\nVariable type: numeric\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmean\nsd\np0\np25\np50\np75\np100\n\n\n\n\nshrimp_year\n0\n1.00\n1999.50\n14.22\n1975.00\n1987.25\n1999.50\n2011.75\n2024.00\n\n\nabundance\n0\n1.00\n0.03\n0.84\n-2.86\n-0.48\n-0.01\n0.47\n3.87\n\n\nabundanceIndex_fullTimePeriod\n0\n1.00\n0.00\n0.99\n-3.47\n-0.57\n-0.04\n0.54\n4.39\n\n\nabundanceIndex_commonTimePeriod\n40\n0.59\n0.00\n0.99\n-1.90\n-0.78\n-0.01\n0.61\n2.47",
+    "crumbs": [
+      "Summarizing to Abundance Index",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Subadults</span>"
+    ]
+  },
+  {
+    "objectID": "process_subad.html#about",
+    "href": "process_subad.html#about",
+    "title": "12  Subadults",
+    "section": "12.2 About",
+    "text": "12.2 About\nInput .qmd file for this section was: process_subad.qmd and can be found in the main directory.\nInput data file(s) - in data/intermediate/subadult_dfs.RData (the single .RData file contains multiple data frames):\n\nsubad_ga_count\nsubad_ga_size\nsubad_sc_cpue\nsubad_sc_size\n\nModifications to data:\nGenerated data file(s): - fully processed files are in the data/processed directory:\nOther notes about data:\n\nnone",
+    "crumbs": [
+      "Summarizing to Abundance Index",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Subadults</span>"
     ]
   },
   {
     "objectID": "process_ad_seamap.html",
     "href": "process_ad_seamap.html",
-    "title": "14  Adults - fishery-independent",
+    "title": "13  Adults - fishery-independent",
     "section": "",
-    "text": "14.1 test\nrendering with freeze: auto",
+    "text": "13.1 test\nrendering with freeze: auto",
     "crumbs": [
       "Summarizing to Abundance Index",
-      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Adults - fishery-independent</span>"
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Adults - fishery-independent</span>"
     ]
   },
   {
     "objectID": "process_ad_seamap.html#another-test",
     "href": "process_ad_seamap.html#another-test",
-    "title": "14  Adults - fishery-independent",
-    "section": "14.2 another test",
-    "text": "14.2 another test\n\n\nCode\n2 + 2\n\n\n[1] 4",
+    "title": "13  Adults - fishery-independent",
+    "section": "13.2 another test",
+    "text": "13.2 another test\n\n\nCode\n2 + 2\n\n\n[1] 4",
     "crumbs": [
       "Summarizing to Abundance Index",
-      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Adults - fishery-independent</span>"
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Adults - fishery-independent</span>"
     ]
   },
   {
     "objectID": "process_ad_commercial.html",
     "href": "process_ad_commercial.html",
-    "title": "15  Adults - landings and trip tickets",
+    "title": "14  Adults - landings and trip tickets",
     "section": "",
-    "text": "15.1 test\ncode:\nCode\n1 + 1\n\n\n[1] 2\nThe end",
+    "text": "14.1 test\ncode:\nCode\n1 + 1\n\n\n[1] 2\nThe end",
     "crumbs": [
       "Summarizing to Abundance Index",
-      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Adults - landings and trip tickets</span>"
-    ]
-  },
-  {
-    "objectID": "process_food_sources.html",
-    "href": "process_food_sources.html",
-    "title": "16  Food sources (benthic cores)",
-    "section": "",
-    "text": "Stuff here",
-    "crumbs": [
-      "Summarizing to Abundance Index",
-      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Food sources (benthic cores)</span>"
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Adults - landings and trip tickets</span>"
     ]
   },
   {
     "objectID": "process_wtemp.html",
     "href": "process_wtemp.html",
-    "title": "17  Water Temperature at Charleston Harbor",
+    "title": "15  Water Temperature at Charleston Harbor",
     "section": "",
     "text": "stuff",
     "crumbs": [
       "Summarizing Environmental Data",
-      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Water Temperature at Charleston Harbor</span>"
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Water Temperature at Charleston Harbor</span>"
     ]
   },
   {
     "objectID": "process_sal.html",
     "href": "process_sal.html",
-    "title": "18  Salinity",
+    "title": "16  Salinity",
     "section": "",
     "text": "from SCDNR trawls",
     "crumbs": [
       "Summarizing Environmental Data",
-      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Salinity</span>"
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Salinity</span>"
     ]
   },
   {
     "objectID": "rel_temp_thresholds.html",
     "href": "rel_temp_thresholds.html",
-    "title": "19  Temperature thresholds",
+    "title": "17  Temperature thresholds",
     "section": "",
     "text": "some stuff",
     "crumbs": [
       "Relationships between datasets",
-      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Temperature thresholds</span>"
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Temperature thresholds</span>"
     ]
   },
   {
     "objectID": "rel_sal.html",
     "href": "rel_sal.html",
-    "title": "20  Nursery Period Salinity",
+    "title": "18  Nursery Period Salinity",
     "section": "",
     "text": "stuff",
     "crumbs": [
       "Relationships between datasets",
-      "<span class='chapter-number'>20</span>  <span class='chapter-title'>Nursery Period Salinity</span>"
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Nursery Period Salinity</span>"
     ]
   },
   {
     "objectID": "rel_regression_models.html",
     "href": "rel_regression_models.html",
-    "title": "21  Regression Models",
+    "title": "19  Regression Models",
     "section": "",
     "text": "Start to explore what happens when we do more than just correlations.",
     "crumbs": [
       "Relationships between datasets",
-      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Regression Models</span>"
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Regression Models</span>"
     ]
   }
 ]

@@ -1,3 +1,234 @@
 # Subadults  
 
-Stuff here ....
+There are two datasets that represent subadults: Georgia trawls and SC estuarine trawls. 
+
+#### Setup 
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+source(here::here("functions.R"))
+
+in_path <- here::here("data", "intermediate")
+out_path <- here::here("data", "processed", "byLifeStage")
+out_path_detailed <- here::here(out_path, "moreDetailed")
+
+load(here::here(in_path, "subadult_dfs.RData"))
+```
+
+
+#### GA Trawls - compile to monthly  
+
+```{r}
+names(subad_ga_count) <- tolower(names(subad_ga_count))
+
+# shouldn't be replicates but there are duplicates
+# ohno <- janitor::get_dupes(subad_ga_count, refnum, species)
+# write.csv(ohno,
+#           here::here("data", "GAEMTS_dupes.csv"))
+
+
+# no pink shrimp in dataset
+# average over multiple rows on a single date
+subad_ga_monthly <- subad_ga_count |> 
+    summarize(.by = c(guesseddate, year, month, species),
+              totwt = mean(totwt, na.rm = TRUE)) |> 
+    # now to monthly
+    summarize(.by = c(year, month, species),
+              totwt = mean(totwt, na.rm = TRUE)) |> 
+    mutate(survey = "GA EMTS",
+           life_stage = "subadult",
+           abundance_measure = "total weight",
+           abundance = totwt) 
+
+subad_ga_monthly <- add_cohorts(subad_ga_monthly, "subadult") |> 
+    select(all_of(sel_order_monthly))
+
+```
+
+#### SCDNR - compile to monthly  
+
+```{r}
+# Oyster Landing
+# compile to monthly
+
+names(subad_sc_cpue) <- tolower(names(subad_sc_cpue))
+
+# pink shrimp present; remove
+
+
+subad_sc_monthly <- subad_sc_cpue |> 
+    filter(species %in% c("brown", "white")) |> 
+    # can be multiple collections ('coll') at a station on a day, so average those first
+    summarize(.by = c(year, month, day, stationcode, species),
+              cpue = mean(cpue, na.rm = TRUE)) |> 
+    # then average up to month
+    summarize(.by = c(year, month, species),
+              cpue = mean(cpue, na.rm = TRUE)) |> 
+    mutate(survey = "SCDNR",
+           life_stage = "subadult",
+           abundance_measure = "CPUE",
+           abundance = cpue)
+
+subad_sc_monthly <- add_cohorts(subad_sc_monthly, "subadult") |> 
+    select(all_of(sel_order_monthly)) |> 
+    arrange(year, month, species)
+```
+
+#### Combine monthly data frames  
+
+```{r}
+subad_monthly_combined <- bind_rows(subad_ga_monthly,
+                                    subad_sc_monthly) |> 
+    arrange(year, month, species, survey)
+```
+
+Make sure numbers are generally on the same scale before averaging.  
+
+```{r}
+#| label: fig-subadCombined
+#| fig-cap: "Jittered graphic of the square-root of abundance by species and survey. The different surveys used different measures of abundance and appear to be on different enough scales that values will be normalized before averaging across surveys."
+
+ggplot(subad_monthly_combined,
+             aes(x = species, y = sqrt(abundance), col = survey)) +
+    geom_jitter()
+```
+
+#### Compile to Shrimp Year  
+
+```{r}
+# because metrics are on somewhat different scales, normalize before averaging
+subad_bySurveyAndShrimpYear <- subad_monthly_combined |> 
+    # calculate total shrimp year abundance and sqrt abundance
+    group_by(survey, species, life_stage, shrimp_year, abundance_measure) |> 
+    summarize(abundance = sum(abundance, na.rm = TRUE)) |> 
+    ungroup() |> 
+    mutate(sqrt_abundance = sqrt(abundance)) |> 
+    # calculate normalized abundance (abundance index)
+    group_by(life_stage, survey, species, abundance_measure) |> 
+    mutate(normalized_abundance = as.vector(scale(sqrt_abundance))) |> 
+    ungroup()  |> 
+    select(all_of(sel_order_annual),
+           everything())
+```
+
+```{r}
+#| echo: false
+#| eval: false
+
+# make sure indices look generally comparable
+ggplot(subad_bySurveyAndShrimpYear) +
+    geom_histogram(aes(x = normalized_abundance),
+                   fill = "cadetblue3") +
+    facet_grid(species ~ survey) +
+    theme_bw()
+```
+
+```{r}
+subad_combined_byShrimpYear <- subad_bySurveyAndShrimpYear |> 
+    group_by(life_stage, species, shrimp_year) |> 
+    summarize(abundance = mean(normalized_abundance, na.rm = TRUE)) |> 
+    mutate(survey = "GA EMTS and SCDNR",
+           abundance_measure = "mean across surveys of normalized annual abundance",
+           sqrt_abundance = abundance) |>   # using abundance in sqrt column because sqrt column is the column that will get normalized in all other datasets - doesn't matter here; just needs to be included because it's a required column in 'annual'
+    select(all_of(sel_order_annual)) |> 
+    select(-sqrt_abundance) |> 
+    group_by(species) |> 
+    mutate(abundanceIndex_fullTimePeriod = as.vector(scale(abundance))) |> 
+    ungroup()
+
+
+abund_commontime <- subad_combined_byShrimpYear |> 
+    select(species, shrimp_year, abundance) |> 
+    filter(shrimp_year %in% common_shrimpYears) |> 
+    group_by(species) |> 
+    mutate(abundanceIndex_commonTimePeriod = as.vector(scale(abundance))) |> 
+    ungroup()
+
+subad_combined_byShrimpYear <- left_join(subad_combined_byShrimpYear,
+                                         abund_commontime)
+```
+
+
+
+#### Write out.  
+
+```{r}
+# write out
+
+# monthly
+write.csv(subad_monthly_combined,
+          here::here(out_path_detailed, "subadult_bySurveyAndMonth.csv"))
+# yearly
+write.csv(subad_bySurveyAndShrimpYear,
+          here::here(out_path_detailed, "subadult_bySurveyAndShrimpYear.csv"))
+write.csv(subad_combined_byShrimpYear,
+          here::here(out_path, "subadult_byShrimpYear.csv"))
+```
+
+
+## Tabular summaries of output datasets  
+
+### Monthly  
+
+<details>
+
+::: {.content-visible when-format="html"}
+<summary>Click to expand</summary>
+:::
+
+```{r}
+#| label: tbl-monthlysubadGA
+#| tbl-cap: "Summary of monthly subadult abundance data, GA trawls"
+skimr::skim_without_charts(subad_ga_monthly)
+```
+
+```{r}
+#| label: tbl-monthlysubadSC
+#| tbl-cap: "Summary of monthly juvenile abundance data, SC Estuarine Trawls"
+skimr::skim_without_charts(sub_sc_monthly)
+```
+
+</details>
+
+### Yearly  
+
+<details>
+
+::: {.content-visible when-format="html"}
+<summary>Click to expand</summary>
+:::
+
+```{r}
+#| label: tbl-yearlySubad
+#| tbl-cap: "Summary of subadult abundance data by shrimp year, after normalizing then averaging GA and SC surveys."
+skimr::skim_without_charts(subad_combined_byShrimpYear)
+```
+
+</details>
+
+## About
+
+**Input `.qmd` file** for this section was: **`r xfun::with_ext(knitr::current_input(), "qmd")`** and can be found in the main directory.  
+
+**Input data file(s)** - in `data/intermediate/subadult_dfs.RData` (the single `.RData` file contains multiple data frames):
+
+-   `subad_ga_count`
+-   `subad_ga_size`
+-   `subad_sc_cpue`
+-   `subad_sc_size`
+
+
+**Modifications to data:**
+
+
+
+**Generated data file(s):**  - fully processed files are in the `data/processed` directory:  
+
+ 
+
+**Other notes about data:**
+
+- none

@@ -1,6 +1,6 @@
 # Postlarval Stage  
 
-Setup  
+#### Setup  
 
 ```{r}
 library(dplyr)
@@ -9,7 +9,8 @@ library(tidyr)
 source(here::here("functions.R"))
 
 in_path <- here::here("data", "intermediate")
-out_path <- here::here("data", "processed")
+out_path <- here::here("data", "processed", "byLifeStage")
+out_path_detailed <- here::here(out_path, "moreDetailed")
 
 
 load(here::here(in_path, "postlarval_dfs.RData"))
@@ -70,6 +71,16 @@ postlarv_yearly <- postlarv_abund_monthly |>
     group_by(species) |> 
     mutate(abundanceIndex_fullTimePeriod = as.vector(scale(sqrt_abundance))) |> 
     ungroup()
+
+abund_commontime <- postlarv_yearly |> 
+    select(species, shrimp_year, sqrt_abundance) |> 
+    filter(shrimp_year %in% common_shrimpYears) |> 
+    group_by(species) |> 
+    mutate(abundanceIndex_commonTimePeriod = as.vector(scale(sqrt_abundance))) |> 
+    ungroup()
+
+postlarv_yearly <- left_join(postlarv_yearly,
+                             abund_commontime)
 ```
 
 #### Saving files out  
@@ -79,7 +90,7 @@ postlarv_yearly <- postlarv_abund_monthly |>
 
 # monthly
 write.csv(postlarv_abund_monthly,
-          here::here(out_path, "postlarval_byMonth.csv"))
+          here::here(out_path_detailed, "postlarval_byMonth.csv"))
 # yearly
 write.csv(postlarv_yearly,
           here::here(out_path, "postlarval_byShrimpYear.csv"))
