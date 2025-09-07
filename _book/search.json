@@ -528,18 +528,18 @@
     "href": "process_ad_seamap.html",
     "title": "11  Adults - fishery-independent",
     "section": "",
-    "text": "11.1 test\nrendering with freeze: auto",
+    "text": "11.1 About\nInput .qmd file for this section was: r xfun::with_ext(knitr::current_input(), \"qmd\") and can be found in the main directory.\nInput data file(s) - in data/intermediate/adultSeamap_dfs.RData (the single .RData file contains multiple data frames):\nModifications to data:\nGenerated data file(s): - fully processed files are in the data/processed directory:\nOther notes about data:",
     "crumbs": [
       "Summarizing to Abundance Index",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>Adults - fishery-independent</span>"
     ]
   },
   {
-    "objectID": "process_ad_seamap.html#another-test",
-    "href": "process_ad_seamap.html#another-test",
+    "objectID": "process_ad_seamap.html#about",
+    "href": "process_ad_seamap.html#about",
     "title": "11  Adults - fishery-independent",
-    "section": "11.2 another test",
-    "text": "11.2 another test\n\n\nCode\n2 + 2\n\n\n[1] 4",
+    "section": "",
+    "text": "seamap - the unfiltered data frame\nadsm_wide\nadsm_long\n\n\n\n\njuvenile_bySurveyAndMonth.csv, in the subfolder moreDetailed, is summarized to species and month within year, by survey.\n\njuvenile_bySurveyAndShrimpYear.csv, in the subfolder moreDetailed, is summarized to species and shrimp year, by survey.\njuvenile_byShrimpYear.csv is summarized to species and shrimp year, as the average shrimp-year abundance across the two surveys. This is the file that will be used in further analyses.\n\n\n\nnone",
     "crumbs": [
       "Summarizing to Abundance Index",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>Adults - fishery-independent</span>"
@@ -550,7 +550,40 @@
     "href": "process_ad_commercial.html",
     "title": "12  Adults - landings and trip tickets",
     "section": "",
-    "text": "12.1 test\ncode:\nCode\n1 + 1\n\n\n[1] 2\nThe end",
+    "text": "Setup\nCode\nlibrary(dplyr)\nlibrary(tidyr)\nlibrary(ggplot2)\n\nsource(here::here(\"functions.R\"))\n\nin_path &lt;- here::here(\"data\", \"intermediate\")\nout_path &lt;- here::here(\"data\", \"processed\", \"byLifeStage\")\nout_path_detailed &lt;- here::here(out_path, \"moreDetailed\")\n\nload(here::here(in_path, \"adultCommercial_dfs.RData\"))",
+    "crumbs": [
+      "Summarizing to Abundance Index",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Adults - landings and trip tickets</span>"
+    ]
+  },
+  {
+    "objectID": "process_ad_commercial.html#landings-data",
+    "href": "process_ad_commercial.html#landings-data",
+    "title": "12  Adults - landings and trip tickets",
+    "section": "12.1 Landings Data",
+    "text": "12.1 Landings Data\n\nBrown Shrimp\nUse annual data for brown shrimp, because it corresponds to the life cycle and shrimp year. Three states are represented in this dataset. NC is not represented elsewhere, so it is removed and we will focus only on GA and SC.\n\n\nCode\nbrn_landings &lt;- landings_annual |&gt; \n    janitor::clean_names() |&gt; \n    filter(species == \"brown\",\n           state != \"NORTH CAROLINA\") |&gt; \n    select(shrimp_year = year,\n           species,\n           state,\n           pounds)\n\nbrn_abund &lt;- brn_landings |&gt; \n    mutate(survey = case_when(state == \"GEORGIA\" ~ \"GA\",\n                              state == \"SOUTH CAROLINA\" ~ \"SC\",\n                              .default = \"PROBLEM\"),\n           life_stage = \"adult.landings\",\n           abundance_measure = \"pounds\",\n           abundance = pounds,\n           sqrt_abundance = sqrt(abundance)) |&gt; \n    select(all_of(sel_order_annual)) |&gt; \n    arrange(shrimp_year, species, survey)\n\n\n\n\nCode\nggplot(brn_abund,\n       aes(x = shrimp_year,\n           y = abundance,\n           col = survey)) +\n    geom_point(size = 2)\n\n\n\n\n\n\n\n\nFigure 12.1\n\n\n\n\n\nTotal over the two states (because the data we have for white shrimp is totals across the states, not averages) and generate abundance index.\n\n\nCode\nbrn_byShrimpYear &lt;- brn_abund |&gt; \n    group_by(species, life_stage, shrimp_year) |&gt; \n    summarize(abundance = sum(abundance, na.rm = TRUE)) |&gt; \n    ungroup() |&gt; \n    mutate(sqrt_abundance = sqrt(abundance),\n           survey = \"Landings, GA and SC\",\n           abundance_measure = \"total over 2 states\") |&gt; \n    select(all_of(sel_order_annual)) |&gt; \n    group_by(species) |&gt; \n    mutate(abundanceIndex_fullTimePeriod = as.vector(scale(sqrt_abundance))) |&gt; \n    ungroup()\n\nbrn_abund_commontime &lt;- brn_byShrimpYear |&gt; \n    select(species, shrimp_year, sqrt_abundance) |&gt; \n    filter(shrimp_year %in% common_shrimpYears) |&gt; \n    group_by(species) |&gt; \n    mutate(abundanceIndex_commonTimePeriod = as.vector(scale(sqrt_abundance))) |&gt; \n    ungroup()\n\nbrn_byShrimpYear &lt;- left_join(brn_byShrimpYear, \n                              brn_abund_commontime)\n\n\nWrite out.\n\n\nCode\n# by state\nwrite.csv(brn_abund,\n          here::here(out_path_detailed,\n                     \"adult.landings.brown_byStateAndShrimpYear.csv\"),\n          na = \"\",\n          row.names = FALSE)\n\n# combined with index\nwrite.csv(brn_byShrimpYear,\n          here::here(out_path,\n                     \"adult.landings.brown_byShrimpYear.csv\"),\n          na = \"\",\n          row.names = FALSE)\n\n\n\n\nWhite Shrimp\nUsing seasonal data for white shrimp, to separate non-spawning adults (time period 2 for a calendar year, season Fall, Months Aug-Dec) from spawners (time period 1 of the next calendar year, season Winter-Spring-Summer, months Jan-July).\nThe input file contained heads-off landings from SC and GA.\n\n\nCode\n# Fall = Aug-Dec  - make shrimp_year =  year\n# Win_Spr_Sum = Jan-Jul - make shrimp_year = year - 1\n\nwht_landings &lt;- landings_seas |&gt; \n    mutate(shrimp_year = case_when(season == \"Fall\" ~ Year,\n                                   .default = Year - 1),\n           life_stage = case_when(season == \"Fall\" ~ \"adult.nonspawning.landings\",\n                                  .default = \"adult.spawning.landings\"),\n           survey = \"landings\",\n           species = \"white\",\n           abundance_measure = \"head-off weight, sum of SC and GA\",\n           abundance = lbs_headOff,\n           sqrt_abundance = sqrt(abundance)) |&gt; \n    filter(shrimp_year &gt;= 1979,\n           shrimp_year &lt;= 2022) |&gt; \n    janitor::clean_names() |&gt; \n    select(any_of(sel_order_monthly),\n           season, sqrt_abundance) |&gt; \n    relocate(season, .after = \"year\")\n\n\nGenerate abundance index. Handling a little differently because there are two life stages in here (spawning and non-spawning adults).\n\n\nCode\n# abundance index, full time\nwht_abund &lt;- wht_landings |&gt; \n    group_by(species, life_stage) |&gt; \n    mutate(abundanceIndex_fullTimePeriod = as.vector(scale(sqrt_abundance))) |&gt; \n    ungroup()\n\n# abundance index, common time\nwht_abund_commonTime &lt;- wht_abund |&gt; \n    select(species, life_stage, shrimp_year, sqrt_abundance) |&gt; \n    filter(shrimp_year %in% common_shrimpYears) |&gt; \n    group_by(species, life_stage) |&gt; \n    mutate(abundanceIndex_commonTimePeriod = as.vector(scale(sqrt_abundance))) |&gt; \n    ungroup()\n\nwht_abund &lt;- left_join(wht_abund, \n                       wht_abund_commonTime) |&gt; \n    rename(calendar_year = year) |&gt; \n    select(survey, species, shrimp_year, life_stage,\n           calendar_year, season,\n           everything())\n\n\n\n\nCode\nggplot(wht_abund,\n       aes(x = shrimp_year,\n           y = abundanceIndex_fullTimePeriod,\n           col = life_stage)) +\n    geom_point(size = 2) +\n    geom_line() +\n    theme_bw()\n\n\n\n\n\n\n\n\nFigure 12.2: Abundance Index for white shrimp, by spawning vs. non-spawning adults\n\n\n\n\n\n\n\nCode\nggplot(wht_abund) +\n    geom_histogram(aes(x = abundanceIndex_fullTimePeriod)) +\n    facet_wrap(~life_stage)\n\n\nWrite out white shrimp data. Both ‘adult’ life stages are in the single file.\n\n\nCode\nwrite.csv(wht_abund,\n          here::here(out_path,\n                     \"adult.landings.white_byShrimpYear.csv\"),\n          na = \"\",\n          row.names = FALSE)",
+    "crumbs": [
+      "Summarizing to Abundance Index",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Adults - landings and trip tickets</span>"
+    ]
+  },
+  {
+    "objectID": "process_ad_commercial.html#trip-ticket-data",
+    "href": "process_ad_commercial.html#trip-ticket-data",
+    "title": "12  Adults - landings and trip tickets",
+    "section": "12.2 Trip Ticket Data",
+    "text": "12.2 Trip Ticket Data\nFor browns, compile to annual totals.\nFor whites, ideally compile to the same seasons reported in landings: Jan-Jul and Aug-Dec. However the waves here split; Jul-Aug are combined. Based on the nursery period dates for this species starting in June, I’ll ….. cut it off at June?\n\n\nCode\ntest_wht &lt;- tripTick_abund |&gt; \n    filter(Species == \"white\",\n           State %in% c(\"GA\", \"SC\"))\n\nggplot(test_wht) +\n    geom_boxplot(aes(x = Wave,\n                     y = annland/1000000),\n                 fill = NA,\n                 outliers = FALSE) +\n    geom_jitter(aes(x = Wave,\n                     y = annland/1000000,\n                   col = Wave),\n                size = 2,\n                alpha = 0.6) +\n    theme_bw() +\n    theme(legend.position = \"none\") +\n    labs(y = \"Landings (millions of pounds)\")\n\n\n\n\n\n\n\n\nFigure 12.3: White Shrimp Landings in GA and SC, by wave. These landings are reported as head-off weights (pounds) by state. They were not added or averaged here; each point represents a number for a state in a given year.",
+    "crumbs": [
+      "Summarizing to Abundance Index",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Adults - landings and trip tickets</span>"
+    ]
+  },
+  {
+    "objectID": "process_ad_commercial.html#about",
+    "href": "process_ad_commercial.html#about",
+    "title": "12  Adults - landings and trip tickets",
+    "section": "12.3 About",
+    "text": "12.3 About\nInput .qmd file for this section was: process_ad_commercial.qmd and can be found in the main directory.\nInput data file(s) - in data/intermediate/adultCommercial_dfs.RData (the single .RData file contains multiple data frames):\n\nlandings_annual\nlandings_seas\ntripTick_abund\n\nModifications to data:\nGenerated data file(s): - fully processed files are in the data/processed directory:\n\nadult.landings.brown_byStateAndShrimpYear.csv, in the subfolder moreDetailed, shows the separate totals by year.\n\nadult.landings.brown_byShrimpYear.csv - annual landings were totalled across the two states, to be consistent with how white shrimp landings were reported in our input file.\n\nadult.landings.white_byShrimpYear.csv - has both spawning and nonspawning in the same file, as separate life_stages.\n\nOther notes about data:\n\nnone",
     "crumbs": [
       "Summarizing to Abundance Index",
       "<span class='chapter-number'>12</span>  <span class='chapter-title'>Adults - landings and trip tickets</span>"
