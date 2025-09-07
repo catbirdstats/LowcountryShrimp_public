@@ -109,3 +109,37 @@ sel_order_annual <- c("survey", "species", "life_stage",
 # common time period definition ----
 # for trimming files
 common_shrimpYears <- seq(1989, 2017)
+
+
+# function to calculate consec days ----
+consec_stats <- function(data, threshold){
+    # data is a vector of temperature values
+    # threshold is a numeric threshold
+    
+    # make the vector of true/falses - 
+    # is each temperature below the threshold
+    x <- data < threshold
+    
+    # use rle to count runs of trues and falses
+    rle_out <- rle(x)
+    rle_df <- data.frame(value = rle_out$values,
+                         n_consec = rle_out$lengths)
+    
+    # if there weren't any days below the threshold, return 0s
+    if(!(TRUE %in% rle_df$value)){
+        summ_df <- data.frame(threshold = threshold,
+                              totalDays = 0,
+                              totalSpells = 0,
+                              longestSpell = 0)
+        # otherwise calculate the summary stats
+    } else {
+        summ_df <- rle_df |> 
+            filter(value == TRUE) |> 
+            summarize(threshold = threshold,
+                      totalDays = sum(n_consec),
+                      totalSpells = sum(n_consec >= 7),
+                      longestSpell = max(n_consec))
+    }
+    
+    summ_df
+}

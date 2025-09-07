@@ -149,7 +149,7 @@ skimr::skim_without_charts(postlarv_yearly)
 
 **Generated data file(s):**  - fully processed files are in the `data/processed` directory:  
 
--  `postlarval_byMonth.csv` is summarized to species and month within year.  
+-  `postlarval_byMonth.csv`, in the subfolder `moreDetailed`, is summarized to species and month within year.  
 -  `postlarval_byShrimpYear.csv` is summarized to species and shrimp year.  
 
 **Other notes about data:**

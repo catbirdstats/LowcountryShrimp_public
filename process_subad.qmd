@@ -227,7 +227,9 @@ skimr::skim_without_charts(subad_combined_byShrimpYear)
 
 **Generated data file(s):**  - fully processed files are in the `data/processed` directory:  
 
- 
+-  `subadult_bySurveyAndMonth.csv`, in the subfolder `moreDetailed`, is summarized to species and month within year, by survey.   
+-  `subadult_bySurveyAndShrimpYear.csv` , in the subfolder `moreDetailed`,is summarized to species and shrimp year, by survey. 
+-  `subadult_byShrimpYear.csv` is summarized to species and shrimp year, as the average shrimp-year abundance across the two surveys. This is the file that will be used in further analyses.  
 
 **Other notes about data:**
 

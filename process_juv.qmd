@@ -200,8 +200,8 @@ skimr::skim_without_charts(juv_combined_byShrimpYear_averaged)
 
 **Generated data file(s):**  - fully processed files are in the `data/processed` directory:  
 
--  `juvenile_bySurveyAndMonth.csv` is summarized to species and month within year, by survey.  
--  `juvenile_bySurveyAndShrimpYear.csv` is summarized to species and shrimp year, by survey. 
+-  `juvenile_bySurveyAndMonth.csv`, in the subfolder `moreDetailed`, is summarized to species and month within year, by survey.  
+-  `juvenile_bySurveyAndShrimpYear.csv`, in the subfolder `moreDetailed`, is summarized to species and shrimp year, by survey. 
 -  `juvenile_byShrimpYear.csv` is summarized to species and shrimp year, as the average shrimp-year abundance across the two surveys. This is the file that will be used in further analyses.  
 
 **Other notes about data:**

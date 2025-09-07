@@ -33,10 +33,6 @@ book:
         - raw_subad.qmd
         - raw_ad_seamap.qmd
         - raw_ad_commercial.qmd
-    - part: "Environmental Data Exploration"
-      chapters: 
-        - raw_wtemp.qmd
-        - raw_sal.qmd  
     - part: "Summarizing to Abundance Index"
       chapters:
         - process_postlarv.qmd
@@ -44,10 +40,9 @@ book:
         - process_subad.qmd
         - process_ad_seamap.qmd
         - process_ad_commercial.qmd
-    - part: "Summarizing Environmental Data"
+    - part: "Environmental Data"
       chapters:
-        - process_wtemp.qmd
-        - process_sal.qmd  
+        - process_environmental.qmd
     - part: "Relationships between datasets"
       chapters:
         - rel_temp_thresholds.qmd  
