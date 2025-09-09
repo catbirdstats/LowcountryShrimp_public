@@ -243,7 +243,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./process_ad_seamap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Adults - fishery-independent</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Adults - fisheries-independent</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -315,7 +315,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#brown-shrimp" id="toc-brown-shrimp" class="nav-link" data-scroll-target="#brown-shrimp">Brown Shrimp</a></li>
   <li><a href="#white-shrimp" id="toc-white-shrimp" class="nav-link" data-scroll-target="#white-shrimp">White Shrimp</a></li>
   </ul></li>
-  <li><a href="#trip-ticket-data" id="toc-trip-ticket-data" class="nav-link" data-scroll-target="#trip-ticket-data"><span class="header-section-number">12.2</span> Trip Ticket Data</a></li>
+  <li><a href="#trip-ticket-data" id="toc-trip-ticket-data" class="nav-link" data-scroll-target="#trip-ticket-data"><span class="header-section-number">12.2</span> Trip Ticket Data</a>
+  <ul class="collapse">
+  <li><a href="#brown-shrimp-1" id="toc-brown-shrimp-1" class="nav-link" data-scroll-target="#brown-shrimp-1">Brown Shrimp</a></li>
+  <li><a href="#white-shrimp-1" id="toc-white-shrimp-1" class="nav-link" data-scroll-target="#white-shrimp-1">White Shrimp</a></li>
+  </ul></li>
   <li><a href="#about" id="toc-about" class="nav-link" data-scroll-target="#about"><span class="header-section-number">12.3</span> About</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/catbirdstats/LowcountryShrimp_public/blob/main/process_ad_commercial.qmd" target="_blank" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></nav>
@@ -560,42 +564,187 @@ Figure&nbsp;12.2: Abundance Index for white shrimp, by spawning vs.&nbsp;non-spa
 </section>
 <section id="trip-ticket-data" class="level2" data-number="12.2">
 <h2 data-number="12.2" class="anchored" data-anchor-id="trip-ticket-data"><span class="header-section-number">12.2</span> Trip Ticket Data</h2>
-<p>For browns, compile to annual totals.</p>
-<p>For whites, ideally compile to the same seasons reported in landings: Jan-Jul and Aug-Dec.&nbsp;However the waves here split; Jul-Aug are combined. Based on the nursery period dates for this species starting in June, I’ll ….. cut it off at June?</p>
+<p>I intended to compile to annual totals, but in early years there are big differences in reporting frequencies. So the only files I will write out will contain the ‘Wave’, which is the 2-month period of reporting. I will not compile to annual values or abundance indices.</p>
+<p>Would probably be best to pull out a wave or two and use those as an index. Waves 3, 4, and 5 seem to be pretty consistently reported after about 2000.</p>
+<section id="brown-shrimp-1" class="level3">
+<h3 class="anchored" data-anchor-id="brown-shrimp-1">Brown Shrimp</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>test_wht <span class="ot">&lt;-</span> tripTick_abund <span class="sc">|&gt;</span> </span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Species <span class="sc">==</span> <span class="st">"white"</span>,</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>           State <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"GA"</span>, <span class="st">"SC"</span>))</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(test_wht) <span class="sc">+</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Wave,</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> annland<span class="sc">/</span><span class="dv">1000000</span>),</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="cn">NA</span>,</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">outliers =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_jitter</span>(<span class="fu">aes</span>(<span class="at">x =</span> Wave,</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> annland<span class="sc">/</span><span class="dv">1000000</span>,</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> Wave),</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">size =</span> <span class="dv">2</span>,</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>                <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Landings (millions of pounds)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>brn_tt_byState <span class="ot">&lt;-</span> tripTick_abund <span class="sc">|&gt;</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Species <span class="sc">==</span> <span class="st">"brown"</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>           State <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"GA"</span>, <span class="st">"SC"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">shrimp_year =</span> Year,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">life_stage =</span> <span class="st">"adult.triptickets"</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">survey =</span> <span class="fu">paste0</span>(<span class="st">"Trip tickets, "</span>, State),</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">pseudodate =</span> lubridate<span class="sc">::</span><span class="fu">ymd</span>(<span class="fu">paste</span>(Year, Wave_start, <span class="dv">15</span>))) <span class="sc">|&gt;</span> </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(pseudodate, Year, Wave, shrimp_year, survey, life_stage, </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>           annland, numdeal, numfisher, CPUE_approx) <span class="sc">|&gt;</span> </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(Year, Wave)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co"># add the states together, within wave</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>brn_tt <span class="ot">&lt;-</span> brn_tt_byState <span class="sc">|&gt;</span> </span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(pseudodate, shrimp_year, Wave, life_stage),</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">annland =</span> <span class="fu">sum</span>(annland, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>              <span class="at">numdeal =</span> <span class="fu">sum</span>(numdeal, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>              <span class="at">numfisher =</span> <span class="fu">sum</span>(numfisher, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">CPUE_approx =</span> annland<span class="sc">/</span>numfisher,</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">survey =</span> <span class="st">"Trip tickets, GA + SC total"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(brn_tt,</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> pseudodate,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> CPUE_approx)) <span class="sc">+</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="at">col =</span> <span class="st">"gray50"</span>) <span class="sc">+</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">col =</span> Wave,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">shape =</span> Wave),</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Brown Shrimp"</span>,</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">"Date"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div id="fig-WaveComparison" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-brnCPUEbyWave" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-WaveComparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="process_ad_commercial_files/figure-html/fig-WaveComparison-1.png" class="img-fluid figure-img" width="672">
+<div aria-describedby="fig-brnCPUEbyWave-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="process_ad_commercial_files/figure-html/fig-brnCPUEbyWave-1.png" class="img-fluid figure-img" width="672">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-WaveComparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.3: White Shrimp Landings in GA and SC, by wave. These landings are reported as head-off weights (pounds) by state. They were not added or averaged here; each point represents a number for a state in a given year.
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-brnCPUEbyWave-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12.3: Approximate CPUE for GA &amp; SC combined (added together) for brown shrimp by time period. Notice the vastly different reporting frequencies before about 2000.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># by state &amp; wave</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(brn_tt_byState,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>          here<span class="sc">::</span><span class="fu">here</span>(out_path_detailed,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"adult.triptickets.brown_01byStateAndWave.csv"</span>),</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">na =</span> <span class="st">""</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co"># by state &amp; shrimp year</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(brn_tt,</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>          here<span class="sc">::</span><span class="fu">here</span>(out_path_detailed,</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"adult.triptickets.brown_02byWave.csv"</span>),</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">na =</span> <span class="st">""</span>,</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="white-shrimp-1" class="level3">
+<h3 class="anchored" data-anchor-id="white-shrimp-1">White Shrimp</h3>
+<p>For whites, ideally I would compile to the same seasons reported in landings: Jan-Jul and Aug-Dec.&nbsp;However the waves here split; Jul-Aug are combined. Per advice from a work group member, July landings are negligible and this wave should be dominated by August landings, so we will count them with Fall/non-spawning shrimp.</p>
+<p>There are most likely differences in when reporting happened seasonally, as with brown shrimp, so I will again only compile to “Wave”.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>wht_tt_byState <span class="ot">&lt;-</span> tripTick_abund <span class="sc">|&gt;</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Species <span class="sc">==</span> <span class="st">"white"</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>           State <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"GA"</span>, <span class="st">"SC"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">shrimp_year =</span> <span class="fu">case_when</span>(WAVE <span class="sc">&lt;=</span> <span class="dv">3</span> <span class="sc">~</span> Year <span class="sc">-</span> <span class="dv">1</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                                   WAVE <span class="sc">&gt;=</span> <span class="dv">4</span> <span class="sc">~</span> Year),</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">life_stage =</span> <span class="fu">case_when</span>(WAVE <span class="sc">&lt;=</span> <span class="dv">3</span> <span class="sc">~</span> <span class="st">"adult.spawning.triptickets"</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>                                  WAVE <span class="sc">&gt;=</span> <span class="dv">4</span> <span class="sc">~</span> <span class="st">"adult.nonspawning.triptickets"</span>),</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">survey =</span> <span class="fu">paste0</span>(<span class="st">"Trip tickets, "</span>, State),</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">pseudodate =</span> lubridate<span class="sc">::</span><span class="fu">ymd</span>(<span class="fu">paste</span>(Year, Wave_start, <span class="dv">15</span>))) <span class="sc">|&gt;</span> </span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(Year, pseudodate, Wave, shrimp_year, survey, life_stage, </span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>           annland, numdeal, numfisher, CPUE_approx)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co"># add the states together, within wave</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>wht_tt <span class="ot">&lt;-</span> wht_tt_byState <span class="sc">|&gt;</span> </span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(pseudodate, shrimp_year, Wave, life_stage),</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>              <span class="at">annland =</span> <span class="fu">sum</span>(annland, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>              <span class="at">numdeal =</span> <span class="fu">sum</span>(numdeal, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>              <span class="at">numfisher =</span> <span class="fu">sum</span>(numfisher, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">CPUE_approx =</span> annland<span class="sc">/</span>numfisher,</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>           <span class="at">survey =</span> <span class="st">"Trip tickets, GA + SC total"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(wht_tt,</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> pseudodate,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> CPUE_approx)) <span class="sc">+</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="at">col =</span> <span class="st">"gray50"</span>) <span class="sc">+</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">col =</span> life_stage,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">shape =</span> Wave),</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"White Shrimp"</span>,</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">"Date"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-whtCPUEApproxByWave" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-whtCPUEApproxByWave-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="process_ad_commercial_files/figure-html/fig-whtCPUEApproxByWave-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-whtCPUEApproxByWave-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12.4: Approximate CPUE for GA &amp; SC combined (added together) for white shrimp by time period. Notice the vastly different reporting frequencies before about 2000.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Looks like there was a lot going on before about 1995 so let’s filter that data.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">filter</span>(wht_tt, shrimp_year <span class="sc">&gt;=</span> <span class="dv">1995</span>),</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> pseudodate,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> CPUE_approx)) <span class="sc">+</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="at">col =</span> <span class="st">"gray50"</span>) <span class="sc">+</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">col =</span> life_stage,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">shape =</span> Wave),</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"White Shrimp"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-whtCPUEApproxByWave2" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-whtCPUEApproxByWave2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="process_ad_commercial_files/figure-html/fig-whtCPUEApproxByWave2-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-whtCPUEApproxByWave2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12.5: Approximate CPUE for GA &amp; SC combined (added together) for white shrimp by time period, starting in 1995
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>There are several years where Wave 2 is missing (triangle), but 1, 3, 4, 5, and 6 seem pretty consistent in this time period (post-1995).</p>
+<p><strong>All years are included in these output files</strong>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># by state &amp; wave</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(wht_tt_byState,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>          here<span class="sc">::</span><span class="fu">here</span>(out_path_detailed,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"adult.triptickets.white_01byStateAndWave.csv"</span>),</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">na =</span> <span class="st">""</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co"># by state &amp; shrimp year</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(wht_tt,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>          here<span class="sc">::</span><span class="fu">here</span>(out_path_detailed,</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"adult.triptickets.white_02byWave.csv"</span>),</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">na =</span> <span class="st">""</span>,</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
 </section>
 <section id="about" class="level2" data-number="12.3">
 <h2 data-number="12.3" class="anchored" data-anchor-id="about"><span class="header-section-number">12.3</span> About</h2>
@@ -607,13 +756,21 @@ Figure&nbsp;12.3: White Shrimp Landings in GA and SC, by wave. These landings ar
 <li><code>tripTick_abund</code></li>
 </ul>
 <p><strong>Modifications to data:</strong></p>
-<p><strong>Generated data file(s):</strong> - fully processed files are in the <code>data/processed</code> directory:</p>
 <ul>
-<li><code>adult.landings.brown_byStateAndShrimpYear.csv</code>, in the subfolder <code>moreDetailed</code>, shows the separate totals by year.<br>
+<li>pink shrimp removed.</li>
+<li>any areas other than GA and SC were removed.<br>
 </li>
-<li><code>adult.landings.brown_byShrimpYear.csv</code> - annual landings were totalled across the two states, to be consistent with how white shrimp landings were reported in our input file.<br>
+<li><code>pseudodate</code> column was created based on the year and first month of each ‘Wave’ of reporting, in order to make time series effectively.</li>
+</ul>
+<p><strong>Generated data file(s):</strong> - fully processed files are in the <code>moreDetailed</code> folder of the <code>data/processed</code> directory. Abundance indices were not generated due to inconsistency in the consituents (which Waves had values through time):</p>
+<ul>
+<li><code>adult.triptickets.brown_01byStateAndWave.csv</code> - abundances and number reporting for GA and SC separately by Wave and year.<br>
 </li>
-<li><code>adult.landings.white_byShrimpYear.csv</code> - has both spawning and nonspawning in the same file, as separate <code>life_stage</code>s.</li>
+<li><code>adult.triptickets.brown_02byWave.csv</code> - abundances and reporters from the two states are added together for Wave and year.<br>
+</li>
+<li><code>adult.triptickets.white_01byStateAndWave.csv</code> - same as brown file<br>
+</li>
+<li><code>adult.triptickets.white_02byWave.csv</code> - same as brown file</li>
 </ul>
 <p><strong>Other notes about data:</strong></p>
 <ul>
@@ -1035,8 +1192,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./process_ad_seamap.html" class="pagination-link" aria-label="Adults - fishery-independent">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Adults - fishery-independent</span></span>
+      <a href="./process_ad_seamap.html" class="pagination-link" aria-label="Adults - fisheries-independent">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Adults - fisheries-independent</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

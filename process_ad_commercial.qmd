@@ -190,35 +190,153 @@ write.csv(wht_abund,
 
 ## Trip Ticket Data  
 
-For browns, compile to annual totals.  
+I intended to compile to annual totals, but in early years there are big differences in reporting frequencies. So the only files I will write out will contain the 'Wave', which is the 2-month period of reporting. I will not compile to annual values or abundance indices.  
 
-For whites, ideally compile to the same seasons reported in landings: Jan-Jul and Aug-Dec. However the waves here split; Jul-Aug are combined. Based on the nursery period dates for this species starting in June, I'll ..... cut it off at June?
+Would probably be best to pull out a wave or two and use those as an index. Waves 3, 4, and 5 seem to be pretty consistently reported after about 2000.  
+
+### Brown Shrimp
 
 ```{r}
-#| label: fig-WaveComparison
-#| fig-cap: "White Shrimp Landings in GA and SC, by wave. These landings are reported as head-off weights (pounds) by state. They were not added or averaged here; each point represents a number for a state in a given year."
+brn_tt_byState <- tripTick_abund |> 
+    filter(Species == "brown",
+           State %in% c("GA", "SC")) |> 
+    mutate(shrimp_year = Year,
+           life_stage = "adult.triptickets",
+           survey = paste0("Trip tickets, ", State),
+           pseudodate = lubridate::ymd(paste(Year, Wave_start, 15))) |> 
+    select(pseudodate, Year, Wave, shrimp_year, survey, life_stage, 
+           annland, numdeal, numfisher, CPUE_approx) |> 
+    arrange(Year, Wave)
 
+# add the states together, within wave
+brn_tt <- brn_tt_byState |> 
+    summarize(.by = c(pseudodate, shrimp_year, Wave, life_stage),
+              annland = sum(annland, na.rm = TRUE),
+              numdeal = sum(numdeal, na.rm = TRUE),
+              numfisher = sum(numfisher, na.rm = TRUE)) |> 
+    mutate(CPUE_approx = annland/numfisher,
+           survey = "Trip tickets, GA + SC total")
+```
 
-test_wht <- tripTick_abund |> 
-    filter(Species == "white",
-           State %in% c("GA", "SC"))
+```{r}
+#| label: fig-brnCPUEbyWave
+#| fig-cap: "Approximate CPUE for GA & SC combined (added together) for brown shrimp by time period. Notice the vastly different reporting frequencies before about 2000."
 
-ggplot(test_wht) +
-    geom_boxplot(aes(x = Wave,
-                     y = annland/1000000),
-                 fill = NA,
-                 outliers = FALSE) +
-    geom_jitter(aes(x = Wave,
-                     y = annland/1000000,
-                   col = Wave),
-                size = 2,
-                alpha = 0.6) +
+ggplot(brn_tt,
+       aes(x = pseudodate,
+           y = CPUE_approx)) +
+    geom_line(col = "gray50") +
+    geom_point(aes(col = Wave,
+                   shape = Wave),
+               size = 2) +
     theme_bw() +
-    theme(legend.position = "none") +
-    labs(y = "Landings (millions of pounds)")
+    theme(legend.position = "bottom") +
+    labs(title = "Brown Shrimp",
+         x = "Date")
 ```
 
 
+```{r}
+# by state & wave
+write.csv(brn_tt_byState,
+          here::here(out_path_detailed,
+                     "adult.triptickets.brown_01byStateAndWave.csv"),
+          na = "",
+          row.names = FALSE)
+
+# by state & shrimp year
+write.csv(brn_tt,
+          here::here(out_path_detailed,
+                     "adult.triptickets.brown_02byWave.csv"),
+          na = "",
+          row.names = FALSE)
+```
+
+
+### White Shrimp  
+
+For whites, ideally I would compile to the same seasons reported in landings: Jan-Jul and Aug-Dec. However the waves here split; Jul-Aug are combined. Per advice from a work group member, July landings are negligible and this wave should be dominated by August landings, so we will count them with Fall/non-spawning shrimp.  
+
+There are most likely differences in when reporting happened seasonally, as with brown shrimp, so I will again only compile to "Wave".  
+
+```{r}
+wht_tt_byState <- tripTick_abund |> 
+    filter(Species == "white",
+           State %in% c("GA", "SC")) |> 
+    mutate(shrimp_year = case_when(WAVE <= 3 ~ Year - 1,
+                                   WAVE >= 4 ~ Year),
+           life_stage = case_when(WAVE <= 3 ~ "adult.spawning.triptickets",
+                                  WAVE >= 4 ~ "adult.nonspawning.triptickets"),
+           survey = paste0("Trip tickets, ", State),
+           pseudodate = lubridate::ymd(paste(Year, Wave_start, 15))) |> 
+    select(Year, pseudodate, Wave, shrimp_year, survey, life_stage, 
+           annland, numdeal, numfisher, CPUE_approx)
+
+# add the states together, within wave
+wht_tt <- wht_tt_byState |> 
+    summarize(.by = c(pseudodate, shrimp_year, Wave, life_stage),
+              annland = sum(annland, na.rm = TRUE),
+              numdeal = sum(numdeal, na.rm = TRUE),
+              numfisher = sum(numfisher, na.rm = TRUE)) |> 
+    mutate(CPUE_approx = annland/numfisher,
+           survey = "Trip tickets, GA + SC total")
+```
+
+```{r}
+#| label: fig-whtCPUEApproxByWave
+#| fig-cap: "Approximate CPUE for GA & SC combined (added together) for white shrimp by time period. Notice the vastly different reporting frequencies before about 2000."
+
+ggplot(wht_tt,
+       aes(x = pseudodate,
+           y = CPUE_approx)) +
+    geom_line(col = "gray50") +
+    geom_point(aes(col = life_stage,
+                   shape = Wave),
+               size = 2) +
+    theme_bw() +
+    theme(legend.position = "bottom") +
+    labs(title = "White Shrimp",
+         x = "Date")
+```
+
+Looks like there was a lot going on before about 1995 so let's filter that data.  
+
+```{r}
+#| label: fig-whtCPUEApproxByWave2
+#| fig-cap: "Approximate CPUE for GA & SC combined (added together) for white shrimp by time period, starting in 1995"
+
+ggplot(filter(wht_tt, shrimp_year >= 1995),
+       aes(x = pseudodate,
+           y = CPUE_approx)) +
+    geom_line(col = "gray50") +
+    geom_point(aes(col = life_stage,
+                   shape = Wave),
+               size = 2) +
+    theme_bw() +
+    theme(legend.position = "bottom") +
+    labs(title = "White Shrimp")
+```
+
+There are several years where Wave 2 is missing (triangle), but 1, 3, 4, 5, and 6 seem pretty consistent in this time period (post-1995).  
+
+
+**All years are included in these output files**.  
+
+```{r}
+# by state & wave
+write.csv(wht_tt_byState,
+          here::here(out_path_detailed,
+                     "adult.triptickets.white_01byStateAndWave.csv"),
+          na = "",
+          row.names = FALSE)
+
+# by state & shrimp year
+write.csv(wht_tt,
+          here::here(out_path_detailed,
+                     "adult.triptickets.white_02byWave.csv"),
+          na = "",
+          row.names = FALSE)
+```
 
 
 ## About
@@ -232,16 +350,19 @@ ggplot(test_wht) +
 -   `tripTick_abund`
 
 
-**Modifications to data:**
+**Modifications to data:**  
+
+-   pink shrimp removed. 
+-   any areas other than GA and SC were removed.  
+-   `pseudodate` column was created based on the year and first month of each 'Wave' of reporting, in order to make time series effectively.
 
 
+**Generated data file(s):**  - fully processed files are in the `moreDetailed` folder of the `data/processed` directory. Abundance indices were not generated due to inconsistency in the consituents (which Waves had values through time):  
 
-**Generated data file(s):**  - fully processed files are in the `data/processed` directory:  
-
--   `adult.landings.brown_byStateAndShrimpYear.csv`, in the subfolder `moreDetailed`, shows the separate totals by year.  
--   `adult.landings.brown_byShrimpYear.csv` - annual landings were totalled across the two states, to be consistent with how white shrimp landings were reported in our input file.  
--   `adult.landings.white_byShrimpYear.csv` - has both spawning and nonspawning in the same file, as separate `life_stage`s.  
-
+-   `adult.triptickets.brown_01byStateAndWave.csv` - abundances and number reporting for GA and SC separately by Wave and year.  
+-   `adult.triptickets.brown_02byWave.csv` - abundances and reporters from the two states are added together for Wave and year.  
+-   `adult.triptickets.white_01byStateAndWave.csv` - same as brown file  
+-   `adult.triptickets.white_02byWave.csv` - same as brown file  
 
 **Other notes about data:**
 
