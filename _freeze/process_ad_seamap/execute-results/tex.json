@@ -1,8 +1,8 @@
 {
-  "hash": "dc8100b8eeba53327a9db571cd8733fb",
+  "hash": "83de2a71b65b3921c29782b70341c8e4",
   "result": {
     "engine": "knitr",
-    "markdown": "# Adults - fishery-independent  \n\nSEAMAP info here  \n\n## test  \n\nrendering with freeze: auto  \n\n## another test  \n\n\n\n::: {.cell}\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] 4\n```\n\n\n:::\n:::\n",
+    "markdown": "# Adults - fisheries-independent  \n\nThis file focuses on SEAMAP data.  \n\n#### Setup \n\n\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n\n\n#### Compiling to season  \n\nSEAMAP does seasonal sampling; not monthly.  \n\n\n# stopping here for the night  \n\nNeed to deal with seasons, get shrimp year assigned, and spawning vs. non-spawning for white shrimp.  \n\n\n\n::: {.cell}\n\n:::\n\n\n\n\n\n## About\n\n**Input `.qmd` file** for this section was: **process_ad_seamap.qmd** and can be found in the main directory.  \n\n**Input data file(s)** - in `data/intermediate/adultSeamap_dfs.RData` (the single `.RData` file contains multiple data frames):\n\n-   `seamap` - the unfiltered data frame\n-   `adsm_wide`\n-   `adsm_long`\n\n\n**Modifications to data:**\n\n\n\n**Generated data file(s):**  - fully processed files are in the `data/processed` directory:  \n\n\n**Other notes about data:**\n\n- none",
     "supporting": [],
     "filters": [
       "rmarkdown/pagebreak.lua"

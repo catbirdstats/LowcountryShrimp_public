@@ -416,31 +416,37 @@ Figure&nbsp;12.1
 </div>
 </div>
 </div>
-<p>Total over the two states (because the data we have for white shrimp is totals across the states, not averages) and generate abundance index.</p>
+<p>For white shrimp landings, we only have totals across the states of GA and SC. For Juvenile and Subadult stages (both species), we averaged the values from the two states.</p>
+<p>Here, I will calculate both ways.</p>
+<p>Because ‘mean’ will probably be primary, the variable names that match those of other files will contain values using the mean across GA and SC. “sum” will be appended to variable names using a total across the two states, in case such values are needed later.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>brn_byShrimpYear <span class="ot">&lt;-</span> brn_abund <span class="sc">|&gt;</span> </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(species, life_stage, shrimp_year) <span class="sc">|&gt;</span> </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">abundance =</span> <span class="fu">sum</span>(abundance, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">sqrt_abundance =</span> <span class="fu">sqrt</span>(abundance),</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">survey =</span> <span class="st">"Landings, GA and SC"</span>,</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">abundance_measure =</span> <span class="st">"total over 2 states"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="fu">all_of</span>(sel_order_annual)) <span class="sc">|&gt;</span> </span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span> </span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">abundanceIndex_fullTimePeriod =</span> <span class="fu">as.vector</span>(<span class="fu">scale</span>(sqrt_abundance))) <span class="sc">|&gt;</span> </span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>brn_abund_commontime <span class="ot">&lt;-</span> brn_byShrimpYear <span class="sc">|&gt;</span> </span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(species, shrimp_year, sqrt_abundance) <span class="sc">|&gt;</span> </span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(shrimp_year <span class="sc">%in%</span> common_shrimpYears) <span class="sc">|&gt;</span> </span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span> </span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">abundanceIndex_commonTimePeriod =</span> <span class="fu">as.vector</span>(<span class="fu">scale</span>(sqrt_abundance))) <span class="sc">|&gt;</span> </span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>brn_byShrimpYear <span class="ot">&lt;-</span> <span class="fu">left_join</span>(brn_byShrimpYear, </span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>                              brn_abund_commontime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">abundance_sum =</span> <span class="fu">sum</span>(abundance, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">abundance =</span> <span class="fu">mean</span>(abundance, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">sqrt_abundance_sum =</span> <span class="fu">sqrt</span>(abundance_sum),</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">sqrt_abundance =</span> <span class="fu">sqrt</span>(abundance),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">survey =</span> <span class="st">"Landings, GA and SC"</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">abundance_measure =</span> <span class="st">"mean over 2 states; sum also provided"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="fu">all_of</span>(sel_order_annual_extra)) <span class="sc">|&gt;</span> </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span> </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">abundanceIndexfullTimePeriod =</span> <span class="fu">as.vector</span>(<span class="fu">scale</span>(sqrt_abundance)),</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>           <span class="at">abundanceIndexSum_fullTimePeriod =</span> <span class="fu">as.vector</span>(<span class="fu">scale</span>(sqrt_abundance_sum))) <span class="sc">|&gt;</span> </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>brn_abund_commontime <span class="ot">&lt;-</span> brn_byShrimpYear <span class="sc">|&gt;</span> </span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(species, shrimp_year, sqrt_abundance, sqrt_abundance_sum) <span class="sc">|&gt;</span> </span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(shrimp_year <span class="sc">%in%</span> common_shrimpYears) <span class="sc">|&gt;</span> </span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span> </span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">abundanceIndex_commonTimePeriod =</span> <span class="fu">as.vector</span>(<span class="fu">scale</span>(sqrt_abundance)),</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>           <span class="at">abundanceIndexSum_commonTimePeriod =</span> <span class="fu">as.vector</span>(<span class="fu">scale</span>(sqrt_abundance_sum))) <span class="sc">|&gt;</span> </span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>brn_byShrimpYear <span class="ot">&lt;-</span> <span class="fu">left_join</span>(brn_byShrimpYear, </span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>                              brn_abund_commontime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Write out.</p>
@@ -582,14 +588,16 @@ Figure&nbsp;12.2: Abundance Index for white shrimp, by spawning vs.&nbsp;non-spa
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>           annland, numdeal, numfisher, CPUE_approx) <span class="sc">|&gt;</span> </span>
 <span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(Year, Wave)</span>
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co"># add the states together, within wave</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co"># average or add the states together, within wave</span></span>
 <span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>brn_tt <span class="ot">&lt;-</span> brn_tt_byState <span class="sc">|&gt;</span> </span>
 <span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">.by =</span> <span class="fu">c</span>(pseudodate, shrimp_year, Wave, life_stage),</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">annland =</span> <span class="fu">sum</span>(annland, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>              <span class="at">numdeal =</span> <span class="fu">sum</span>(numdeal, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>              <span class="at">numfisher =</span> <span class="fu">sum</span>(numfisher, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">CPUE_approx =</span> annland<span class="sc">/</span>numfisher,</span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">survey =</span> <span class="st">"Trip tickets, GA + SC total"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">annland_sum =</span> <span class="fu">sum</span>(annland, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>              <span class="at">numdeal_sum =</span> <span class="fu">sum</span>(numdeal, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>              <span class="at">numfisher_sum =</span> <span class="fu">sum</span>(numfisher, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>              <span class="at">CPUE_approx =</span> <span class="fu">mean</span>(CPUE_approx, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">CPUE_approx_sumGAandSC =</span> annland_sum<span class="sc">/</span>numfisher_sum,</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>           <span class="at">survey =</span> <span class="st">"Trip tickets, GA and SC"</span>,</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>           <span class="at">abundance_measure =</span> <span class="st">"mean CPUE across states; with CPUE based on sum provided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
@@ -614,7 +622,7 @@ Figure&nbsp;12.2: Abundance Index for white shrimp, by spawning vs.&nbsp;non-spa
 <img src="process_ad_commercial_files/figure-html/fig-brnCPUEbyWave-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-brnCPUEbyWave-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.3: Approximate CPUE for GA &amp; SC combined (added together) for brown shrimp by time period. Notice the vastly different reporting frequencies before about 2000.
+Figure&nbsp;12.3: Approximate CPUE for GA &amp; SC combined (mean CPUE per time period across states) for brown shrimp by time period. Notice the vastly different reporting frequencies before about 2000.
 </figcaption>
 </figure>
 </div>
@@ -762,7 +770,19 @@ Figure&nbsp;12.5: Approximate CPUE for GA &amp; SC combined (added together) for
 </li>
 <li><code>pseudodate</code> column was created based on the year and first month of each ‘Wave’ of reporting, in order to make time series effectively.</li>
 </ul>
-<p><strong>Generated data file(s):</strong> - fully processed files are in the <code>moreDetailed</code> folder of the <code>data/processed</code> directory. Abundance indices were not generated due to inconsistency in the consituents (which Waves had values through time):</p>
+<p><strong>Generated data file(s):</strong></p>
+<p><strong>NOTE</strong> - for brown shrimp files, abundances and abundance indices were aggregated from the 2 states of GA and SC in two different ways: by averaging abundance (the usual variable names) and by adding the abundances (“sum” appended to variable name). This was done because for white shrimp landings, only totals across the two states are available, so sum could be useful for comparison. However for other life stages (of both species), values were averaged between states, so the mean is more consistent with other life stages. Because ‘mean’ will probably be the primary value used, only “sum” was appended to the appropriate variable names. If nothing is specified (for brown shrimp), the aggregated value is a mean.</p>
+<p><strong><em>Landings Data</em></strong></p>
+<ul>
+<li><p>fully processed files are in the <code>data/processed</code> directory.</p></li>
+<li><p><code>adult.landings.brown_byStateAndShrimpYear.csv</code>, in the subfolder <code>moreDetailed</code>, shows the separate totals by year.<br>
+</p></li>
+<li><p><code>adult.landings.brown_byShrimpYear.csv</code> - annual landings were totalled across the two states, to be consistent with how white shrimp landings were reported in our input file.<br>
+</p></li>
+<li><p><code>adult.landings.white_byShrimpYear.csv</code> - has both spawning and nonspawning in the same file, as separate <code>life_stage</code>s.</p></li>
+</ul>
+<p><strong><em>Trip Ticket Data</em></strong></p>
+<p>Fully processed files are in the <code>moreDetailed</code> folder of the <code>data/processed</code> directory. Abundance indices for trip ticket data were not generated due to inconsistency in the consituents (which Waves had values through time):</p>
 <ul>
 <li><code>adult.triptickets.brown_01byStateAndWave.csv</code> - abundances and number reporting for GA and SC separately by Wave and year.<br>
 </li>

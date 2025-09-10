@@ -1,7 +1,73 @@
 # Adults - fisheries-independent  
 
-SEAMAP info here  
+This file focuses on SEAMAP data.  
 
+#### Setup 
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+source(here::here("functions.R"))
+
+in_path <- here::here("data", "intermediate")
+out_path <- here::here("data", "processed", "byLifeStage")
+out_path_detailed <- here::here(out_path, "moreDetailed")
+
+load(here::here(in_path, "adultSeamap_dfs.RData"))
+```
+
+```{r}
+adults <- adsm_long |> 
+    janitor::clean_names() |> 
+    filter(species %in% c("brown", "white")) 
+```
+
+#### Compiling to season  
+
+SEAMAP does seasonal sampling; not monthly.  
+
+
+# stopping here for the night  
+
+Need to deal with seasons, get shrimp year assigned, and spawning vs. non-spawning for white shrimp.  
+
+```{r}
+# average to Event,
+# then average to season by state,
+# then calculate annual totals
+
+
+# ad_sm_seasonal <- ad_sm_long |> 
+#     mutate(season = case_when(month %in% c(4, 5) ~ "Spring",
+#                               month %in% c(7, 8) ~ "Summer",
+#                               month %in% c(9, 10, 11) ~ "Fall",
+#                               .default = "JuneProbably")) |> 
+#     filter(season != "JuneProbably") |> 
+#     # average to event
+#     summarize(.by = c(species, year, month, shrimp_year, season, region,
+#                       event),
+#               count = mean(count, na.rm = TRUE),
+#               weight = mean(weight, na.rm = TRUE)) |> 
+#     # average to season within state
+#     summarize(.by = c(species, year, shrimp_year, season, month, region),
+#               count = mean(count, na.rm = TRUE),
+#               weight = mean(weight, na.rm = TRUE)) |> 
+#     mutate(survey = paste0("SEAMAP - ", region),
+#            life_stage = "adult",
+#            abundance_measure = "weight",
+#            abundance = weight) |> 
+#     select(survey, species, life_stage, year, month, season, shrimp_year, abundance_measure, abundance)
+# 
+# # write that out to the seasonal folder
+# write.csv(ad_sm_seasonal,
+#           here::here(path_out, "monthly or seasonal",
+#                      "04_adultSEAMAPbyRegion_bySeason.csv"),
+#           na = "",
+#           row.names = FALSE)
+
+```
 
 
 
@@ -22,9 +88,6 @@ SEAMAP info here
 
 **Generated data file(s):**  - fully processed files are in the `data/processed` directory:  
 
--  `juvenile_bySurveyAndMonth.csv`, in the subfolder `moreDetailed`, is summarized to species and month within year, by survey.  
--  `juvenile_bySurveyAndShrimpYear.csv`, in the subfolder `moreDetailed`, is summarized to species and shrimp year, by survey. 
--  `juvenile_byShrimpYear.csv` is summarized to species and shrimp year, as the average shrimp-year abundance across the two surveys. This is the file that will be used in further analyses.  
 
 **Other notes about data:**
 
