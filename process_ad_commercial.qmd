@@ -55,26 +55,34 @@ ggplot(brn_abund,
     geom_point(size = 2)
 ```
 
-Total over the two states (because the data we have for white shrimp is totals across the states, not averages) and generate abundance index.  
+For white shrimp landings, we only have totals across the states of GA and SC. For Juvenile and Subadult stages (both species), we averaged the values from the two states.  
+
+Here, I will calculate both ways.  
+
+Because 'mean' will probably be primary, the variable names that match those of other files will contain values using the mean across GA and SC. "sum" will be appended to variable names using a total across the two states, in case such values are needed later.  
 
 ```{r}
 brn_byShrimpYear <- brn_abund |> 
     group_by(species, life_stage, shrimp_year) |> 
-    summarize(abundance = sum(abundance, na.rm = TRUE)) |> 
+    summarize(abundance_sum = sum(abundance, na.rm = TRUE),
+              abundance = mean(abundance, na.rm = TRUE)) |> 
     ungroup() |> 
-    mutate(sqrt_abundance = sqrt(abundance),
+    mutate(sqrt_abundance_sum = sqrt(abundance_sum),
+           sqrt_abundance = sqrt(abundance),
            survey = "Landings, GA and SC",
-           abundance_measure = "total over 2 states") |> 
-    select(all_of(sel_order_annual)) |> 
+           abundance_measure = "mean over 2 states; sum also provided") |> 
+    select(all_of(sel_order_annual_extra)) |> 
     group_by(species) |> 
-    mutate(abundanceIndex_fullTimePeriod = as.vector(scale(sqrt_abundance))) |> 
+    mutate(abundanceIndexfullTimePeriod = as.vector(scale(sqrt_abundance)),
+           abundanceIndexSum_fullTimePeriod = as.vector(scale(sqrt_abundance_sum))) |> 
     ungroup()
 
 brn_abund_commontime <- brn_byShrimpYear |> 
-    select(species, shrimp_year, sqrt_abundance) |> 
+    select(species, shrimp_year, sqrt_abundance, sqrt_abundance_sum) |> 
     filter(shrimp_year %in% common_shrimpYears) |> 
     group_by(species) |> 
-    mutate(abundanceIndex_commonTimePeriod = as.vector(scale(sqrt_abundance))) |> 
+    mutate(abundanceIndex_commonTimePeriod = as.vector(scale(sqrt_abundance)),
+           abundanceIndexSum_commonTimePeriod = as.vector(scale(sqrt_abundance_sum))) |> 
     ungroup()
 
 brn_byShrimpYear <- left_join(brn_byShrimpYear, 
@@ -208,19 +216,21 @@ brn_tt_byState <- tripTick_abund |>
            annland, numdeal, numfisher, CPUE_approx) |> 
     arrange(Year, Wave)
 
-# add the states together, within wave
+# average or add the states together, within wave
 brn_tt <- brn_tt_byState |> 
     summarize(.by = c(pseudodate, shrimp_year, Wave, life_stage),
-              annland = sum(annland, na.rm = TRUE),
-              numdeal = sum(numdeal, na.rm = TRUE),
-              numfisher = sum(numfisher, na.rm = TRUE)) |> 
-    mutate(CPUE_approx = annland/numfisher,
-           survey = "Trip tickets, GA + SC total")
+              annland_sum = sum(annland, na.rm = TRUE),
+              numdeal_sum = sum(numdeal, na.rm = TRUE),
+              numfisher_sum = sum(numfisher, na.rm = TRUE),
+              CPUE_approx = mean(CPUE_approx, na.rm = TRUE)) |> 
+    mutate(CPUE_approx_sumGAandSC = annland_sum/numfisher_sum,
+           survey = "Trip tickets, GA and SC",
+           abundance_measure = "mean CPUE across states; with CPUE based on sum provided")
 ```
 
 ```{r}
 #| label: fig-brnCPUEbyWave
-#| fig-cap: "Approximate CPUE for GA & SC combined (added together) for brown shrimp by time period. Notice the vastly different reporting frequencies before about 2000."
+#| fig-cap: "Approximate CPUE for GA & SC combined (mean CPUE per time period across states) for brown shrimp by time period. Notice the vastly different reporting frequencies before about 2000."
 
 ggplot(brn_tt,
        aes(x = pseudodate,
@@ -354,10 +364,24 @@ write.csv(wht_tt,
 
 -   pink shrimp removed. 
 -   any areas other than GA and SC were removed.  
--   `pseudodate` column was created based on the year and first month of each 'Wave' of reporting, in order to make time series effectively.
+-   `pseudodate` column was created based on the year and first month of each 'Wave' of reporting, in order to make time series effectively.  
 
 
-**Generated data file(s):**  - fully processed files are in the `moreDetailed` folder of the `data/processed` directory. Abundance indices were not generated due to inconsistency in the consituents (which Waves had values through time):  
+**Generated data file(s):**   
+
+**NOTE** - for brown shrimp files, abundances and abundance indices were aggregated from the 2 states of GA and SC in two different ways: by averaging abundance (the usual variable names) and by adding the abundances ("sum" appended to variable name). This was done because for white shrimp landings, only totals across the two states are available, so sum could be useful for comparison. However for other life stages (of both species), values were averaged between states, so the mean is more consistent with other life stages. Because 'mean' will probably be the primary value used, only "sum" was appended to the appropriate variable names. If nothing is specified (for brown shrimp), the aggregated value is a mean.   
+
+**_Landings Data_**  
+
+- fully processed files are in the `data/processed` directory.    
+
+-   `adult.landings.brown_byStateAndShrimpYear.csv`, in the subfolder `moreDetailed`, shows the separate totals by year.  
+-   `adult.landings.brown_byShrimpYear.csv` - annual landings were totalled across the two states, to be consistent with how white shrimp landings were reported in our input file.  
+-   `adult.landings.white_byShrimpYear.csv` - has both spawning and nonspawning in the same file, as separate `life_stage`s. 
+
+**_Trip Ticket Data_**  
+
+Fully processed files are in the `moreDetailed` folder of the `data/processed` directory. Abundance indices for trip ticket data were not generated due to inconsistency in the consituents (which Waves had values through time):  
 
 -   `adult.triptickets.brown_01byStateAndWave.csv` - abundances and number reporting for GA and SC separately by Wave and year.  
 -   `adult.triptickets.brown_02byWave.csv` - abundances and reporters from the two states are added together for Wave and year.  

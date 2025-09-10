@@ -105,6 +105,11 @@ sel_order_annual <- c("survey", "species", "life_stage",
                       "shrimp_year",
                       "abundance_measure", "abundance",
                       "sqrt_abundance")
+sel_order_annual_extra <- c("survey", "species", "life_stage", 
+                      "shrimp_year",
+                      "abundance_measure", 
+                      "abundance", "sqrt_abundance",
+                      "abundance_sum", "sqrt_abundance_sum")
 
 # common time period definition ----
 # for trimming files
