@@ -1,0 +1,151 @@
+# Combine abundance information  
+
+Pull together data from all life stages. There are a couple of graphs in here; life stages are not in order and I did not try to make them look nice, but they will give a very rough idea of what's in the data.    
+
+```{r}
+library(tidyverse)
+library(plotly)
+
+source(here::here("functions.R"))
+
+in_path <- here::here("data", 
+                      "processed",
+                      "byLifeStage")
+
+in_env <- here::here("data",
+                     "processed",
+                     "environmental")
+
+out_path <- here::here("data",
+                       "processed")
+```
+
+
+The files for each life stage have the same columns in them. Some have additional columns that are removed at this stage.  
+
+```{r}
+in_files <- paste0(
+     c("postlarval",
+      "juvenile",
+      "subadult",
+      "adult",
+      "adult.landings.brown",
+      "adult.landings.white"),
+    "_byShrimpYear.csv")
+
+in_paths <- file.path(in_path, in_files)
+```
+
+I will create a few files: one with all abundance information for both species, so future data users can compare whichever subsets they are interested in. That will be in a subfolder `data/processed/combinedLifeStages`.  
+
+Then I will split brown and white shrimp, and combine the environmental data with abundance data. These will be saved in `data/processed`.  
+
+Landings data are retained in these files. Trip Ticket data has not been incorporated.  
+
+```{r}
+dat <- in_paths |> 
+    purrr::map(read.csv) |> 
+    dplyr::bind_rows() |> 
+    select(all_of(sel_order_annual),
+           abundanceIndex_fullTimePeriod,
+           abundanceIndex_commonTimePeriod)
+```
+
+
+```{r}
+write.csv(dat,
+          here::here(out_path,
+                     "combinedLifeStages",
+                     "allAbundanceIndices.csv"),
+          row.names = FALSE,
+          na = "")
+```
+
+## Brown Shrimp  
+
+```{r}
+brn <- dat |> 
+    filter(species == "brown")
+
+p <- ggplot(brn,
+       aes(x = shrimp_year,
+           y = abundanceIndex_fullTimePeriod,
+           col = life_stage)) +
+    geom_hline(yintercept = 0, col = "gray40") +
+    geom_line(linewidth = 0.5,
+              alpha = 0.4) +
+    geom_point() +
+    theme_bw() +
+    labs(title = "Brown Shrimp",
+         x = "Shrimp Year",
+         y = "Abundance Index",
+         col = "Life Stage") +
+    theme(legend.position = "bottom")
+
+plotly_out(p)
+```
+
+```{r}
+
+brn_env <- read.csv(here::here(in_env,
+                               "brn_environmental.csv"))
+```
+
+
+## White Shrimp  
+
+```{r}
+wht <- dat |> 
+    filter(species == "white")
+
+p <- ggplot(wht,
+       aes(x = shrimp_year,
+           y = abundanceIndex_fullTimePeriod,
+           col = life_stage)) +
+    geom_hline(yintercept = 0, col = "gray40") +
+    geom_line(linewidth = 0.5,
+              alpha = 0.4) +
+    geom_point() +
+    theme_bw() +
+    labs(title = "White Shrimp",
+         x = "Shrimp Year",
+         y = "Abundance Index",
+         col = "Life Stage") +
+    theme(legend.position = "bottom")
+
+plotly_out(p)
+
+```
+
+```{r}
+wht_env <- read.csv(here::here(in_env,
+                               "wht_environmental.csv"))
+```
+
+
+
+## About
+
+**Input `.qmd` file** for this section was: **`r xfun::with_ext(knitr::current_input(), "qmd")`** and can be found in the main directory.  
+
+**Input data file(s)** - in `data/processed/byLifeStage`:  
+
+-   `postlarval_byShrimpYear.csv`
+-   `juvenile_byShrimpYear.csv`
+-   `subadult_byShrimpYear.csv`  
+-   `adult_byShrimpYear.csv`  
+-   `adult.landings.brown_byShrimpYear.csv`  
+-   `adult.landings.white_byShrimpYear.csv`  
+
+
+**Modifications to data:**  
+
+
+
+**Generated data file(s):**   
+
+
+
+**Other notes about data:**
+
+- none

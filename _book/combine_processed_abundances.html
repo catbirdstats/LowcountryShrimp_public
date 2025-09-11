@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.555">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Lowcountry Shrimp Dataset Deep Dive - 14&nbsp; Combine abundance information</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./rel_temp_thresholds.html" rel="next">
+<link href="./process_ad_commercial.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+<script src="site_libs/plotly-binding-4.11.0/plotly.js"></script>
+
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+
+<script src="site_libs/jquery-3.5.1/jquery.min.js"></script>
+
+<link href="site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+
+<script src="site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+
+<link href="site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+
+<script src="site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./process_postlarv.html">Summarizing to Abundance Index</a></li><li class="breadcrumb-item"><a href="./combine_processed_abundances.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Combine abundance information</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Lowcountry Shrimp Dataset Deep Dive</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/catbirdstats/LowcountryShrimp_public" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Summary</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Definitions and Structure</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./shrimp_year_explanations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Shrimp Year Abundance Index Explanation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./directory_structure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Processing and Directory Structure</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Environmental Data</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./process_environmental.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Environmental Data</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./shrimp_data_exploration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Shrimp Data Exploration</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./raw_postlarv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Postlarvae</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./raw_juv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Juveniles</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./raw_subad.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Subadults</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./raw_ad_seamap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Adults - fisheries-independent</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./raw_ad_commercial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Adults - landings and trip tickets</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">Summarizing to Abundance Index</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./process_postlarv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Postlarval Stage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./process_juv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Juvenile</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./process_subad.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Subadults</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./process_ad_seamap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Adults - fisheries-independent</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./process_ad_commercial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Adults - landings and trip tickets</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./combine_processed_abundances.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Combine abundance information</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+ <span class="menu-text">Relationships between datasets</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rel_temp_thresholds.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Temperature thresholds</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rel_sal.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Nursery Period Salinity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rel_regression_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Regression Models</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#brown-shrimp" id="toc-brown-shrimp" class="nav-link active" data-scroll-target="#brown-shrimp"><span class="header-section-number">14.1</span> Brown Shrimp</a></li>
+  <li><a href="#white-shrimp" id="toc-white-shrimp" class="nav-link" data-scroll-target="#white-shrimp"><span class="header-section-number">14.2</span> White Shrimp</a></li>
+  <li><a href="#about" id="toc-about" class="nav-link" data-scroll-target="#about"><span class="header-section-number">14.3</span> About</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/catbirdstats/LowcountryShrimp_public/blob/main/combine_processed_abundances.qmd" target="_blank" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./process_postlarv.html">Summarizing to Abundance Index</a></li><li class="breadcrumb-item"><a href="./combine_processed_abundances.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Combine abundance information</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Combine abundance information</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Pull together data from all life stages. There are a couple of graphs in here; life stages are not in order and I did not try to make them look nice, but they will give a very rough idea of what’s in the data.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"functions.R"</span>))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>in_path <span class="ot">&lt;-</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"processed"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"byLifeStage"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>in_env <span class="ot">&lt;-</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"processed"</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"environmental"</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>out_path <span class="ot">&lt;-</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"processed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The files for each life stage have the same columns in them. Some have additional columns that are removed at this stage.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>in_files <span class="ot">&lt;-</span> <span class="fu">paste0</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>     <span class="fu">c</span>(<span class="st">"postlarval"</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>      <span class="st">"juvenile"</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>      <span class="st">"subadult"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">"adult"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">"adult.landings.brown"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>      <span class="st">"adult.landings.white"</span>),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"_byShrimpYear.csv"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>in_paths <span class="ot">&lt;-</span> <span class="fu">file.path</span>(in_path, in_files)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>I will create a few files: one with all abundance information for both species, so future data users can compare whichever subsets they are interested in. That will be in a subfolder <code>data/processed/combinedLifeStages</code>.</p>
+<p>Then I will split brown and white shrimp, and combine the environmental data with abundance data. These will be saved in <code>data/processed</code>.</p>
+<p>Landings data are retained in these files. Trip Ticket data has not been incorporated.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> in_paths <span class="sc">|&gt;</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    purrr<span class="sc">::</span><span class="fu">map</span>(read.csv) <span class="sc">|&gt;</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">bind_rows</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="fu">all_of</span>(sel_order_annual),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>           abundanceIndex_fullTimePeriod,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>           abundanceIndex_commonTimePeriod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(dat,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>          here<span class="sc">::</span><span class="fu">here</span>(out_path,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"combinedLifeStages"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"allAbundanceIndices.csv"</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">na =</span> <span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="brown-shrimp" class="level2" data-number="14.1">
+<h2 data-number="14.1" class="anchored" data-anchor-id="brown-shrimp"><span class="header-section-number">14.1</span> Brown Shrimp</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>brn <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">"brown"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(brn,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> shrimp_year,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> abundanceIndex_fullTimePeriod,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">col =</span> life_stage)) <span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"gray40"</span>) <span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="fl">0.5</span>,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Brown Shrimp"</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">"Shrimp Year"</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">"Abundance Index"</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> <span class="st">"Life Stage"</span>) <span class="sc">+</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="fu">plotly_out</span>(p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-894ac07991a183cf4576" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-894ac07991a183cf4576">{"x":{"data":[{"x":[1973.5999999999999,2026.4000000000001],"y":[0,0],"text":"yintercept: 0","type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"rgba(102,102,102,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2021,2022],"y":[-0.53244657183284405,-0.29991207745264198,-0.86417031179236903,-1.51789348817797,-0.41508138265060301,-1.2405205174171601,-1.1246042102985401,0.013722360474459599,-0.77593242210303104,-1.4553796936991199,-1.0242313997525401,0.682901411047516,1.18226398052126,-0.25256690822121802,-0.12370577840689601,-0.89363948858646203,0.174949167220079,-0.64598075543162603,1.4649590932558101,-0.50702797917270104,-0.36689826874515902,-0.089120017857462402,1.9853025464488401,1.4154419401118301,0.30409510823868702,1.1971862507098101,1.6105632498933899,-0.30410893005852402,-0.87778430789311201,1.09720170547096,1.0578968033093099,1.6139677980878799,-0.48944690523985901],"text":["shrimp_year: 1989<br />abundanceIndex_fullTimePeriod: -0.532446572<br />life_stage: adult","shrimp_year: 1990<br />abundanceIndex_fullTimePeriod: -0.299912077<br />life_stage: adult","shrimp_year: 1991<br />abundanceIndex_fullTimePeriod: -0.864170312<br />life_stage: adult","shrimp_year: 1992<br />abundanceIndex_fullTimePeriod: -1.517893488<br />life_stage: adult","shrimp_year: 1993<br />abundanceIndex_fullTimePeriod: -0.415081383<br />life_stage: adult","shrimp_year: 1994<br />abundanceIndex_fullTimePeriod: -1.240520517<br />life_stage: adult","shrimp_year: 1995<br />abundanceIndex_fullTimePeriod: -1.124604210<br />life_stage: adult","shrimp_year: 1996<br />abundanceIndex_fullTimePeriod:  0.013722360<br />life_stage: adult","shrimp_year: 1997<br />abundanceIndex_fullTimePeriod: -0.775932422<br />life_stage: adult","shrimp_year: 1998<br />abundanceIndex_fullTimePeriod: -1.455379694<br />life_stage: adult","shrimp_year: 1999<br />abundanceIndex_fullTimePeriod: -1.024231400<br />life_stage: adult","shrimp_year: 2000<br />abundanceIndex_fullTimePeriod:  0.682901411<br />life_stage: adult","shrimp_year: 2001<br />abundanceIndex_fullTimePeriod:  1.182263981<br />life_stage: adult","shrimp_year: 2002<br />abundanceIndex_fullTimePeriod: -0.252566908<br />life_stage: adult","shrimp_year: 2003<br />abundanceIndex_fullTimePeriod: -0.123705778<br />life_stage: adult","shrimp_year: 2004<br />abundanceIndex_fullTimePeriod: -0.893639489<br />life_stage: adult","shrimp_year: 2005<br />abundanceIndex_fullTimePeriod:  0.174949167<br />life_stage: adult","shrimp_year: 2006<br />abundanceIndex_fullTimePeriod: -0.645980755<br />life_stage: adult","shrimp_year: 2007<br />abundanceIndex_fullTimePeriod:  1.464959093<br />life_stage: adult","shrimp_year: 2008<br />abundanceIndex_fullTimePeriod: -0.507027979<br />life_stage: adult","shrimp_year: 2009<br />abundanceIndex_fullTimePeriod: -0.366898269<br />life_stage: adult","shrimp_year: 2010<br />abundanceIndex_fullTimePeriod: -0.089120018<br />life_stage: adult","shrimp_year: 2011<br />abundanceIndex_fullTimePeriod:  1.985302546<br />life_stage: adult","shrimp_year: 2012<br />abundanceIndex_fullTimePeriod:  1.415441940<br />life_stage: adult","shrimp_year: 2013<br />abundanceIndex_fullTimePeriod:  0.304095108<br />life_stage: adult","shrimp_year: 2014<br />abundanceIndex_fullTimePeriod:  1.197186251<br />life_stage: adult","shrimp_year: 2015<br />abundanceIndex_fullTimePeriod:  1.610563250<br />life_stage: adult","shrimp_year: 2016<br />abundanceIndex_fullTimePeriod: -0.304108930<br />life_stage: adult","shrimp_year: 2017<br />abundanceIndex_fullTimePeriod: -0.877784308<br />life_stage: adult","shrimp_year: 2018<br />abundanceIndex_fullTimePeriod:  1.097201705<br />life_stage: adult","shrimp_year: 2019<br />abundanceIndex_fullTimePeriod:  1.057896803<br />life_stage: adult","shrimp_year: 2021<br />abundanceIndex_fullTimePeriod:  1.613967798<br />life_stage: adult","shrimp_year: 2022<br />abundanceIndex_fullTimePeriod: -0.489446905<br />life_stage: adult"],"type":"scatter","mode":"lines+markers","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,0.4)","dash":"solid"},"hoveron":"points","name":"adult","legendgroup":"adult","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"frame":null},{"x":[1978,1979,1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019],"y":[0.314986715249718,0.464668469336808,1.49263971232884,-0.0097598008923920308,0.69788729057777399,0.70499136014124997,0.66125403976355601,1.6007710997522999,1.2775644110175599,-0.49373372153877099,0.18269229157443101,0.92634617978420397,0.51504060932891105,0.96588730480162599,-0.056955557097974001,1.65108902151564,0.31412211707399801,0.85782580565979905,0.72092333520145802,0.015362055337230901,-0.23733293461125801,0.87980187066899096,0.124242667131713,1.12266161454264,0.097312858343997694,1.1082282570714099,-0.60704681142200101,0.293349437869036,-1.5460945946041,-0.56047238697957202,-0.84216891608988897,-1.26016786106033,-0.37427321497573002,-0.39057295268695702,-1.0748135025951799,-0.85378518363364597,-0.745134228205936,-0.330155978997204,-1.85141408577676,-2.09188433381189,-1.46685560279709,-2.1970268562962301],"text":["shrimp_year: 1978<br />abundanceIndex_fullTimePeriod:  0.314986715<br />life_stage: adult.landings","shrimp_year: 1979<br />abundanceIndex_fullTimePeriod:  0.464668469<br />life_stage: adult.landings","shrimp_year: 1980<br />abundanceIndex_fullTimePeriod:  1.492639712<br />life_stage: adult.landings","shrimp_year: 1981<br />abundanceIndex_fullTimePeriod: -0.009759801<br />life_stage: adult.landings","shrimp_year: 1982<br />abundanceIndex_fullTimePeriod:  0.697887291<br />life_stage: adult.landings","shrimp_year: 1983<br />abundanceIndex_fullTimePeriod:  0.704991360<br />life_stage: adult.landings","shrimp_year: 1984<br />abundanceIndex_fullTimePeriod:  0.661254040<br />life_stage: adult.landings","shrimp_year: 1985<br />abundanceIndex_fullTimePeriod:  1.600771100<br />life_stage: adult.landings","shrimp_year: 1986<br />abundanceIndex_fullTimePeriod:  1.277564411<br />life_stage: adult.landings","shrimp_year: 1987<br />abundanceIndex_fullTimePeriod: -0.493733722<br />life_stage: adult.landings","shrimp_year: 1988<br />abundanceIndex_fullTimePeriod:  0.182692292<br />life_stage: adult.landings","shrimp_year: 1989<br />abundanceIndex_fullTimePeriod:  0.926346180<br />life_stage: adult.landings","shrimp_year: 1990<br />abundanceIndex_fullTimePeriod:  0.515040609<br />life_stage: adult.landings","shrimp_year: 1991<br />abundanceIndex_fullTimePeriod:  0.965887305<br />life_stage: adult.landings","shrimp_year: 1992<br />abundanceIndex_fullTimePeriod: -0.056955557<br />life_stage: adult.landings","shrimp_year: 1993<br />abundanceIndex_fullTimePeriod:  1.651089022<br />life_stage: adult.landings","shrimp_year: 1994<br />abundanceIndex_fullTimePeriod:  0.314122117<br />life_stage: adult.landings","shrimp_year: 1995<br />abundanceIndex_fullTimePeriod:  0.857825806<br />life_stage: adult.landings","shrimp_year: 1996<br />abundanceIndex_fullTimePeriod:  0.720923335<br />life_stage: adult.landings","shrimp_year: 1997<br />abundanceIndex_fullTimePeriod:  0.015362055<br />life_stage: adult.landings","shrimp_year: 1998<br />abundanceIndex_fullTimePeriod: -0.237332935<br />life_stage: adult.landings","shrimp_year: 1999<br />abundanceIndex_fullTimePeriod:  0.879801871<br />life_stage: adult.landings","shrimp_year: 2000<br />abundanceIndex_fullTimePeriod:  0.124242667<br />life_stage: adult.landings","shrimp_year: 2001<br />abundanceIndex_fullTimePeriod:  1.122661615<br />life_stage: adult.landings","shrimp_year: 2002<br />abundanceIndex_fullTimePeriod:  0.097312858<br />life_stage: adult.landings","shrimp_year: 2003<br />abundanceIndex_fullTimePeriod:  1.108228257<br />life_stage: adult.landings","shrimp_year: 2004<br />abundanceIndex_fullTimePeriod: -0.607046811<br />life_stage: adult.landings","shrimp_year: 2005<br />abundanceIndex_fullTimePeriod:  0.293349438<br />life_stage: adult.landings","shrimp_year: 2006<br />abundanceIndex_fullTimePeriod: -1.546094595<br />life_stage: adult.landings","shrimp_year: 2007<br />abundanceIndex_fullTimePeriod: -0.560472387<br />life_stage: adult.landings","shrimp_year: 2008<br />abundanceIndex_fullTimePeriod: -0.842168916<br />life_stage: adult.landings","shrimp_year: 2009<br />abundanceIndex_fullTimePeriod: -1.260167861<br />life_stage: adult.landings","shrimp_year: 2010<br />abundanceIndex_fullTimePeriod: -0.374273215<br />life_stage: adult.landings","shrimp_year: 2011<br />abundanceIndex_fullTimePeriod: -0.390572953<br />life_stage: adult.landings","shrimp_year: 2012<br />abundanceIndex_fullTimePeriod: -1.074813503<br />life_stage: adult.landings","shrimp_year: 2013<br />abundanceIndex_fullTimePeriod: -0.853785184<br />life_stage: adult.landings","shrimp_year: 2014<br />abundanceIndex_fullTimePeriod: -0.745134228<br />life_stage: adult.landings","shrimp_year: 2015<br />abundanceIndex_fullTimePeriod: -0.330155979<br />life_stage: adult.landings","shrimp_year: 2016<br />abundanceIndex_fullTimePeriod: -1.851414086<br />life_stage: adult.landings","shrimp_year: 2017<br />abundanceIndex_fullTimePeriod: -2.091884334<br />life_stage: adult.landings","shrimp_year: 2018<br />abundanceIndex_fullTimePeriod: -1.466855603<br />life_stage: adult.landings","shrimp_year: 2019<br />abundanceIndex_fullTimePeriod: -2.197026856<br />life_stage: adult.landings"],"type":"scatter","mode":"lines+markers","line":{"width":1.8897637795275593,"color":"rgba(163,165,0,0.4)","dash":"solid"},"hoveron":"points","name":"adult.landings","legendgroup":"adult.landings","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(163,165,0,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(163,165,0,1)"}},"frame":null},{"x":[1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024],"y":[-0.51931879167097506,-0.62039064934614696,-1.38580370749926,-0.184962939806805,-0.080652599146631199,-0.23757606487517599,-0.067534413919201106,-0.52120959689430102,-1.0251529776800901,0.54652555701032801,-0.15100830204117899,2.1727519182342299,-0.31106421661803302,1.8552091764097101,0.35955606903575499,0.95994695931419405,-0.107713859525627,0.14519817316384501,0.18215932008218699,1.2842205630797101,0.35537663582337298,0.80178458018072396,0.79239947300284097,0.29919606578234098,-0.77453261287287301,-0.65383659994144305,-1.2304477504940301,-0.41642333967735601,-0.41106928736305398,0.049864524637847601,-0.51002777562847201,-0.77215054604174604,-1.0386474848201299,-0.175529355528035,-1.27315293075785,-0.32079161630081798,-0.61650454469306504,-1.01510873580464,-0.93363449102871099,0.62065642973281598,0.548786670346187,2.0797959826502601,2.6243047670595199,1.62120860555122,-1.9446962811214701],"text":["shrimp_year: 1980<br />abundanceIndex_fullTimePeriod: -0.519318792<br />life_stage: juvenile","shrimp_year: 1981<br />abundanceIndex_fullTimePeriod: -0.620390649<br />life_stage: juvenile","shrimp_year: 1982<br />abundanceIndex_fullTimePeriod: -1.385803707<br />life_stage: juvenile","shrimp_year: 1983<br />abundanceIndex_fullTimePeriod: -0.184962940<br />life_stage: juvenile","shrimp_year: 1984<br />abundanceIndex_fullTimePeriod: -0.080652599<br />life_stage: juvenile","shrimp_year: 1985<br />abundanceIndex_fullTimePeriod: -0.237576065<br />life_stage: juvenile","shrimp_year: 1986<br />abundanceIndex_fullTimePeriod: -0.067534414<br />life_stage: juvenile","shrimp_year: 1987<br />abundanceIndex_fullTimePeriod: -0.521209597<br />life_stage: juvenile","shrimp_year: 1988<br />abundanceIndex_fullTimePeriod: -1.025152978<br />life_stage: juvenile","shrimp_year: 1989<br />abundanceIndex_fullTimePeriod:  0.546525557<br />life_stage: juvenile","shrimp_year: 1990<br />abundanceIndex_fullTimePeriod: -0.151008302<br />life_stage: juvenile","shrimp_year: 1991<br />abundanceIndex_fullTimePeriod:  2.172751918<br />life_stage: juvenile","shrimp_year: 1992<br />abundanceIndex_fullTimePeriod: -0.311064217<br />life_stage: juvenile","shrimp_year: 1993<br />abundanceIndex_fullTimePeriod:  1.855209176<br />life_stage: juvenile","shrimp_year: 1994<br />abundanceIndex_fullTimePeriod:  0.359556069<br />life_stage: juvenile","shrimp_year: 1995<br />abundanceIndex_fullTimePeriod:  0.959946959<br />life_stage: juvenile","shrimp_year: 1996<br />abundanceIndex_fullTimePeriod: -0.107713860<br />life_stage: juvenile","shrimp_year: 1997<br />abundanceIndex_fullTimePeriod:  0.145198173<br />life_stage: juvenile","shrimp_year: 1998<br />abundanceIndex_fullTimePeriod:  0.182159320<br />life_stage: juvenile","shrimp_year: 1999<br />abundanceIndex_fullTimePeriod:  1.284220563<br />life_stage: juvenile","shrimp_year: 2000<br />abundanceIndex_fullTimePeriod:  0.355376636<br />life_stage: juvenile","shrimp_year: 2001<br />abundanceIndex_fullTimePeriod:  0.801784580<br />life_stage: juvenile","shrimp_year: 2002<br />abundanceIndex_fullTimePeriod:  0.792399473<br />life_stage: juvenile","shrimp_year: 2003<br />abundanceIndex_fullTimePeriod:  0.299196066<br />life_stage: juvenile","shrimp_year: 2004<br />abundanceIndex_fullTimePeriod: -0.774532613<br />life_stage: juvenile","shrimp_year: 2005<br />abundanceIndex_fullTimePeriod: -0.653836600<br />life_stage: juvenile","shrimp_year: 2006<br />abundanceIndex_fullTimePeriod: -1.230447750<br />life_stage: juvenile","shrimp_year: 2007<br />abundanceIndex_fullTimePeriod: -0.416423340<br />life_stage: juvenile","shrimp_year: 2008<br />abundanceIndex_fullTimePeriod: -0.411069287<br />life_stage: juvenile","shrimp_year: 2009<br />abundanceIndex_fullTimePeriod:  0.049864525<br />life_stage: juvenile","shrimp_year: 2010<br />abundanceIndex_fullTimePeriod: -0.510027776<br />life_stage: juvenile","shrimp_year: 2011<br />abundanceIndex_fullTimePeriod: -0.772150546<br />life_stage: juvenile","shrimp_year: 2012<br />abundanceIndex_fullTimePeriod: -1.038647485<br />life_stage: juvenile","shrimp_year: 2013<br />abundanceIndex_fullTimePeriod: -0.175529356<br />life_stage: juvenile","shrimp_year: 2014<br />abundanceIndex_fullTimePeriod: -1.273152931<br />life_stage: juvenile","shrimp_year: 2015<br />abundanceIndex_fullTimePeriod: -0.320791616<br />life_stage: juvenile","shrimp_year: 2016<br />abundanceIndex_fullTimePeriod: -0.616504545<br />life_stage: juvenile","shrimp_year: 2017<br />abundanceIndex_fullTimePeriod: -1.015108736<br />life_stage: juvenile","shrimp_year: 2018<br />abundanceIndex_fullTimePeriod: -0.933634491<br />life_stage: juvenile","shrimp_year: 2019<br />abundanceIndex_fullTimePeriod:  0.620656430<br />life_stage: juvenile","shrimp_year: 2020<br />abundanceIndex_fullTimePeriod:  0.548786670<br />life_stage: juvenile","shrimp_year: 2021<br />abundanceIndex_fullTimePeriod:  2.079795983<br />life_stage: juvenile","shrimp_year: 2022<br />abundanceIndex_fullTimePeriod:  2.624304767<br />life_stage: juvenile","shrimp_year: 2023<br />abundanceIndex_fullTimePeriod:  1.621208606<br />life_stage: juvenile","shrimp_year: 2024<br />abundanceIndex_fullTimePeriod: -1.944696281<br />life_stage: juvenile"],"type":"scatter","mode":"lines+markers","line":{"width":1.8897637795275593,"color":"rgba(0,191,125,0.4)","dash":"solid"},"hoveron":"points","name":"juvenile","legendgroup":"juvenile","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(0,191,125,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,191,125,1)"}},"frame":null},{"x":[1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017],"y":[-1.34193447164431,0.232027523914349,1.13547410056464,1.3070648938121201,-0.63670812367404395,-0.1593311980089,-1.112574613587,-1.4158854457736001,-0.72375344757992699,0.23397085686307101,-0.940278127962623,-1.0792249134274901,0.22239406999716399,-0.95543011085280305,0.90846988095637504,-0.839548303733618,-0.90436085524996901,1.23853311076859,-0.48504353945509499,0.076227917690421906,1.92868170088936,0.40209295800497802,0.96040731508877097,-0.73316829112036996,1.1823072584782199,-0.244170171324265,-0.40235632871666899,0.33217842038741802,-0.48116172402014101,-0.31218857864746202,-0.55705613235018503,0.54828629410521901,0.22350476314395501,0.17498992902301899,-0.96243486076458196,3.27633538359607,-0.096337139390690704],"text":["shrimp_year: 1981<br />abundanceIndex_fullTimePeriod: -1.341934472<br />life_stage: postlarval","shrimp_year: 1982<br />abundanceIndex_fullTimePeriod:  0.232027524<br />life_stage: postlarval","shrimp_year: 1983<br />abundanceIndex_fullTimePeriod:  1.135474101<br />life_stage: postlarval","shrimp_year: 1984<br />abundanceIndex_fullTimePeriod:  1.307064894<br />life_stage: postlarval","shrimp_year: 1985<br />abundanceIndex_fullTimePeriod: -0.636708124<br />life_stage: postlarval","shrimp_year: 1986<br />abundanceIndex_fullTimePeriod: -0.159331198<br />life_stage: postlarval","shrimp_year: 1987<br />abundanceIndex_fullTimePeriod: -1.112574614<br />life_stage: postlarval","shrimp_year: 1988<br />abundanceIndex_fullTimePeriod: -1.415885446<br />life_stage: postlarval","shrimp_year: 1989<br />abundanceIndex_fullTimePeriod: -0.723753448<br />life_stage: postlarval","shrimp_year: 1990<br />abundanceIndex_fullTimePeriod:  0.233970857<br />life_stage: postlarval","shrimp_year: 1991<br />abundanceIndex_fullTimePeriod: -0.940278128<br />life_stage: postlarval","shrimp_year: 1992<br />abundanceIndex_fullTimePeriod: -1.079224913<br />life_stage: postlarval","shrimp_year: 1993<br />abundanceIndex_fullTimePeriod:  0.222394070<br />life_stage: postlarval","shrimp_year: 1994<br />abundanceIndex_fullTimePeriod: -0.955430111<br />life_stage: postlarval","shrimp_year: 1995<br />abundanceIndex_fullTimePeriod:  0.908469881<br />life_stage: postlarval","shrimp_year: 1996<br />abundanceIndex_fullTimePeriod: -0.839548304<br />life_stage: postlarval","shrimp_year: 1997<br />abundanceIndex_fullTimePeriod: -0.904360855<br />life_stage: postlarval","shrimp_year: 1998<br />abundanceIndex_fullTimePeriod:  1.238533111<br />life_stage: postlarval","shrimp_year: 1999<br />abundanceIndex_fullTimePeriod: -0.485043539<br />life_stage: postlarval","shrimp_year: 2000<br />abundanceIndex_fullTimePeriod:  0.076227918<br />life_stage: postlarval","shrimp_year: 2001<br />abundanceIndex_fullTimePeriod:  1.928681701<br />life_stage: postlarval","shrimp_year: 2002<br />abundanceIndex_fullTimePeriod:  0.402092958<br />life_stage: postlarval","shrimp_year: 2003<br />abundanceIndex_fullTimePeriod:  0.960407315<br />life_stage: postlarval","shrimp_year: 2004<br />abundanceIndex_fullTimePeriod: -0.733168291<br />life_stage: postlarval","shrimp_year: 2005<br />abundanceIndex_fullTimePeriod:  1.182307258<br />life_stage: postlarval","shrimp_year: 2006<br />abundanceIndex_fullTimePeriod: -0.244170171<br />life_stage: postlarval","shrimp_year: 2007<br />abundanceIndex_fullTimePeriod: -0.402356329<br />life_stage: postlarval","shrimp_year: 2008<br />abundanceIndex_fullTimePeriod:  0.332178420<br />life_stage: postlarval","shrimp_year: 2009<br />abundanceIndex_fullTimePeriod: -0.481161724<br />life_stage: postlarval","shrimp_year: 2010<br />abundanceIndex_fullTimePeriod: -0.312188579<br />life_stage: postlarval","shrimp_year: 2011<br />abundanceIndex_fullTimePeriod: -0.557056132<br />life_stage: postlarval","shrimp_year: 2012<br />abundanceIndex_fullTimePeriod:  0.548286294<br />life_stage: postlarval","shrimp_year: 2013<br />abundanceIndex_fullTimePeriod:  0.223504763<br />life_stage: postlarval","shrimp_year: 2014<br />abundanceIndex_fullTimePeriod:  0.174989929<br />life_stage: postlarval","shrimp_year: 2015<br />abundanceIndex_fullTimePeriod: -0.962434861<br />life_stage: postlarval","shrimp_year: 2016<br />abundanceIndex_fullTimePeriod:  3.276335384<br />life_stage: postlarval","shrimp_year: 2017<br />abundanceIndex_fullTimePeriod: -0.096337139<br />life_stage: postlarval"],"type":"scatter","mode":"lines+markers","line":{"width":1.8897637795275593,"color":"rgba(0,176,246,0.4)","dash":"solid"},"hoveron":"points","name":"postlarval","legendgroup":"postlarval","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(0,176,246,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,176,246,1)"}},"frame":null},{"x":[1976,1977,1978,1979,1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024],"y":[1.79130872846058,0.42130990452655598,0.27616223339009,-0.480009446720849,-1.38726330796321,-2.0039600987242698,-1.02788982610081,-1.16422243785519,-0.17443750474886399,0.67445752411201598,0.25629263974220701,-0.25177013088194999,-1.08415868963384,0.173919876525434,-0.324963416118913,0.97135714407287099,-0.54645508491695205,2.1897846790034401,-0.078100944880334006,0.488567214379166,0.19715169355311599,0.259957776805879,-0.603080246727285,0.60351568515459897,-0.64369137114305697,1.50912106336259,0.92787826840745202,2.0301783814541099,0.60596733957424198,0.29025351742837502,-0.56333709483304995,-0.041578993601151901,0.56449440850297405,0.041839114972344799,0.78439607807961398,-0.33867629913335101,-1.1066668929419801,0.49665637582593503,0.19344963476098501,0.703748081567106,-0.35310089909595399,-0.30351887594846799,0.483794098932884,-0.21076407219840099,-0.56842604035630795,1.1664535491463901,-1.0337312192238399,-0.34099292729043401,-3.4712191907024899],"text":["shrimp_year: 1976<br />abundanceIndex_fullTimePeriod:  1.791308728<br />life_stage: subadult","shrimp_year: 1977<br />abundanceIndex_fullTimePeriod:  0.421309905<br />life_stage: subadult","shrimp_year: 1978<br />abundanceIndex_fullTimePeriod:  0.276162233<br />life_stage: subadult","shrimp_year: 1979<br />abundanceIndex_fullTimePeriod: -0.480009447<br />life_stage: subadult","shrimp_year: 1980<br />abundanceIndex_fullTimePeriod: -1.387263308<br />life_stage: subadult","shrimp_year: 1981<br />abundanceIndex_fullTimePeriod: -2.003960099<br />life_stage: subadult","shrimp_year: 1982<br />abundanceIndex_fullTimePeriod: -1.027889826<br />life_stage: subadult","shrimp_year: 1983<br />abundanceIndex_fullTimePeriod: -1.164222438<br />life_stage: subadult","shrimp_year: 1984<br />abundanceIndex_fullTimePeriod: -0.174437505<br />life_stage: subadult","shrimp_year: 1985<br />abundanceIndex_fullTimePeriod:  0.674457524<br />life_stage: subadult","shrimp_year: 1986<br />abundanceIndex_fullTimePeriod:  0.256292640<br />life_stage: subadult","shrimp_year: 1987<br />abundanceIndex_fullTimePeriod: -0.251770131<br />life_stage: subadult","shrimp_year: 1988<br />abundanceIndex_fullTimePeriod: -1.084158690<br />life_stage: subadult","shrimp_year: 1989<br />abundanceIndex_fullTimePeriod:  0.173919877<br />life_stage: subadult","shrimp_year: 1990<br />abundanceIndex_fullTimePeriod: -0.324963416<br />life_stage: subadult","shrimp_year: 1991<br />abundanceIndex_fullTimePeriod:  0.971357144<br />life_stage: subadult","shrimp_year: 1992<br />abundanceIndex_fullTimePeriod: -0.546455085<br />life_stage: subadult","shrimp_year: 1993<br />abundanceIndex_fullTimePeriod:  2.189784679<br />life_stage: subadult","shrimp_year: 1994<br />abundanceIndex_fullTimePeriod: -0.078100945<br />life_stage: subadult","shrimp_year: 1995<br />abundanceIndex_fullTimePeriod:  0.488567214<br />life_stage: subadult","shrimp_year: 1996<br />abundanceIndex_fullTimePeriod:  0.197151694<br />life_stage: subadult","shrimp_year: 1997<br />abundanceIndex_fullTimePeriod:  0.259957777<br />life_stage: subadult","shrimp_year: 1998<br />abundanceIndex_fullTimePeriod: -0.603080247<br />life_stage: subadult","shrimp_year: 1999<br />abundanceIndex_fullTimePeriod:  0.603515685<br />life_stage: subadult","shrimp_year: 2000<br />abundanceIndex_fullTimePeriod: -0.643691371<br />life_stage: subadult","shrimp_year: 2001<br />abundanceIndex_fullTimePeriod:  1.509121063<br />life_stage: subadult","shrimp_year: 2002<br />abundanceIndex_fullTimePeriod:  0.927878268<br />life_stage: subadult","shrimp_year: 2003<br />abundanceIndex_fullTimePeriod:  2.030178381<br />life_stage: subadult","shrimp_year: 2004<br />abundanceIndex_fullTimePeriod:  0.605967340<br />life_stage: subadult","shrimp_year: 2005<br />abundanceIndex_fullTimePeriod:  0.290253517<br />life_stage: subadult","shrimp_year: 2006<br />abundanceIndex_fullTimePeriod: -0.563337095<br />life_stage: subadult","shrimp_year: 2007<br />abundanceIndex_fullTimePeriod: -0.041578994<br />life_stage: subadult","shrimp_year: 2008<br />abundanceIndex_fullTimePeriod:  0.564494409<br />life_stage: subadult","shrimp_year: 2009<br />abundanceIndex_fullTimePeriod:  0.041839115<br />life_stage: subadult","shrimp_year: 2010<br />abundanceIndex_fullTimePeriod:  0.784396078<br />life_stage: subadult","shrimp_year: 2011<br />abundanceIndex_fullTimePeriod: -0.338676299<br />life_stage: subadult","shrimp_year: 2012<br />abundanceIndex_fullTimePeriod: -1.106666893<br />life_stage: subadult","shrimp_year: 2013<br />abundanceIndex_fullTimePeriod:  0.496656376<br />life_stage: subadult","shrimp_year: 2014<br />abundanceIndex_fullTimePeriod:  0.193449635<br />life_stage: subadult","shrimp_year: 2015<br />abundanceIndex_fullTimePeriod:  0.703748082<br />life_stage: subadult","shrimp_year: 2016<br />abundanceIndex_fullTimePeriod: -0.353100899<br />life_stage: subadult","shrimp_year: 2017<br />abundanceIndex_fullTimePeriod: -0.303518876<br />life_stage: subadult","shrimp_year: 2018<br />abundanceIndex_fullTimePeriod:  0.483794099<br />life_stage: subadult","shrimp_year: 2019<br />abundanceIndex_fullTimePeriod: -0.210764072<br />life_stage: subadult","shrimp_year: 2020<br />abundanceIndex_fullTimePeriod: -0.568426040<br />life_stage: subadult","shrimp_year: 2021<br />abundanceIndex_fullTimePeriod:  1.166453549<br />life_stage: subadult","shrimp_year: 2022<br />abundanceIndex_fullTimePeriod: -1.033731219<br />life_stage: subadult","shrimp_year: 2023<br />abundanceIndex_fullTimePeriod: -0.340992927<br />life_stage: subadult","shrimp_year: 2024<br />abundanceIndex_fullTimePeriod: -3.471219191<br />life_stage: subadult"],"type":"scatter","mode":"lines+markers","line":{"width":1.8897637795275593,"color":"rgba(231,107,243,0.4)","dash":"solid"},"hoveron":"points","name":"subadult","legendgroup":"subadult","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(231,107,243,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(231,107,243,1)"}},"frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826491,"l":37.260273972602747},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Brown Shrimp","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[1973.5999999999999,2026.4000000000001],"tickmode":"array","ticktext":["1980","1990","2000","2010","2020"],"tickvals":[1980,1990,2000,2010,2020],"categoryorder":"array","categoryarray":["1980","1990","2000","2010","2020"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Shrimp Year","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-3.8085969194174178,3.613713112310998],"tickmode":"array","ticktext":["-2","0","2"],"tickvals":[-2,0,2.0000000000000004],"categoryorder":"array","categoryarray":["-2","0","2"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Abundance Index","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(51,51,51,1)","width":0.66417600664176002,"linetype":"solid"},"yref":"paper","xref":"paper","layer":"below","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"title":{"text":"Life Stage","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"orientation":"h","x":0.5,"xanchor":"center","y":-0.20000000000000001},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"25881fb94601":{"yintercept":{},"type":"scatter"},"25887ad01a5a":{"x":{},"y":{},"colour":{}},"2588230a2f84":{"x":{},"y":{},"colour":{}}},"cur_data":"25881fb94601","visdat":{"25881fb94601":["function (y) ","x"],"25887ad01a5a":["function (y) ","x"],"2588230a2f84":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>brn_env <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(here<span class="sc">::</span><span class="fu">here</span>(in_env,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"brn_environmental.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="white-shrimp" class="level2" data-number="14.2">
+<h2 data-number="14.2" class="anchored" data-anchor-id="white-shrimp"><span class="header-section-number">14.2</span> White Shrimp</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>wht <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">"white"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(wht,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> shrimp_year,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> abundanceIndex_fullTimePeriod,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">col =</span> life_stage)) <span class="sc">+</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"gray40"</span>) <span class="sc">+</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="fl">0.5</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"White Shrimp"</span>,</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">"Shrimp Year"</span>,</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">"Abundance Index"</span>,</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> <span class="st">"Life Stage"</span>) <span class="sc">+</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="fu">plotly_out</span>(p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-05052b27c8b809a4149c" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-05052b27c8b809a4149c">{"x":{"data":[{"x":[1972.5999999999999,2025.4000000000001],"y":[0,0],"text":"yintercept: 0","type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"rgba(102,102,102,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2021,2022],"y":[0.25089695075365498,-0.13542713855480101,-0.37338216763736398,-1.8936869259901301,-1.1537250116809801,-0.19936557959120399,-0.11530076966062699,-0.70416687618424501,-1.0892333677755099,-0.51976705157326597,1.3422073634852301,-0.44885966753720802,-0.50278175008777504,-1.3006622969235,-1.2364297961802999,0.290000658766908,-0.99771454618618205,0.45136592115431901,1.1071409516083199,0.71242652258054495,0.27203058994509799,0.21371424049929899,2.21741417764509,0.38667452051358198,-0.99422203967252099,0.54900880643206096,0.77525549560995599,1.4238394792973601,0.21309685274012499,0.87311056165374001,2.0046800382990302,-1.5538954186994201,0.13575727295072701],"text":["shrimp_year: 1989<br />abundanceIndex_fullTimePeriod:  0.25089695<br />life_stage: adult.nonspawning","shrimp_year: 1990<br />abundanceIndex_fullTimePeriod: -0.13542714<br />life_stage: adult.nonspawning","shrimp_year: 1991<br />abundanceIndex_fullTimePeriod: -0.37338217<br />life_stage: adult.nonspawning","shrimp_year: 1992<br />abundanceIndex_fullTimePeriod: -1.89368693<br />life_stage: adult.nonspawning","shrimp_year: 1993<br />abundanceIndex_fullTimePeriod: -1.15372501<br />life_stage: adult.nonspawning","shrimp_year: 1994<br />abundanceIndex_fullTimePeriod: -0.19936558<br />life_stage: adult.nonspawning","shrimp_year: 1995<br />abundanceIndex_fullTimePeriod: -0.11530077<br />life_stage: adult.nonspawning","shrimp_year: 1996<br />abundanceIndex_fullTimePeriod: -0.70416688<br />life_stage: adult.nonspawning","shrimp_year: 1997<br />abundanceIndex_fullTimePeriod: -1.08923337<br />life_stage: adult.nonspawning","shrimp_year: 1998<br />abundanceIndex_fullTimePeriod: -0.51976705<br />life_stage: adult.nonspawning","shrimp_year: 1999<br />abundanceIndex_fullTimePeriod:  1.34220736<br />life_stage: adult.nonspawning","shrimp_year: 2000<br />abundanceIndex_fullTimePeriod: -0.44885967<br />life_stage: adult.nonspawning","shrimp_year: 2001<br />abundanceIndex_fullTimePeriod: -0.50278175<br />life_stage: adult.nonspawning","shrimp_year: 2002<br />abundanceIndex_fullTimePeriod: -1.30066230<br />life_stage: adult.nonspawning","shrimp_year: 2003<br />abundanceIndex_fullTimePeriod: -1.23642980<br />life_stage: adult.nonspawning","shrimp_year: 2004<br />abundanceIndex_fullTimePeriod:  0.29000066<br />life_stage: adult.nonspawning","shrimp_year: 2005<br />abundanceIndex_fullTimePeriod: -0.99771455<br />life_stage: adult.nonspawning","shrimp_year: 2006<br />abundanceIndex_fullTimePeriod:  0.45136592<br />life_stage: adult.nonspawning","shrimp_year: 2007<br />abundanceIndex_fullTimePeriod:  1.10714095<br />life_stage: adult.nonspawning","shrimp_year: 2008<br />abundanceIndex_fullTimePeriod:  0.71242652<br />life_stage: adult.nonspawning","shrimp_year: 2009<br />abundanceIndex_fullTimePeriod:  0.27203059<br />life_stage: adult.nonspawning","shrimp_year: 2010<br />abundanceIndex_fullTimePeriod:  0.21371424<br />life_stage: adult.nonspawning","shrimp_year: 2011<br />abundanceIndex_fullTimePeriod:  2.21741418<br />life_stage: adult.nonspawning","shrimp_year: 2012<br />abundanceIndex_fullTimePeriod:  0.38667452<br />life_stage: adult.nonspawning","shrimp_year: 2013<br />abundanceIndex_fullTimePeriod: -0.99422204<br />life_stage: adult.nonspawning","shrimp_year: 2014<br />abundanceIndex_fullTimePeriod:  0.54900881<br />life_stage: adult.nonspawning","shrimp_year: 2015<br />abundanceIndex_fullTimePeriod:  0.77525550<br />life_stage: adult.nonspawning","shrimp_year: 2016<br />abundanceIndex_fullTimePeriod:  1.42383948<br />life_stage: adult.nonspawning","shrimp_year: 2017<br />abundanceIndex_fullTimePeriod:  0.21309685<br />life_stage: adult.nonspawning","shrimp_year: 2018<br />abundanceIndex_fullTimePeriod:  0.87311056<br />life_stage: adult.nonspawning","shrimp_year: 2019<br />abundanceIndex_fullTimePeriod:  2.00468004<br />life_stage: adult.nonspawning","shrimp_year: 2021<br />abundanceIndex_fullTimePeriod: -1.55389542<br />life_stage: adult.nonspawning","shrimp_year: 2022<br />abundanceIndex_fullTimePeriod:  0.13575727<br />life_stage: adult.nonspawning"],"type":"scatter","mode":"lines+markers","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,0.4)","dash":"solid"},"hoveron":"points","name":"adult.nonspawning","legendgroup":"adult.nonspawning","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"frame":null},{"x":[1979,1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[1.6440496942173199,0.84882339557337305,-0.055973324460216502,0.570862566054955,0.37215638206305901,-1.81068447678985,-0.164158766132874,0.62839159920320098,0.651088934217261,0.39301978287418998,0.85782358962388305,0.76243610216758695,1.3389408066731601,0.95091877872955999,0.89054876582697495,1.09231910285175,2.25546942321155,0.84286191702133495,1.4200281081567001,0.69101685980145899,1.0155954995637999,0.24664215862552799,-0.229846370454761,-0.16130557080737601,0.45436011150995098,0.51961796232059299,-0.22580222586058801,-0.38962333328593501,-1.28508025205724,-0.70959169645041997,-0.92356051729232402,0.0376319402551872,-0.097549285563151997,-0.76879444566233501,-1.8684294494795799,-1.2164158540630501,-0.80460186966056901,-1.2858498565818,-1.7139103555792199,-0.73513695111604704,-0.82138203659017095,-0.717693491553691,-1.1604435172884899,-1.3387698338127001],"text":["shrimp_year: 1979<br />abundanceIndex_fullTimePeriod:  1.64404969<br />life_stage: adult.nonspawning.landings","shrimp_year: 1980<br />abundanceIndex_fullTimePeriod:  0.84882340<br />life_stage: adult.nonspawning.landings","shrimp_year: 1981<br />abundanceIndex_fullTimePeriod: -0.05597332<br />life_stage: adult.nonspawning.landings","shrimp_year: 1982<br />abundanceIndex_fullTimePeriod:  0.57086257<br />life_stage: adult.nonspawning.landings","shrimp_year: 1983<br />abundanceIndex_fullTimePeriod:  0.37215638<br />life_stage: adult.nonspawning.landings","shrimp_year: 1984<br />abundanceIndex_fullTimePeriod: -1.81068448<br />life_stage: adult.nonspawning.landings","shrimp_year: 1985<br />abundanceIndex_fullTimePeriod: -0.16415877<br />life_stage: adult.nonspawning.landings","shrimp_year: 1986<br />abundanceIndex_fullTimePeriod:  0.62839160<br />life_stage: adult.nonspawning.landings","shrimp_year: 1987<br />abundanceIndex_fullTimePeriod:  0.65108893<br />life_stage: adult.nonspawning.landings","shrimp_year: 1988<br />abundanceIndex_fullTimePeriod:  0.39301978<br />life_stage: adult.nonspawning.landings","shrimp_year: 1989<br />abundanceIndex_fullTimePeriod:  0.85782359<br />life_stage: adult.nonspawning.landings","shrimp_year: 1990<br />abundanceIndex_fullTimePeriod:  0.76243610<br />life_stage: adult.nonspawning.landings","shrimp_year: 1991<br />abundanceIndex_fullTimePeriod:  1.33894081<br />life_stage: adult.nonspawning.landings","shrimp_year: 1992<br />abundanceIndex_fullTimePeriod:  0.95091878<br />life_stage: adult.nonspawning.landings","shrimp_year: 1993<br />abundanceIndex_fullTimePeriod:  0.89054877<br />life_stage: adult.nonspawning.landings","shrimp_year: 1994<br />abundanceIndex_fullTimePeriod:  1.09231910<br />life_stage: adult.nonspawning.landings","shrimp_year: 1995<br />abundanceIndex_fullTimePeriod:  2.25546942<br />life_stage: adult.nonspawning.landings","shrimp_year: 1996<br />abundanceIndex_fullTimePeriod:  0.84286192<br />life_stage: adult.nonspawning.landings","shrimp_year: 1997<br />abundanceIndex_fullTimePeriod:  1.42002811<br />life_stage: adult.nonspawning.landings","shrimp_year: 1998<br />abundanceIndex_fullTimePeriod:  0.69101686<br />life_stage: adult.nonspawning.landings","shrimp_year: 1999<br />abundanceIndex_fullTimePeriod:  1.01559550<br />life_stage: adult.nonspawning.landings","shrimp_year: 2000<br />abundanceIndex_fullTimePeriod:  0.24664216<br />life_stage: adult.nonspawning.landings","shrimp_year: 2001<br />abundanceIndex_fullTimePeriod: -0.22984637<br />life_stage: adult.nonspawning.landings","shrimp_year: 2002<br />abundanceIndex_fullTimePeriod: -0.16130557<br />life_stage: adult.nonspawning.landings","shrimp_year: 2003<br />abundanceIndex_fullTimePeriod:  0.45436011<br />life_stage: adult.nonspawning.landings","shrimp_year: 2004<br />abundanceIndex_fullTimePeriod:  0.51961796<br />life_stage: adult.nonspawning.landings","shrimp_year: 2005<br />abundanceIndex_fullTimePeriod: -0.22580223<br />life_stage: adult.nonspawning.landings","shrimp_year: 2006<br />abundanceIndex_fullTimePeriod: -0.38962333<br />life_stage: adult.nonspawning.landings","shrimp_year: 2007<br />abundanceIndex_fullTimePeriod: -1.28508025<br />life_stage: adult.nonspawning.landings","shrimp_year: 2008<br />abundanceIndex_fullTimePeriod: -0.70959170<br />life_stage: adult.nonspawning.landings","shrimp_year: 2009<br />abundanceIndex_fullTimePeriod: -0.92356052<br />life_stage: adult.nonspawning.landings","shrimp_year: 2010<br />abundanceIndex_fullTimePeriod:  0.03763194<br />life_stage: adult.nonspawning.landings","shrimp_year: 2011<br />abundanceIndex_fullTimePeriod: -0.09754929<br />life_stage: adult.nonspawning.landings","shrimp_year: 2012<br />abundanceIndex_fullTimePeriod: -0.76879445<br />life_stage: adult.nonspawning.landings","shrimp_year: 2013<br />abundanceIndex_fullTimePeriod: -1.86842945<br />life_stage: adult.nonspawning.landings","shrimp_year: 2014<br />abundanceIndex_fullTimePeriod: -1.21641585<br />life_stage: adult.nonspawning.landings","shrimp_year: 2015<br />abundanceIndex_fullTimePeriod: -0.80460187<br />life_stage: adult.nonspawning.landings","shrimp_year: 2016<br />abundanceIndex_fullTimePeriod: -1.28584986<br />life_stage: adult.nonspawning.landings","shrimp_year: 2017<br />abundanceIndex_fullTimePeriod: -1.71391036<br />life_stage: adult.nonspawning.landings","shrimp_year: 2018<br />abundanceIndex_fullTimePeriod: -0.73513695<br />life_stage: adult.nonspawning.landings","shrimp_year: 2019<br />abundanceIndex_fullTimePeriod: -0.82138204<br />life_stage: adult.nonspawning.landings","shrimp_year: 2020<br />abundanceIndex_fullTimePeriod: -0.71769349<br />life_stage: adult.nonspawning.landings","shrimp_year: 2021<br />abundanceIndex_fullTimePeriod: -1.16044352<br />life_stage: adult.nonspawning.landings","shrimp_year: 2022<br />abundanceIndex_fullTimePeriod: -1.33876983<br />life_stage: adult.nonspawning.landings"],"type":"scatter","mode":"lines+markers","line":{"width":1.8897637795275593,"color":"rgba(196,154,0,0.4)","dash":"solid"},"hoveron":"points","name":"adult.nonspawning.landings","legendgroup":"adult.nonspawning.landings","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(196,154,0,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(196,154,0,1)"}},"frame":null},{"x":[1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2021],"y":[-0.65317967023835999,-0.36425593156414399,1.54776223721527,-0.054166519988093603,-0.42670421539695202,-1.1865646921869,-0.038989399047462001,-1.5195001971678399,-0.53825166253165801,1.36057323775941,0.61830295397663304,0.19355534613068301,-1.3145553223516599,-0.21110271695025601,-0.23910478910249999,0.026799869562692601,-1.8012443653558401,1.04579265384716,0.63776547775663395,0.48278808069115098,0.094364457081396194,-1.5694837671597299,-0.73554705018364797,0.83180409233026398,0.73239073044091596,-1.58505620488592,0.53040104631548302,1.6834291630111999,1.3630371954349101,-0.47840790216694601,1.67485742322298,-0.10750955849888701],"text":["shrimp_year: 1988<br />abundanceIndex_fullTimePeriod: -0.65317967<br />life_stage: adult.spawning","shrimp_year: 1989<br />abundanceIndex_fullTimePeriod: -0.36425593<br />life_stage: adult.spawning","shrimp_year: 1990<br />abundanceIndex_fullTimePeriod:  1.54776224<br />life_stage: adult.spawning","shrimp_year: 1991<br />abundanceIndex_fullTimePeriod: -0.05416652<br />life_stage: adult.spawning","shrimp_year: 1992<br />abundanceIndex_fullTimePeriod: -0.42670422<br />life_stage: adult.spawning","shrimp_year: 1993<br />abundanceIndex_fullTimePeriod: -1.18656469<br />life_stage: adult.spawning","shrimp_year: 1994<br />abundanceIndex_fullTimePeriod: -0.03898940<br />life_stage: adult.spawning","shrimp_year: 1995<br />abundanceIndex_fullTimePeriod: -1.51950020<br />life_stage: adult.spawning","shrimp_year: 1996<br />abundanceIndex_fullTimePeriod: -0.53825166<br />life_stage: adult.spawning","shrimp_year: 1997<br />abundanceIndex_fullTimePeriod:  1.36057324<br />life_stage: adult.spawning","shrimp_year: 1998<br />abundanceIndex_fullTimePeriod:  0.61830295<br />life_stage: adult.spawning","shrimp_year: 1999<br />abundanceIndex_fullTimePeriod:  0.19355535<br />life_stage: adult.spawning","shrimp_year: 2000<br />abundanceIndex_fullTimePeriod: -1.31455532<br />life_stage: adult.spawning","shrimp_year: 2001<br />abundanceIndex_fullTimePeriod: -0.21110272<br />life_stage: adult.spawning","shrimp_year: 2002<br />abundanceIndex_fullTimePeriod: -0.23910479<br />life_stage: adult.spawning","shrimp_year: 2003<br />abundanceIndex_fullTimePeriod:  0.02679987<br />life_stage: adult.spawning","shrimp_year: 2004<br />abundanceIndex_fullTimePeriod: -1.80124437<br />life_stage: adult.spawning","shrimp_year: 2005<br />abundanceIndex_fullTimePeriod:  1.04579265<br />life_stage: adult.spawning","shrimp_year: 2006<br />abundanceIndex_fullTimePeriod:  0.63776548<br />life_stage: adult.spawning","shrimp_year: 2007<br />abundanceIndex_fullTimePeriod:  0.48278808<br />life_stage: adult.spawning","shrimp_year: 2008<br />abundanceIndex_fullTimePeriod:  0.09436446<br />life_stage: adult.spawning","shrimp_year: 2009<br />abundanceIndex_fullTimePeriod: -1.56948377<br />life_stage: adult.spawning","shrimp_year: 2010<br />abundanceIndex_fullTimePeriod: -0.73554705<br />life_stage: adult.spawning","shrimp_year: 2011<br />abundanceIndex_fullTimePeriod:  0.83180409<br />life_stage: adult.spawning","shrimp_year: 2012<br />abundanceIndex_fullTimePeriod:  0.73239073<br />life_stage: adult.spawning","shrimp_year: 2013<br />abundanceIndex_fullTimePeriod: -1.58505620<br />life_stage: adult.spawning","shrimp_year: 2014<br />abundanceIndex_fullTimePeriod:  0.53040105<br />life_stage: adult.spawning","shrimp_year: 2015<br />abundanceIndex_fullTimePeriod:  1.68342916<br />life_stage: adult.spawning","shrimp_year: 2016<br />abundanceIndex_fullTimePeriod:  1.36303720<br />life_stage: adult.spawning","shrimp_year: 2017<br />abundanceIndex_fullTimePeriod: -0.47840790<br />life_stage: adult.spawning","shrimp_year: 2018<br />abundanceIndex_fullTimePeriod:  1.67485742<br />life_stage: adult.spawning","shrimp_year: 2021<br />abundanceIndex_fullTimePeriod: -0.10750956<br />life_stage: adult.spawning"],"type":"scatter","mode":"lines+markers","line":{"width":1.8897637795275593,"color":"rgba(83,180,0,0.4)","dash":"solid"},"hoveron":"points","name":"adult.spawning","legendgroup":"adult.spawning","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(83,180,0,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(83,180,0,1)"}},"frame":null},{"x":[1979,1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[0.29869756298466799,-1.73013147066271,-0.65318029010244105,0.59442590308848298,-1.48935041206012,-2.1230018415199901,-0.421498160644599,0.62258579443417805,-0.32633516597858803,0.31744406490580601,-1.7970833655852301,1.6048031800668501,1.49390752818957,1.16360563631137,-0.15337617728421399,1.81948928473016,-0.55301176444829303,0.094350214636679003,1.0205167953909999,0.52029999961459605,0.76675354515644301,-1.9350209952904101,0.69979380394182999,-0.74948730690678,-0.075249801271307801,-0.89126255001641996,0.24044042885563699,-0.30862997404530301,-0.458000809548818,-0.15224513819169799,-0.52507023617707604,-1.4812462940792099,0.54917219096160896,-0.44861811469657198,-0.32075453194478998,0.030292604367309101,0.831586414517137,0.94662539397048595,-1.3146098874780101,0.96163195054168304,1.1993866898515499,1.1883736865619099,0.241332145793448,0.70164946906020798],"text":["shrimp_year: 1979<br />abundanceIndex_fullTimePeriod:  0.29869756<br />life_stage: adult.spawning.landings","shrimp_year: 1980<br />abundanceIndex_fullTimePeriod: -1.73013147<br />life_stage: adult.spawning.landings","shrimp_year: 1981<br />abundanceIndex_fullTimePeriod: -0.65318029<br />life_stage: adult.spawning.landings","shrimp_year: 1982<br />abundanceIndex_fullTimePeriod:  0.59442590<br />life_stage: adult.spawning.landings","shrimp_year: 1983<br />abundanceIndex_fullTimePeriod: -1.48935041<br />life_stage: adult.spawning.landings","shrimp_year: 1984<br />abundanceIndex_fullTimePeriod: -2.12300184<br />life_stage: adult.spawning.landings","shrimp_year: 1985<br />abundanceIndex_fullTimePeriod: -0.42149816<br />life_stage: adult.spawning.landings","shrimp_year: 1986<br />abundanceIndex_fullTimePeriod:  0.62258579<br />life_stage: adult.spawning.landings","shrimp_year: 1987<br />abundanceIndex_fullTimePeriod: -0.32633517<br />life_stage: adult.spawning.landings","shrimp_year: 1988<br />abundanceIndex_fullTimePeriod:  0.31744406<br />life_stage: adult.spawning.landings","shrimp_year: 1989<br />abundanceIndex_fullTimePeriod: -1.79708337<br />life_stage: adult.spawning.landings","shrimp_year: 1990<br />abundanceIndex_fullTimePeriod:  1.60480318<br />life_stage: adult.spawning.landings","shrimp_year: 1991<br />abundanceIndex_fullTimePeriod:  1.49390753<br />life_stage: adult.spawning.landings","shrimp_year: 1992<br />abundanceIndex_fullTimePeriod:  1.16360564<br />life_stage: adult.spawning.landings","shrimp_year: 1993<br />abundanceIndex_fullTimePeriod: -0.15337618<br />life_stage: adult.spawning.landings","shrimp_year: 1994<br />abundanceIndex_fullTimePeriod:  1.81948928<br />life_stage: adult.spawning.landings","shrimp_year: 1995<br />abundanceIndex_fullTimePeriod: -0.55301176<br />life_stage: adult.spawning.landings","shrimp_year: 1996<br />abundanceIndex_fullTimePeriod:  0.09435021<br />life_stage: adult.spawning.landings","shrimp_year: 1997<br />abundanceIndex_fullTimePeriod:  1.02051680<br />life_stage: adult.spawning.landings","shrimp_year: 1998<br />abundanceIndex_fullTimePeriod:  0.52030000<br />life_stage: adult.spawning.landings","shrimp_year: 1999<br />abundanceIndex_fullTimePeriod:  0.76675355<br />life_stage: adult.spawning.landings","shrimp_year: 2000<br />abundanceIndex_fullTimePeriod: -1.93502100<br />life_stage: adult.spawning.landings","shrimp_year: 2001<br />abundanceIndex_fullTimePeriod:  0.69979380<br />life_stage: adult.spawning.landings","shrimp_year: 2002<br />abundanceIndex_fullTimePeriod: -0.74948731<br />life_stage: adult.spawning.landings","shrimp_year: 2003<br />abundanceIndex_fullTimePeriod: -0.07524980<br />life_stage: adult.spawning.landings","shrimp_year: 2004<br />abundanceIndex_fullTimePeriod: -0.89126255<br />life_stage: adult.spawning.landings","shrimp_year: 2005<br />abundanceIndex_fullTimePeriod:  0.24044043<br />life_stage: adult.spawning.landings","shrimp_year: 2006<br />abundanceIndex_fullTimePeriod: -0.30862997<br />life_stage: adult.spawning.landings","shrimp_year: 2007<br />abundanceIndex_fullTimePeriod: -0.45800081<br />life_stage: adult.spawning.landings","shrimp_year: 2008<br />abundanceIndex_fullTimePeriod: -0.15224514<br />life_stage: adult.spawning.landings","shrimp_year: 2009<br />abundanceIndex_fullTimePeriod: -0.52507024<br />life_stage: adult.spawning.landings","shrimp_year: 2010<br />abundanceIndex_fullTimePeriod: -1.48124629<br />life_stage: adult.spawning.landings","shrimp_year: 2011<br />abundanceIndex_fullTimePeriod:  0.54917219<br />life_stage: adult.spawning.landings","shrimp_year: 2012<br />abundanceIndex_fullTimePeriod: -0.44861811<br />life_stage: adult.spawning.landings","shrimp_year: 2013<br />abundanceIndex_fullTimePeriod: -0.32075453<br />life_stage: adult.spawning.landings","shrimp_year: 2014<br />abundanceIndex_fullTimePeriod:  0.03029260<br />life_stage: adult.spawning.landings","shrimp_year: 2015<br />abundanceIndex_fullTimePeriod:  0.83158641<br />life_stage: adult.spawning.landings","shrimp_year: 2016<br />abundanceIndex_fullTimePeriod:  0.94662539<br />life_stage: adult.spawning.landings","shrimp_year: 2017<br />abundanceIndex_fullTimePeriod: -1.31460989<br />life_stage: adult.spawning.landings","shrimp_year: 2018<br />abundanceIndex_fullTimePeriod:  0.96163195<br />life_stage: adult.spawning.landings","shrimp_year: 2019<br />abundanceIndex_fullTimePeriod:  1.19938669<br />life_stage: adult.spawning.landings","shrimp_year: 2020<br />abundanceIndex_fullTimePeriod:  1.18837369<br />life_stage: adult.spawning.landings","shrimp_year: 2021<br />abundanceIndex_fullTimePeriod:  0.24133215<br />life_stage: adult.spawning.landings","shrimp_year: 2022<br />abundanceIndex_fullTimePeriod:  0.70164947<br />life_stage: adult.spawning.landings"],"type":"scatter","mode":"lines+markers","line":{"width":1.8897637795275593,"color":"rgba(0,192,148,0.4)","dash":"solid"},"hoveron":"points","name":"adult.spawning.landings","legendgroup":"adult.spawning.landings","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(0,192,148,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,192,148,1)"}},"frame":null},{"x":[1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023],"y":[-0.53877384657997296,-1.52511392710509,-0.63275833540765503,-0.34215751664709998,-1.8153599540679699,-1.8717728559034701,-0.312408702824024,1.0032248438698601,-1.44954715698839,0.44898881018190601,-0.51772991266321899,0.285561156804164,-0.109490818804111,0.79872298193375202,-0.60930947037042704,0.90412917531705805,-0.20120752871078201,1.2736750871996301,0.070201632985735701,1.2121037954195399,0.496587214766395,-1.2124413896645001,1.1063046991527601,-0.0161143945386499,2.2344577956416298,0.95369587080071705,2.5816326946567401,0.73601089484920901,0.49527179134048899,0.99984161534626204,-0.28750279794850297,-0.189108294934067,-0.0088805100228343502,-0.27949661358531902,-1.4544152430181201,-0.67315084760262101,0.14839072245680099,-0.60556251412644102,-1.3314724639192099,-0.37678670243433998,-0.91890099407410797,0.35916606112657301,0.19047012422961701,0.98102582386208104],"text":["shrimp_year: 1980<br />abundanceIndex_fullTimePeriod: -0.53877385<br />life_stage: juvenile","shrimp_year: 1981<br />abundanceIndex_fullTimePeriod: -1.52511393<br />life_stage: juvenile","shrimp_year: 1982<br />abundanceIndex_fullTimePeriod: -0.63275834<br />life_stage: juvenile","shrimp_year: 1983<br />abundanceIndex_fullTimePeriod: -0.34215752<br />life_stage: juvenile","shrimp_year: 1984<br />abundanceIndex_fullTimePeriod: -1.81535995<br />life_stage: juvenile","shrimp_year: 1985<br />abundanceIndex_fullTimePeriod: -1.87177286<br />life_stage: juvenile","shrimp_year: 1986<br />abundanceIndex_fullTimePeriod: -0.31240870<br />life_stage: juvenile","shrimp_year: 1987<br />abundanceIndex_fullTimePeriod:  1.00322484<br />life_stage: juvenile","shrimp_year: 1988<br />abundanceIndex_fullTimePeriod: -1.44954716<br />life_stage: juvenile","shrimp_year: 1989<br />abundanceIndex_fullTimePeriod:  0.44898881<br />life_stage: juvenile","shrimp_year: 1990<br />abundanceIndex_fullTimePeriod: -0.51772991<br />life_stage: juvenile","shrimp_year: 1991<br />abundanceIndex_fullTimePeriod:  0.28556116<br />life_stage: juvenile","shrimp_year: 1992<br />abundanceIndex_fullTimePeriod: -0.10949082<br />life_stage: juvenile","shrimp_year: 1993<br />abundanceIndex_fullTimePeriod:  0.79872298<br />life_stage: juvenile","shrimp_year: 1994<br />abundanceIndex_fullTimePeriod: -0.60930947<br />life_stage: juvenile","shrimp_year: 1995<br />abundanceIndex_fullTimePeriod:  0.90412918<br />life_stage: juvenile","shrimp_year: 1996<br />abundanceIndex_fullTimePeriod: -0.20120753<br />life_stage: juvenile","shrimp_year: 1997<br />abundanceIndex_fullTimePeriod:  1.27367509<br />life_stage: juvenile","shrimp_year: 1998<br />abundanceIndex_fullTimePeriod:  0.07020163<br />life_stage: juvenile","shrimp_year: 1999<br />abundanceIndex_fullTimePeriod:  1.21210380<br />life_stage: juvenile","shrimp_year: 2000<br />abundanceIndex_fullTimePeriod:  0.49658721<br />life_stage: juvenile","shrimp_year: 2001<br />abundanceIndex_fullTimePeriod: -1.21244139<br />life_stage: juvenile","shrimp_year: 2002<br />abundanceIndex_fullTimePeriod:  1.10630470<br />life_stage: juvenile","shrimp_year: 2003<br />abundanceIndex_fullTimePeriod: -0.01611439<br />life_stage: juvenile","shrimp_year: 2004<br />abundanceIndex_fullTimePeriod:  2.23445780<br />life_stage: juvenile","shrimp_year: 2005<br />abundanceIndex_fullTimePeriod:  0.95369587<br />life_stage: juvenile","shrimp_year: 2006<br />abundanceIndex_fullTimePeriod:  2.58163269<br />life_stage: juvenile","shrimp_year: 2007<br />abundanceIndex_fullTimePeriod:  0.73601089<br />life_stage: juvenile","shrimp_year: 2008<br />abundanceIndex_fullTimePeriod:  0.49527179<br />life_stage: juvenile","shrimp_year: 2009<br />abundanceIndex_fullTimePeriod:  0.99984162<br />life_stage: juvenile","shrimp_year: 2010<br />abundanceIndex_fullTimePeriod: -0.28750280<br />life_stage: juvenile","shrimp_year: 2011<br />abundanceIndex_fullTimePeriod: -0.18910829<br />life_stage: juvenile","shrimp_year: 2012<br />abundanceIndex_fullTimePeriod: -0.00888051<br />life_stage: juvenile","shrimp_year: 2013<br />abundanceIndex_fullTimePeriod: -0.27949661<br />life_stage: juvenile","shrimp_year: 2014<br />abundanceIndex_fullTimePeriod: -1.45441524<br />life_stage: juvenile","shrimp_year: 2015<br />abundanceIndex_fullTimePeriod: -0.67315085<br />life_stage: juvenile","shrimp_year: 2016<br />abundanceIndex_fullTimePeriod:  0.14839072<br />life_stage: juvenile","shrimp_year: 2017<br />abundanceIndex_fullTimePeriod: -0.60556251<br />life_stage: juvenile","shrimp_year: 2018<br />abundanceIndex_fullTimePeriod: -1.33147246<br />life_stage: juvenile","shrimp_year: 2019<br />abundanceIndex_fullTimePeriod: -0.37678670<br />life_stage: juvenile","shrimp_year: 2020<br />abundanceIndex_fullTimePeriod: -0.91890099<br />life_stage: juvenile","shrimp_year: 2021<br />abundanceIndex_fullTimePeriod:  0.35916606<br />life_stage: juvenile","shrimp_year: 2022<br />abundanceIndex_fullTimePeriod:  0.19047012<br />life_stage: juvenile","shrimp_year: 2023<br />abundanceIndex_fullTimePeriod:  0.98102582<br />life_stage: juvenile"],"type":"scatter","mode":"lines+markers","line":{"width":1.8897637795275593,"color":"rgba(0,182,235,0.4)","dash":"solid"},"hoveron":"points","name":"juvenile","legendgroup":"juvenile","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(0,182,235,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,182,235,1)"}},"frame":null},{"x":[1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017],"y":[-1.02082414821641,0.27573640026797702,1.02526127261878,-0.048148271049401101,-1.2342548362727399,-1.06915955064478,-0.59924743608802,-1.4246329309138701,-0.61826704728370596,-0.66761842263912197,0.579802090663183,-1.35225221175167,-1.01423530768151,-0.52507473567155005,0.120401833615051,-0.53443163194711396,0.85795530456492897,-0.65563504901622605,0.59906117918651602,-0.42170547967318101,-0.28353532413475602,-0.036902382595319902,1.1490541808722201,1.1912437276124499,0.55973781199367401,0.53203612653088905,0.54612292113267202,-0.11162080680656,-1.01718927756248,-0.96161015569923802,-1.10479001056299,-0.26753808337107199,3.31772342572437,0.894546012698344,1.0219160339847599,1.1239151178179601,1.1741596602979301],"text":["shrimp_year: 1981<br />abundanceIndex_fullTimePeriod: -1.02082415<br />life_stage: postlarval","shrimp_year: 1982<br />abundanceIndex_fullTimePeriod:  0.27573640<br />life_stage: postlarval","shrimp_year: 1983<br />abundanceIndex_fullTimePeriod:  1.02526127<br />life_stage: postlarval","shrimp_year: 1984<br />abundanceIndex_fullTimePeriod: -0.04814827<br />life_stage: postlarval","shrimp_year: 1985<br />abundanceIndex_fullTimePeriod: -1.23425484<br />life_stage: postlarval","shrimp_year: 1986<br />abundanceIndex_fullTimePeriod: -1.06915955<br />life_stage: postlarval","shrimp_year: 1987<br />abundanceIndex_fullTimePeriod: -0.59924744<br />life_stage: postlarval","shrimp_year: 1988<br />abundanceIndex_fullTimePeriod: -1.42463293<br />life_stage: postlarval","shrimp_year: 1989<br />abundanceIndex_fullTimePeriod: -0.61826705<br />life_stage: postlarval","shrimp_year: 1990<br />abundanceIndex_fullTimePeriod: -0.66761842<br />life_stage: postlarval","shrimp_year: 1991<br />abundanceIndex_fullTimePeriod:  0.57980209<br />life_stage: postlarval","shrimp_year: 1992<br />abundanceIndex_fullTimePeriod: -1.35225221<br />life_stage: postlarval","shrimp_year: 1993<br />abundanceIndex_fullTimePeriod: -1.01423531<br />life_stage: postlarval","shrimp_year: 1994<br />abundanceIndex_fullTimePeriod: -0.52507474<br />life_stage: postlarval","shrimp_year: 1995<br />abundanceIndex_fullTimePeriod:  0.12040183<br />life_stage: postlarval","shrimp_year: 1996<br />abundanceIndex_fullTimePeriod: -0.53443163<br />life_stage: postlarval","shrimp_year: 1997<br />abundanceIndex_fullTimePeriod:  0.85795530<br />life_stage: postlarval","shrimp_year: 1998<br />abundanceIndex_fullTimePeriod: -0.65563505<br />life_stage: postlarval","shrimp_year: 1999<br />abundanceIndex_fullTimePeriod:  0.59906118<br />life_stage: postlarval","shrimp_year: 2000<br />abundanceIndex_fullTimePeriod: -0.42170548<br />life_stage: postlarval","shrimp_year: 2001<br />abundanceIndex_fullTimePeriod: -0.28353532<br />life_stage: postlarval","shrimp_year: 2002<br />abundanceIndex_fullTimePeriod: -0.03690238<br />life_stage: postlarval","shrimp_year: 2003<br />abundanceIndex_fullTimePeriod:  1.14905418<br />life_stage: postlarval","shrimp_year: 2004<br />abundanceIndex_fullTimePeriod:  1.19124373<br />life_stage: postlarval","shrimp_year: 2005<br />abundanceIndex_fullTimePeriod:  0.55973781<br />life_stage: postlarval","shrimp_year: 2006<br />abundanceIndex_fullTimePeriod:  0.53203613<br />life_stage: postlarval","shrimp_year: 2007<br />abundanceIndex_fullTimePeriod:  0.54612292<br />life_stage: postlarval","shrimp_year: 2008<br />abundanceIndex_fullTimePeriod: -0.11162081<br />life_stage: postlarval","shrimp_year: 2009<br />abundanceIndex_fullTimePeriod: -1.01718928<br />life_stage: postlarval","shrimp_year: 2010<br />abundanceIndex_fullTimePeriod: -0.96161016<br />life_stage: postlarval","shrimp_year: 2011<br />abundanceIndex_fullTimePeriod: -1.10479001<br />life_stage: postlarval","shrimp_year: 2012<br />abundanceIndex_fullTimePeriod: -0.26753808<br />life_stage: postlarval","shrimp_year: 2013<br />abundanceIndex_fullTimePeriod:  3.31772343<br />life_stage: postlarval","shrimp_year: 2014<br />abundanceIndex_fullTimePeriod:  0.89454601<br />life_stage: postlarval","shrimp_year: 2015<br />abundanceIndex_fullTimePeriod:  1.02191603<br />life_stage: postlarval","shrimp_year: 2016<br />abundanceIndex_fullTimePeriod:  1.12391512<br />life_stage: postlarval","shrimp_year: 2017<br />abundanceIndex_fullTimePeriod:  1.17415966<br />life_stage: postlarval"],"type":"scatter","mode":"lines+markers","line":{"width":1.8897637795275593,"color":"rgba(165,138,255,0.4)","dash":"solid"},"hoveron":"points","name":"postlarval","legendgroup":"postlarval","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(165,138,255,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(165,138,255,1)"}},"frame":null},{"x":[1975,1976,1977,1978,1979,1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023],"y":[-0.140656807018224,1.87542378683012,4.3858885042581397,-0.73052744956243598,-0.79287523010016003,-1.0601446784189701,-1.3957497458164601,-0.12149074537080599,-0.86397534928030795,-1.9082789355940699,-0.25733693343973202,0.124967750789179,0.186619974526816,-0.70079643104352995,0.059271513509039898,-0.205718411465832,1.10637875402817,1.28100021101092,0.32934587337814802,0.555663302508694,0.78063789231685099,-0.41373457642406603,0.71491752550597198,-0.31082611329680998,0.588059535900185,-1.2167133309787901,-0.71575949527502902,0.216112013280404,0.047426266806769597,0.13473426745512099,0.41451369704670299,-0.23598357933560199,-0.78333155993647496,0.26788422160261199,-0.75379235012718904,-0.34378934022186802,-0.90459981838027304,-1.33039838491368,-0.97944178994567899,0.32658559118722003,0.49433570842679397,0.77863746396732103,-0.41240607478353403,-0.039035159620316798,0.58107044271699404,0.83859182454524395,-0.44810509793055098,-0.16895406135191601,1.1463553280348899],"text":["shrimp_year: 1975<br />abundanceIndex_fullTimePeriod: -0.14065681<br />life_stage: subadult","shrimp_year: 1976<br />abundanceIndex_fullTimePeriod:  1.87542379<br />life_stage: subadult","shrimp_year: 1977<br />abundanceIndex_fullTimePeriod:  4.38588850<br />life_stage: subadult","shrimp_year: 1978<br />abundanceIndex_fullTimePeriod: -0.73052745<br />life_stage: subadult","shrimp_year: 1979<br />abundanceIndex_fullTimePeriod: -0.79287523<br />life_stage: subadult","shrimp_year: 1980<br />abundanceIndex_fullTimePeriod: -1.06014468<br />life_stage: subadult","shrimp_year: 1981<br />abundanceIndex_fullTimePeriod: -1.39574975<br />life_stage: subadult","shrimp_year: 1982<br />abundanceIndex_fullTimePeriod: -0.12149075<br />life_stage: subadult","shrimp_year: 1983<br />abundanceIndex_fullTimePeriod: -0.86397535<br />life_stage: subadult","shrimp_year: 1984<br />abundanceIndex_fullTimePeriod: -1.90827894<br />life_stage: subadult","shrimp_year: 1985<br />abundanceIndex_fullTimePeriod: -0.25733693<br />life_stage: subadult","shrimp_year: 1986<br />abundanceIndex_fullTimePeriod:  0.12496775<br />life_stage: subadult","shrimp_year: 1987<br />abundanceIndex_fullTimePeriod:  0.18661997<br />life_stage: subadult","shrimp_year: 1988<br />abundanceIndex_fullTimePeriod: -0.70079643<br />life_stage: subadult","shrimp_year: 1989<br />abundanceIndex_fullTimePeriod:  0.05927151<br />life_stage: subadult","shrimp_year: 1990<br />abundanceIndex_fullTimePeriod: -0.20571841<br />life_stage: subadult","shrimp_year: 1991<br />abundanceIndex_fullTimePeriod:  1.10637875<br />life_stage: subadult","shrimp_year: 1992<br />abundanceIndex_fullTimePeriod:  1.28100021<br />life_stage: subadult","shrimp_year: 1993<br />abundanceIndex_fullTimePeriod:  0.32934587<br />life_stage: subadult","shrimp_year: 1994<br />abundanceIndex_fullTimePeriod:  0.55566330<br />life_stage: subadult","shrimp_year: 1995<br />abundanceIndex_fullTimePeriod:  0.78063789<br />life_stage: subadult","shrimp_year: 1996<br />abundanceIndex_fullTimePeriod: -0.41373458<br />life_stage: subadult","shrimp_year: 1997<br />abundanceIndex_fullTimePeriod:  0.71491753<br />life_stage: subadult","shrimp_year: 1998<br />abundanceIndex_fullTimePeriod: -0.31082611<br />life_stage: subadult","shrimp_year: 1999<br />abundanceIndex_fullTimePeriod:  0.58805954<br />life_stage: subadult","shrimp_year: 2000<br />abundanceIndex_fullTimePeriod: -1.21671333<br />life_stage: subadult","shrimp_year: 2001<br />abundanceIndex_fullTimePeriod: -0.71575950<br />life_stage: subadult","shrimp_year: 2002<br />abundanceIndex_fullTimePeriod:  0.21611201<br />life_stage: subadult","shrimp_year: 2003<br />abundanceIndex_fullTimePeriod:  0.04742627<br />life_stage: subadult","shrimp_year: 2004<br />abundanceIndex_fullTimePeriod:  0.13473427<br />life_stage: subadult","shrimp_year: 2005<br />abundanceIndex_fullTimePeriod:  0.41451370<br />life_stage: subadult","shrimp_year: 2006<br />abundanceIndex_fullTimePeriod: -0.23598358<br />life_stage: subadult","shrimp_year: 2007<br />abundanceIndex_fullTimePeriod: -0.78333156<br />life_stage: subadult","shrimp_year: 2008<br />abundanceIndex_fullTimePeriod:  0.26788422<br />life_stage: subadult","shrimp_year: 2009<br />abundanceIndex_fullTimePeriod: -0.75379235<br />life_stage: subadult","shrimp_year: 2010<br />abundanceIndex_fullTimePeriod: -0.34378934<br />life_stage: subadult","shrimp_year: 2011<br />abundanceIndex_fullTimePeriod: -0.90459982<br />life_stage: subadult","shrimp_year: 2012<br />abundanceIndex_fullTimePeriod: -1.33039838<br />life_stage: subadult","shrimp_year: 2013<br />abundanceIndex_fullTimePeriod: -0.97944179<br />life_stage: subadult","shrimp_year: 2014<br />abundanceIndex_fullTimePeriod:  0.32658559<br />life_stage: subadult","shrimp_year: 2015<br />abundanceIndex_fullTimePeriod:  0.49433571<br />life_stage: subadult","shrimp_year: 2016<br />abundanceIndex_fullTimePeriod:  0.77863746<br />life_stage: subadult","shrimp_year: 2017<br />abundanceIndex_fullTimePeriod: -0.41240607<br />life_stage: subadult","shrimp_year: 2018<br />abundanceIndex_fullTimePeriod: -0.03903516<br />life_stage: subadult","shrimp_year: 2019<br />abundanceIndex_fullTimePeriod:  0.58107044<br />life_stage: subadult","shrimp_year: 2020<br />abundanceIndex_fullTimePeriod:  0.83859182<br />life_stage: subadult","shrimp_year: 2021<br />abundanceIndex_fullTimePeriod: -0.44810510<br />life_stage: subadult","shrimp_year: 2022<br />abundanceIndex_fullTimePeriod: -0.16895406<br />life_stage: subadult","shrimp_year: 2023<br />abundanceIndex_fullTimePeriod:  1.14635533<br />life_stage: subadult"],"type":"scatter","mode":"lines+markers","line":{"width":1.8897637795275593,"color":"rgba(251,97,215,0.4)","dash":"solid"},"hoveron":"points","name":"subadult","legendgroup":"subadult","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(251,97,215,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(251,97,215,1)"}},"frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826491,"l":37.260273972602747},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"White Shrimp","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[1972.5999999999999,2025.4000000000001],"tickmode":"array","ticktext":["1980","1990","2000","2010","2020"],"tickvals":[1980,1990,2000,2010,2020],"categoryorder":"array","categoryarray":["1980","1990","2000","2010","2020"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Shrimp Year","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-2.4484463588088965,4.7113330215470466],"tickmode":"array","ticktext":["-2","0","2","4"],"tickvals":[-2,0,1.9999999999999996,3.9999999999999996],"categoryorder":"array","categoryarray":["-2","0","2","4"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Abundance Index","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(51,51,51,1)","width":0.66417600664176002,"linetype":"solid"},"yref":"paper","xref":"paper","layer":"below","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"title":{"text":"Life Stage","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"orientation":"h","x":0.5,"xanchor":"center","y":-0.20000000000000001},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"2588204d9d9":{"yintercept":{},"type":"scatter"},"258840ea6c0b":{"x":{},"y":{},"colour":{}},"2588375c763a":{"x":{},"y":{},"colour":{}}},"cur_data":"2588204d9d9","visdat":{"2588204d9d9":["function (y) ","x"],"258840ea6c0b":["function (y) ","x"],"2588375c763a":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>wht_env <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(here<span class="sc">::</span><span class="fu">here</span>(in_env,</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"wht_environmental.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="about" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="about"><span class="header-section-number">14.3</span> About</h2>
+<p><strong>Input <code>.qmd</code> file</strong> for this section was: <strong>combine_processed_abundances.qmd</strong> and can be found in the main directory.</p>
+<p><strong>Input data file(s)</strong> - in <code>data/processed/byLifeStage</code>:</p>
+<ul>
+<li><code>postlarval_byShrimpYear.csv</code></li>
+<li><code>juvenile_byShrimpYear.csv</code></li>
+<li><code>subadult_byShrimpYear.csv</code><br>
+</li>
+<li><code>adult_byShrimpYear.csv</code><br>
+</li>
+<li><code>adult.landings.brown_byShrimpYear.csv</code><br>
+</li>
+<li><code>adult.landings.white_byShrimpYear.csv</code></li>
+</ul>
+<p><strong>Modifications to data:</strong></p>
+<p><strong>Generated data file(s):</strong></p>
+<p><strong>Other notes about data:</strong></p>
+<ul>
+<li>none</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./process_ad_commercial.html" class="pagination-link" aria-label="Adults - landings and trip tickets">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Adults - landings and trip tickets</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./rel_temp_thresholds.html" class="pagination-link" aria-label="Temperature thresholds">
+        <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Temperature thresholds</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/catbirdstats/LowcountryShrimp_public/blob/main/combine_processed_abundances.qmd" target="_blank" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></div></div></footer></body></html>

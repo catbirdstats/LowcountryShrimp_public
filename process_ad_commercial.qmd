@@ -57,7 +57,7 @@ ggplot(brn_abund,
 
 For white shrimp landings, we only have totals across the states of GA and SC. For Juvenile and Subadult stages (both species), we averaged the values from the two states.  
 
-Here, I will calculate both ways.  
+Here, I calculated both ways, and only later realized they would be exactly the same once normalized - because averaging is just dividing the total by 2, for all samples; so they all stay the same relative to each other when you re-scale.  
 
 Because 'mean' will probably be primary, the variable names that match those of other files will contain values using the mean across GA and SC. "sum" will be appended to variable names using a total across the two states, in case such values are needed later.  
 
@@ -73,7 +73,7 @@ brn_byShrimpYear <- brn_abund |>
            abundance_measure = "mean over 2 states; sum also provided") |> 
     select(all_of(sel_order_annual_extra)) |> 
     group_by(species) |> 
-    mutate(abundanceIndexfullTimePeriod = as.vector(scale(sqrt_abundance)),
+    mutate(abundanceIndex_fullTimePeriod = as.vector(scale(sqrt_abundance)),
            abundanceIndexSum_fullTimePeriod = as.vector(scale(sqrt_abundance_sum))) |> 
     ungroup()
 
@@ -369,7 +369,7 @@ write.csv(wht_tt,
 
 **Generated data file(s):**   
 
-**NOTE** - for brown shrimp files, abundances and abundance indices were aggregated from the 2 states of GA and SC in two different ways: by averaging abundance (the usual variable names) and by adding the abundances ("sum" appended to variable name). This was done because for white shrimp landings, only totals across the two states are available, so sum could be useful for comparison. However for other life stages (of both species), values were averaged between states, so the mean is more consistent with other life stages. Because 'mean' will probably be the primary value used, only "sum" was appended to the appropriate variable names. If nothing is specified (for brown shrimp), the aggregated value is a mean.   
+**NOTE** - for brown shrimp files, abundances and abundance indices were aggregated from the 2 states of GA and SC in two different ways. They turn out to give the same numbers when scaled, so the columns with "sum" appended can be ignored. They were retained in case someone else wants to verify in the future.     
 
 **_Landings Data_**  
 

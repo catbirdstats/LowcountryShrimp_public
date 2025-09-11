@@ -148,3 +148,30 @@ consec_stats <- function(data, threshold){
     
     summ_df
 }
+
+# deal with plotly: interactive in html; static in pdf
+
+plotly_out <- function(p, legend_pos = "bottom") {
+    if (knitr::is_html_output()) {
+        # Map positions to Plotly layout settings
+        legend_settings <- switch(
+            legend_pos,
+            "bottom" = list(orientation = "h", x = 0.5, xanchor = "center", y = -0.2),
+            "top"    = list(orientation = "h", x = 0.5, xanchor = "center", y = 1.1),
+            "left"   = list(orientation = "v", x = -0.1, xanchor = "right", y = 0.5, yanchor = "middle"),
+            "right"  = list(orientation = "v", x = 1.05, xanchor = "left", y = 0.5, yanchor = "middle"),
+            "default"= NULL,   # use Plotly’s default
+            stop("legend_pos must be one of: 'bottom', 'top', 'left', 'right', 'default'")
+        )
+        
+        if (is.null(legend_settings)) {
+            ggplotly(p)
+        } else {
+            ggplotly(p) %>% layout(legend = legend_settings)
+        }
+        
+    } else {
+        # PDF/LaTeX just uses the ggplot legend settings
+        p
+    }
+}

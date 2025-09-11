@@ -19,59 +19,132 @@ load(here::here(in_path, "adultSeamap_dfs.RData"))
 ```
 
 ```{r}
+# filter the dataset
 adults <- adsm_long |> 
     janitor::clean_names() |> 
-    filter(species %in% c("brown", "white")) 
+    filter(species %in% c("brown", "white"),
+           region %in% c("GEORGIA", "SOUTH CAROLINA")) 
+
+# add shrimp year
+adults <- add_cohorts(adults, "adult") 
+
+# add life stage
+adults <- adults |> 
+    mutate(life_stage = case_when(species == "brown" ~ "adult",
+                                  species == "white" & month <= 5 ~ "adult.spawning",
+                                  .default = "adult.nonspawning"),
+           region = case_when(region == "GEORGIA" ~ "GA",
+                              .default = "SC"))
 ```
 
 #### Compiling to season  
 
 SEAMAP does seasonal sampling; not monthly.  
 
-
-# stopping here for the night  
-
-Need to deal with seasons, get shrimp year assigned, and spawning vs. non-spawning for white shrimp.  
+So here, I average to sampling event; then average to season within state; and then calculate annual totals.
+ 
 
 ```{r}
-# average to Event,
-# then average to season by state,
-# then calculate annual totals
-
-
-# ad_sm_seasonal <- ad_sm_long |> 
-#     mutate(season = case_when(month %in% c(4, 5) ~ "Spring",
-#                               month %in% c(7, 8) ~ "Summer",
-#                               month %in% c(9, 10, 11) ~ "Fall",
-#                               .default = "JuneProbably")) |> 
-#     filter(season != "JuneProbably") |> 
-#     # average to event
-#     summarize(.by = c(species, year, month, shrimp_year, season, region,
-#                       event),
-#               count = mean(count, na.rm = TRUE),
-#               weight = mean(weight, na.rm = TRUE)) |> 
-#     # average to season within state
-#     summarize(.by = c(species, year, shrimp_year, season, month, region),
-#               count = mean(count, na.rm = TRUE),
-#               weight = mean(weight, na.rm = TRUE)) |> 
-#     mutate(survey = paste0("SEAMAP - ", region),
-#            life_stage = "adult",
-#            abundance_measure = "weight",
-#            abundance = weight) |> 
-#     select(survey, species, life_stage, year, month, season, shrimp_year, abundance_measure, abundance)
-# 
-# # write that out to the seasonal folder
-# write.csv(ad_sm_seasonal,
-#           here::here(path_out, "monthly or seasonal",
-#                      "04_adultSEAMAPbyRegion_bySeason.csv"),
-#           na = "",
-#           row.names = FALSE)
+ad_seasonal <- adults |>
+    mutate(season = case_when(month %in% c(4, 5) ~ "Spring",
+                              month %in% c(7, 8) ~ "Summer",
+                              month %in% c(9, 10, 11) ~ "Fall",
+                              .default = "JuneProbably")) |>
+    filter(season != "JuneProbably") |>
+    # average to event
+    summarize(.by = c(species, life_stage, 
+                      year, month, shrimp_year, 
+                      season, region, event),
+              count = mean(count, na.rm = TRUE),
+              weight = mean(weight, na.rm = TRUE)) |>
+    # average to season within state
+    summarize(.by = c(species, year, life_stage, shrimp_year, season, region),
+              count = mean(count, na.rm = TRUE),
+              weight = mean(weight, na.rm = TRUE)) |>
+    mutate(survey = paste0("SEAMAP - ", region),
+           abundance_measure = "weight",
+           abundance = weight) |>
+    select(survey, species, life_stage, year, season, shrimp_year, abundance_measure, abundance)  # not using 'sel_order_monthly' because we have season, not month
 
 ```
 
+Yearly totals by state.  
+
+```{r}
+ad_yearly_state <- ad_seasonal |> 
+    summarize(.by = c(survey, species, life_stage, shrimp_year, abundance_measure),
+              abundance = sum(abundance, na.rm = TRUE)) 
+```
+
+```{r}
+#| label: fig-seamapAnnualByLifeStage
+#| fig-cap: "Time series of total abundance (weight) by species x life stage, colored by state, in SEAMAP surveys."
+
+ad_yearly_state |> 
+    mutate(sp.stage = paste(species, life_stage)) |> 
+ggplot(aes(x = shrimp_year,
+           y = abundance,
+           col = survey)) +
+    geom_line() +
+    geom_point(size = 2) +
+    facet_wrap(~sp.stage, scales = "free", ncol = 1) +
+    theme_bw() +
+    theme(legend.position = "bottom")
+```
+
+Average the states each year and calculate abundance index.  
+
+```{r}
+ad_yearly_final <- ad_yearly_state |> 
+    summarize(.by = c(species, life_stage, abundance_measure, shrimp_year),
+              abundance = mean(abundance, na.rm = TRUE)) |>
+    group_by(species, life_stage, abundance_measure) |> 
+    mutate(sqrt_abundance = sqrt(abundance),
+           survey = "SEAMAP - GA and SC",
+           abundanceIndex_fullTimePeriod = as.vector(scale(sqrt_abundance))) |> 
+    ungroup() |> 
+    select(all_of(sel_order_annual),
+           everything())
+
+abund_commontime <- ad_yearly_final |> 
+    select(species, life_stage, shrimp_year, sqrt_abundance) |> 
+    filter(shrimp_year %in% common_shrimpYears) |> 
+    group_by(species) |> 
+    mutate(abundanceIndex_commonTimePeriod = as.vector(scale(sqrt_abundance))) |> 
+    ungroup()
+
+ad_yearly_final <- left_join(ad_yearly_final,
+                             abund_commontime)
+```
 
 
-## About
+Write out the files.  
+
+```{r}
+# by state and season
+write.csv(ad_seasonal,
+          here::here(out_path_detailed, 
+                     "adult.seamap_byStateAndSeason.csv"),
+          na = "",
+          row.names = FALSE)
+
+# shrimp year total by state
+write.csv(ad_yearly_state,
+          here::here(out_path_detailed,
+                     "adult.seamap_byStateAndShrimpYear.csv"),
+          na = "",
+          row.names = FALSE)
+
+# with abundance index
+write.csv(ad_yearly_final,
+          here::here(out_path,
+                     "adult_byShrimpYear.csv"),
+          na = "",
+          row.names = FALSE)
+```
+
+
+## About  
 
 **Input `.qmd` file** for this section was: **`r xfun::with_ext(knitr::current_input(), "qmd")`** and can be found in the main directory.  
 
@@ -84,11 +157,18 @@ Need to deal with seasons, get shrimp year assigned, and spawning vs. non-spawni
 
 **Modifications to data:**
 
+-   filtered to only brown and white shrimp  
+-   filtered to only SC and GA  
+-   averaged to sampling event, then to season, by state. Summed seasonal averages by shrimp year, by state. Then averaged annual totals and calculated abundance index.  
 
 
 **Generated data file(s):**  - fully processed files are in the `data/processed` directory:  
 
+-   `adult.seamap_byStateAndSeason.csv` - in `moreDetailed` folder - abundance averaged to season within state, by species and life stage.  
+-   `adult.seamap_byStateAndShrimpYear.csv` - in `moreDetailed` folder - contains annual totals by species, life stage, shrimp year, and state.  
+-   `adult_byShrimpYear.csv` - contains average of annual totals by shrimp year and calculated abundance index, by species, life stage, and shrimp year.  
+
 
 **Other notes about data:**
 
-- none
+-   did not worry about order of rows in output files, but all life stages are represented equally.  

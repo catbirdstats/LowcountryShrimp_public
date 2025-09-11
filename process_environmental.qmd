@@ -396,11 +396,13 @@ save(tmp_thresh, tmp_distn, sal_means,
 ```{r}
 # split out salinity means 
 sal_brn <- sal_means |> 
-    filter(species == "brown") |> 
+    filter(species == "brown",
+           !is.na(shrimp_year)) |> 
     select(-species)
 
 sal_wht <- sal_means |> 
-    filter(species == "white") |> 
+    filter(species == "white",
+           !is.na(shrimp_year)) |> 
     select(-species)
 
 
@@ -409,14 +411,18 @@ sal_wht <- sal_means |>
 env_brn <- full_join(sal_brn, tmp_distn_brn) |> 
     full_join(tmp_thresh_brn_wide) |> 
     arrange(shrimp_year) |> 
-    relocate(calendar_year, shrimp_year)
+    relocate(shrimp_year) |> 
+    select(-calendar_year)
 
 # white
 env_wht <- full_join(sal_wht, tmp_distn_wht_all) |> 
     full_join(tmp_thresh_wht_all) |> 
     arrange(shrimp_year) |> 
+    relocate(shrimp_year) |> 
     select(-calendar_year)
+```
 
+```{r}
 # write out
 out_path <- here::here("data", "processed", "environmental")
 

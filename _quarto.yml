@@ -26,6 +26,9 @@ book:
       chapters: 
         - shrimp_year_explanations.qmd
         - directory_structure.qmd
+    - part: "Environmental Data"
+      chapters:
+        - process_environmental.qmd
     - part: shrimp_data_exploration.qmd
       chapters: 
         - raw_postlarv.qmd
@@ -40,9 +43,7 @@ book:
         - process_subad.qmd
         - process_ad_seamap.qmd
         - process_ad_commercial.qmd
-    - part: "Environmental Data"
-      chapters:
-        - process_environmental.qmd
+        - combine_processed_abundances.qmd
     - part: "Relationships between datasets"
       chapters:
         - rel_temp_thresholds.qmd  

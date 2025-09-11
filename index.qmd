@@ -2,10 +2,15 @@
 
 ## About the Project  
 
-Funded by the NERRS Science Collaborative, link to page  
+Funded by the NERRS Science Collaborative - see the [project page here](https://nerrssciencecollaborative.org/project/Dunn21).  
 
 ## Collaborators  
 
-Name people here!  
+Project PIs were Robert Dunn^1,2^ and Joshua Stone^1^. The work group that guided the compilation of this document included Matt Kimball^1^, Michael Kendrick^3^, Liam Batchelder^1^, Graham Wagner^1^, and Maggie^1^. The R code developed to work with the data and produce this document was written by Kim Cressman^4^. 
+
+^1^ University of South Carolina, Baruch Marine Lab  
+^2^ Ecological Dynamics, LLC  
+^3^ South Carolina Department of Natural Resources  
+^4^ Catbird Stats, LLC
 
 
