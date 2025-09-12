@@ -46,6 +46,7 @@ book:
         - combine_processed_abundances.qmd
     - part: "Relationships between datasets"
       chapters:
+        - rel_abundances.qmd  
         - rel_temp_thresholds.qmd  
         - rel_sal.qmd  
         - rel_regression_models.qmd  

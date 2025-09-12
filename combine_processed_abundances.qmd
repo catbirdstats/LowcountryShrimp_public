@@ -67,6 +67,27 @@ write.csv(dat,
 brn <- dat |> 
     filter(species == "brown")
 
+brn_env <- read.csv(here::here(in_env,
+                               "brn_environmental.csv")) |> 
+    filter(shrimp_year %in% unique(brn$shrimp_year))
+
+brn_combined <- left_join(brn, brn_env)
+
+```
+
+Write it out.  
+
+```{r}
+write.csv(brn_combined,
+          here::here(out_path,
+                     "brn_abundAndEnv.csv"),
+          na = "",
+          row.names = FALSE)
+```
+
+
+```{r}
+
 p <- ggplot(brn,
        aes(x = shrimp_year,
            y = abundanceIndex_fullTimePeriod,
@@ -85,11 +106,6 @@ p <- ggplot(brn,
 plotly_out(p)
 ```
 
-```{r}
-
-brn_env <- read.csv(here::here(in_env,
-                               "brn_environmental.csv"))
-```
 
 
 ## White Shrimp  
@@ -97,6 +113,21 @@ brn_env <- read.csv(here::here(in_env,
 ```{r}
 wht <- dat |> 
     filter(species == "white")
+
+wht_env <- read.csv(here::here(in_env,
+                               "wht_environmental.csv")) |> 
+    filter(shrimp_year %in% unique(wht$shrimp_year))
+
+wht_combined <- left_join(wht, wht_env)
+
+write.csv(wht_combined,
+          here::here(out_path,
+                     "wht_abundAndEnv.csv"),
+          na = "",
+          row.names = FALSE)
+```
+
+```{r}
 
 p <- ggplot(wht,
        aes(x = shrimp_year,
@@ -117,10 +148,6 @@ plotly_out(p)
 
 ```
 
-```{r}
-wht_env <- read.csv(here::here(in_env,
-                               "wht_environmental.csv"))
-```
 
 
 
@@ -140,10 +167,16 @@ wht_env <- read.csv(here::here(in_env,
 
 **Modifications to data:**  
 
+-   reduced to only common shrimp abundance columns  
+-   combined abundance and environmental data, based on shrimp year.  
+-   **NOTE:** because the abundances are in a long format, meaning each life stage has a separate row for shrimp year, the same environmental data is repeated on multiple rows.
 
 
 **Generated data file(s):**   
 
+-   `allAbundanceIndices.csv`, in `data/processed/combinedLifeStages`. Contains abundance indices for each life stage and shrimp year, for both brown and white shrimp.  
+-   `brn_abundAndEnv.csv`, in `data/processed`. Contains abundance index and environmental metrics (nursery period salinity; winter days below temperature thresholds) for brown shrimp only.  
+-   `wht_abundAndEnv.csv`, in `data/processed`. Contains abundance index and environmental metrics (nursery period salinity; winter days below temperature thresholds) for white shrimp only.  
 
 
 **Other notes about data:**

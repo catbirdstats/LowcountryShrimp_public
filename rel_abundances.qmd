@@ -1,0 +1,556 @@
+---
+format:
+    html:
+        fig-width: 7
+        fig-height: 7
+    pdf:
+        fig-width: 6
+        fig-height: 6
+---
+
+
+# Abundance Index Relationships  
+
+This chapter will look at time series of abundance indices and the relationships between abundance index of different life stages.  
+
+Relationships will only be examined in years where we have data from all life stages (using the variable `abundanceIndex_commonTimePeriod`).  
+
+```{r}
+library(tidyverse)
+library(plotly)
+library(corrplot)
+library(GGally)
+library(vegan)
+
+source(here::here("functions.R"))
+
+in_path <- here::here("data", "processed")
+```
+
+Read in data; trim to only common years; put life stages in proper order.  
+
+```{r}
+# brown
+brn_all <- read.csv(here::here(in_path, "brn_abundAndEnv.csv"))
+brn <- brn_all |> 
+    filter(shrimp_year %in% common_shrimpYears) |> 
+    mutate(life_stage = factor(life_stage, levels = ls_order_brn)) |> 
+    rename(abundIndex = abundanceIndex_commonTimePeriod)
+brn_wide <- brn |> 
+    select(shrimp_year, life_stage, abundIndex) |> 
+    pivot_wider(names_from = life_stage,
+                values_from = abundIndex)
+
+# white
+wht_all <- read.csv(here::here(in_path, "wht_abundAndEnv.csv"))
+wht <- wht_all |> 
+    filter(shrimp_year %in% common_shrimpYears) |> 
+    mutate(life_stage = factor(life_stage, levels = ls_order_wht)) |> 
+    rename(abundIndex = abundanceIndex_commonTimePeriod)
+wht_wide <- wht |> 
+    select(shrimp_year, life_stage, abundIndex) |> 
+    pivot_wider(names_from = life_stage,
+                values_from = abundIndex)
+```
+
+Set up colors and shapes  
+
+```{r}
+# palcols <- RColorBrewer::brewer.pal(9, "PuBuGn")[2:9]
+# palcols <- khroma::color("devon", reverse = TRUE)(12)[4:12]
+palcols <- khroma::color("oslo", reverse = TRUE)(12)[3:11]
+shps <- c(16, 15, 17, 9, 2, 1, 0, 5)
+```
+
+
+## Brown Shrimp  
+
+### Time Series  
+
+```{r}
+#| label: fig-brnTimeSeries
+#| fig-cap: "Time series of brown shrimp abundance index by life stage."
+#| fig-width: 5
+#| fig-height: 7
+
+p <- ggplot(brn,
+       aes(x = shrimp_year, y = abundIndex,
+           col = life_stage,
+           shape = life_stage)) +
+    geom_hline(yintercept = 0,
+               col = "gray40",
+               linewidth = 0.5) +
+    geom_point() +
+    geom_line() +
+    facet_wrap(~life_stage, scales = "free_y", ncol = 1) +
+    theme_bw() +
+    scale_color_manual(values = palcols) +
+    scale_shape_manual(values = shps) +
+    labs(title = "Brown Shrimp",
+         x = "Shrimp Year",
+         y = "Abundance Index",
+         col = "Life Stage",
+         shape = "Life Stage") +
+    theme(legend.position = "none")
+
+plotly_out(p)
+```
+
+```{r}
+#| label: fig-brnBoxplotTimeSeries
+#| fig-cap: "Time series of abundance index for brown shrimp, focused on the variability between life stages within each year."
+#| fig-width: 7
+#| fig-height: 5
+
+p <- ggplot(brn,
+            aes(x = shrimp_year, 
+                y = abundIndex,
+                group = shrimp_year
+            )) +
+    geom_hline(yintercept = 0,
+               col = "gray40",
+               linewidth = 0.5) +
+    geom_boxplot(fill = "gray92",
+                 col = "gray20",
+                 alpha = 0.5,
+                 outliers = FALSE) +
+    geom_point(aes(col = life_stage,
+                   shape = life_stage),
+               size = 3) +
+    theme_bw() +
+    scale_color_manual(values = palcols) +
+    scale_shape_manual(values = shps) +
+    labs(title = "Brown shrimp abundance index by year",
+         x = "Shrimp Year",
+         y = "Abundance Index",
+         col = "Life Stage",
+         shape = "Life Stage") +
+    theme(legend.position = "bottom")
+
+plotly_out(p)
+```
+
+
+### PCA  
+
+```{r}
+brn_pca <- rda(brn_wide[2:ncol(brn_wide)])
+
+# pull out info
+eigs <- summary(eigenvals(brn_pca))
+row.scores <- scores(brn_pca, choices = 1:3)$sites
+col.scores <- data.frame(scores(brn_pca, choices = 1:3)$species) |> 
+    rownames_to_column("column")
+row.scores <- cbind(brn_wide, row.scores)
+```
+
+
+```{r}
+#| label: tbl-brnPCAeigenvalues
+
+knitr::kable(eigs,
+             caption = "Variance explained by PC axes",
+             digits = 4)
+
+```
+
+```{r}
+#| label: fig-brnScreePlot
+#| fig-cap: "Screeplot for brown shrimp PCA."
+
+screeplot(brn_pca, type = "l")
+```
+
+```{r}
+#| label: tbl-brnPCAloadings
+
+
+knitr::kable(scores(brn_pca, 
+                    choices = 1:3,
+                    display = "species",
+                    scaling = 0),
+             caption = "unscaled loadings onto PC axes",
+             digits = 4)
+```
+
+```{r}
+#| label: fig-brnPCAbiplot
+#| fig-cap: "Biplot from brown shrimp PCA. Each point represents a year. Columns were life stages, rows were years, and cell values were abundance index."
+
+p <- ggplot(row.scores,
+       aes(x = PC1,
+           y = PC2)) +
+    geom_segment(data = col.scores,
+                 aes(x = 0, y = 0,
+                     xend = PC1, yend = PC2),
+                 col = "red",
+                 arrow = arrow(length = unit(0.15, "inches")),
+                 linewidth = 0.4,
+                 alpha = 0.6) +
+    geom_text(data = col.scores,
+              aes(x = PC1*1.1, y = PC2*1.1,
+                  label = column),
+              col = "red",
+              size = 3.5) +
+    geom_text(aes(label = shrimp_year,
+                  col = shrimp_year)) +
+    khroma::scale_color_smoothrainbow() +
+    theme_bw() +
+    labs(title = "Brown Shrimp PCA biplot",
+         x = paste0("PC1 (", round(eigs[2, 1]*100, 2), "%)"),
+         y = paste0("PC2 (", round(eigs[2, 2]*100, 2), "%)"))
+
+plotly_out(p)
+
+```
+
+```{r}
+#| label: fig-brnPCA3d
+#| fig-cap: "3-dimensional plot of brown shrimp PCA. Each point represents a year."
+#| eval: false
+#| eval-html: true
+
+fig <- plot_ly() %>% 
+    add_trace(data = row.scores,
+              type = "scatter3d",
+              mode = "markers",
+              x = ~PC1,
+              y = ~PC2,
+              z = ~PC3,
+              color = ~shrimp_year,
+              marker = list(size = 6,
+                            opacity = 0.9)
+    ) 
+
+# now add lines, text, and cross-hatches for each identified loading
+for (i in 1:nrow(col.scores)) {
+    fig <- fig %>% 
+        add_paths(
+            x = c(0, col.scores$PC1[i]),
+            y = c(0, col.scores$PC2[i]),
+            z = c(0, col.scores$PC3[i]),
+            # type = "scatter3d",
+            mode = "lines",
+            line = list(color = "red", width = 4),
+            showlegend = FALSE
+        )  |>
+        add_text(
+            x = col.scores$PC1[i],
+            y = col.scores$PC2[i],
+            z = col.scores$PC3[i],
+            text = col.scores$column[i],
+            textfont = list(color = "red", size = 12),
+            showlegend = FALSE
+        )  %>% 
+        add_trace(
+            type = "scatter3d",
+            mode = "markers",
+            x = col.scores$PC1[i],
+            y = col.scores$PC2[i],
+            z = col.scores$PC3[i],
+            marker = list(size = 6,
+                          color = "red",
+                          symbol = "cross"),
+            showlegend = FALSE
+        )
+        
+}
+
+# print the plot
+fig
+```
+
+### Correlations between life stages  
+
+```{r}
+#| label: fig-brnCorrMatrix
+#| fig-cap: "Pairs plot of brown shrimp life stages, with Spearman correlation coefficients in the upper triangle."
+brn_wide |> 
+    select(-shrimp_year) |> 
+    ggpairs(upper = list(continuous = wrap("cor", 
+                                           method = "spearman")),
+            lower = list(continuous = wrap(lowerFn)))
+```
+
+Juveniles positively correlated with subadults. Adult landings positively correlated with juveniles and subadults.  
+
+### Cross-correlations (lags)  
+
+The lag k value returned by ccf(x, y) estimates the correlation between x[t+k] and y[t].  
+
+These are Pearson correlation coefficients, so lag-0 correlations will be a little different than the Spearman coefficients in the pairs plots.  
+
+#### Juveniles vs. subadults
+
+```{r}
+#| label: fig-brnLagJvSubad
+#| fig-cap: "Cross-correlation between juvenile and adult stages of brown shrimp"
+print(ccf(brn_wide$juvenile, brn_wide$subadult))
+```
+
+The highest correlation is at lag 0: the time series are most correlated without lagging either of them. Lag -2 is almost as big, but doesn't seem to make much sense - juveniles 2 years ago correlated with this year's subadults? 
+
+#### Postlarvae vs. adults  
+
+Can we see if adults are correlated with the following year's postlarvae?  
+
+```{r}
+#| label: fig-brnLagPlvAd
+#| fig-cap: "Cross-correlation between postlarval and adult stages of brown shrimp"
+
+print(ccf(brn_wide$postlarval, brn_wide$adult))
+```
+
+Nothing shows up except something at 5 years, which could just be noise.  
+
+## White Shrimp  
+
+### Time Series  
+
+```{r}
+#| label: fig-whtTimeSeries
+#| fig-cap: "Time series of white shrimp abundance index by life stage."
+#| fig-width: 5
+#| fig-height: 7
+
+p <- ggplot(wht,
+       aes(x = shrimp_year, y = abundIndex,
+           col = life_stage,
+           shape = life_stage)) +
+    geom_hline(yintercept = 0,
+               col = "gray40",
+               linewidth = 0.5) +
+    geom_point() +
+    geom_line() +
+    facet_wrap(~life_stage, scales = "free_y", ncol = 1) +
+    theme_bw() +
+    scale_color_manual(values = palcols) +
+    scale_shape_manual(values = shps) +
+    labs(title = "White Shrimp",
+         x = "Shrimp Year",
+         y = "Abundance Index",
+         col = "Life Stage",
+         shape = "Life Stage") +
+    theme(legend.position = "none")
+
+plotly_out(p)
+```
+
+```{r}
+#| label: fig-whtBoxplotTimeSeries
+#| fig-cap: "Time series of abundance index for white shrimp, focused on the variability between life stages within each year."
+#| fig-width: 7
+#| fig-height: 5
+
+p <- ggplot(wht,
+            aes(x = shrimp_year, 
+                y = abundIndex,
+                group = shrimp_year
+            )) +
+    geom_hline(yintercept = 0,
+               col = "gray40",
+               linewidth = 0.5) +
+    geom_boxplot(fill = "gray92",
+                 col = "gray20",
+                 alpha = 0.5,
+                 outliers = FALSE) +
+    geom_point(aes(col = life_stage,
+                   shape = life_stage),
+               size = 3) +
+    theme_bw() +
+    scale_color_manual(values = palcols) +
+    scale_shape_manual(values = shps) +
+    labs(title = "White shrimp abundance index by year",
+         x = "Shrimp Year",
+         y = "Abundance Index",
+         col = "Life Stage",
+         shape = "Life Stage") +
+    theme(legend.position = "bottom")
+
+plotly_out(p)
+```
+
+### PCA  
+
+```{r}
+wht_pca <- rda(wht_wide[2:ncol(wht_wide)])
+
+# pull out info
+eigs <- summary(eigenvals(wht_pca))
+row.scores <- scores(wht_pca, choices = 1:3)$sites
+col.scores <- data.frame(scores(wht_pca, choices = 1:3)$species) |> 
+    rownames_to_column("column")
+row.scores <- cbind(wht_wide, row.scores)
+```
+
+
+```{r}
+#| label: tbl-whtPCAeigenvalues
+
+knitr::kable(eigs,
+             caption = "Variance explained by PC axes",
+             digits = 4)
+
+```
+
+```{r}
+#| label: fig-whtScreePlot
+#| fig-cap: "Screeplot for white shrimp PCA."
+
+screeplot(wht_pca, type = "l")
+```
+
+```{r}
+#| label: tbl-whtPCAloadings
+
+
+knitr::kable(scores(wht_pca, 
+                    choices = 1:3,
+                    display = "species",
+                    scaling = 0),
+             caption = "unscaled loadings onto PC axes",
+             digits = 4)
+```
+
+```{r}
+#| label: fig-whtPCAbiplot
+#| fig-cap: "Biplot from white shrimp PCA. Each point represents a year. Columns were life stages, rows were years, and cell values were abundance index."
+
+p <- ggplot(row.scores,
+       aes(x = PC1,
+           y = PC2)) +
+    geom_segment(data = col.scores,
+                 aes(x = 0, y = 0,
+                     xend = PC1, yend = PC2),
+                 col = "red",
+                 arrow = arrow(length = unit(0.15, "inches")),
+                 linewidth = 0.4,
+                 alpha = 0.6) +
+    geom_text(data = col.scores,
+              aes(x = PC1*1.1, y = PC2*1.1,
+                  label = column),
+              col = "red",
+              size = 3.5) +
+    geom_text(aes(label = shrimp_year,
+                  col = shrimp_year)) +
+    khroma::scale_color_smoothrainbow() +
+    theme_bw() +
+    labs(title = "White Shrimp PCA biplot",
+         x = paste0("PC1 (", round(eigs[2, 1]*100, 2), "%)"),
+         y = paste0("PC2 (", round(eigs[2, 2]*100, 2), "%)"))
+
+plotly_out(p)
+
+```
+
+```{r}
+#| label: fig-whtPCA3d
+#| fig-cap: "3-dimensional plot of white shrimp PCA. Each point represents a year."
+#| eval: false
+#| eval-html: true
+
+fig <- plot_ly() %>% 
+    add_trace(data = row.scores,
+              type = "scatter3d",
+              mode = "markers",
+              x = ~PC1,
+              y = ~PC2,
+              z = ~PC3,
+              color = ~shrimp_year,
+              marker = list(size = 6,
+                            opacity = 0.9)
+    ) 
+
+# now add lines, text, and cross-hatches for each identified loading
+for (i in 1:nrow(col.scores)) {
+    fig <- fig %>% 
+        add_paths(
+            x = c(0, col.scores$PC1[i]),
+            y = c(0, col.scores$PC2[i]),
+            z = c(0, col.scores$PC3[i]),
+            # type = "scatter3d",
+            mode = "lines",
+            line = list(color = "red", width = 4),
+            showlegend = FALSE
+        )  |>
+        add_text(
+            x = col.scores$PC1[i],
+            y = col.scores$PC2[i],
+            z = col.scores$PC3[i],
+            text = col.scores$column[i],
+            textfont = list(color = "red", size = 12),
+            showlegend = FALSE
+        )  %>% 
+        add_trace(
+            type = "scatter3d",
+            mode = "markers",
+            x = col.scores$PC1[i],
+            y = col.scores$PC2[i],
+            z = col.scores$PC3[i],
+            marker = list(size = 6,
+                          color = "red",
+                          symbol = "cross"),
+            showlegend = FALSE
+        )
+        
+}
+
+# print the plot
+fig
+```
+
+### Correlations between life stages  
+
+```{r}
+#| label: fig-whtCorrMatrix
+#| fig-cap: "Pairs plot of white shrimp life stages, with Spearman correlation coefficients in the upper triangle."
+wht_wide |> 
+    select(-shrimp_year) |> 
+    ggpairs(upper = list(continuous = wrap("cor", 
+                                           method = "spearman")),
+            lower = list(continuous = wrap(lowerFn)))
+```
+
+Subadults positively correlated with landings (both spawning and non-spawning); interesting. Adult spawning from SEAMAP is positively correlated with adult spawning landings. Small negative correlation between non-spawning adults in SEAMAP vs. landings, though the graph mostly looks like scatter.  
+
+
+### Cross-correlations (lags)  
+
+The lag k value returned by ccf(x, y) estimates the correlation between x[t+k] and y[t].  
+
+These are Pearson correlation coefficients, so lag-0 correlations will be a little different than the Spearman coefficients in the pairs plots.  
+
+#### Juveniles vs. subadults
+
+```{r}
+#| label: fig-whtLagJvSubad
+#| fig-cap: "Cross-correlation between juvenile and adult stages of white shrimp"
+
+print(ccf(wht_wide$juvenile, wht_wide$subadult))
+```
+
+Nope, nothing to see.
+
+
+#### Postlarvae vs. spawning adults  
+
+Can we see if adults are correlated with the following year's postlarvae?  
+
+```{r}
+#| label: fig-whtLagPlvAdSp
+#| fig-cap: "Cross-correlation between postlarval and adult (spawning) stages of white shrimp"
+
+print(ccf(wht_wide$postlarval, wht_wide$adult.spawning))
+```
+
+Again, not much to see.   
+
+
+## About
+
+**Input `.qmd` file** for this section was: **`r xfun::with_ext(knitr::current_input(), "qmd")`** and can be found in the main directory.  
+
+**Input data file(s)** - in `data/processed`:  
+
+-   `brn_abundAndEnv.csv`
+-   `wht_abundAndEnv.csv`

@@ -1,3 +1,40 @@
+# definitions ----
+# column selection order ----
+# not really functions; objects that I want in the environment
+sel_order_monthly <- c("survey", "species", "life_stage", 
+                       "year", "month", "shrimp_year",
+                       "abundance_measure", "abundance")
+sel_order_annual <- c("survey", "species", "life_stage", 
+                      "shrimp_year",
+                      "abundance_measure", "abundance",
+                      "sqrt_abundance")
+sel_order_annual_extra <- c("survey", "species", "life_stage", 
+                            "shrimp_year",
+                            "abundance_measure", 
+                            "abundance", "sqrt_abundance",
+                            "abundance_sum", "sqrt_abundance_sum")
+
+# common time period definition ----
+# for trimming files
+common_shrimpYears <- seq(1989, 2017)
+
+
+# life stage ordering ----
+ls_order_brn <- c("postlarval",
+                  "juvenile",
+                  "subadult",
+                  "adult",
+                  "adult.landings")
+
+ls_order_wht <- c("postlarval",
+                  "juvenile",
+                  "subadult",
+                  "adult.nonspawning",
+                  "adult.spawning",
+                  "adult.nonspawning.landings",
+                  "adult.spawning.landings")
+
+
 # size distribution, colored by month, faceted by species ----
 beeswarm_sizeDistn <- function(df, x, y, month, survey){
     # all options except df need to be fed in as character strings
@@ -95,27 +132,7 @@ add_cohorts <- function(df, lifestage){
 # if desired, to check the function:
 # source(here::here("R", "tests.R"))
 
-
-# column selection order ----
-# not really functions; objects that I want in the environment
-sel_order_monthly <- c("survey", "species", "life_stage", 
-                       "year", "month", "shrimp_year",
-                       "abundance_measure", "abundance")
-sel_order_annual <- c("survey", "species", "life_stage", 
-                      "shrimp_year",
-                      "abundance_measure", "abundance",
-                      "sqrt_abundance")
-sel_order_annual_extra <- c("survey", "species", "life_stage", 
-                      "shrimp_year",
-                      "abundance_measure", 
-                      "abundance", "sqrt_abundance",
-                      "abundance_sum", "sqrt_abundance_sum")
-
-# common time period definition ----
-# for trimming files
-common_shrimpYears <- seq(1989, 2017)
-
-
+#
 # function to calculate consec days ----
 consec_stats <- function(data, threshold){
     # data is a vector of temperature values
@@ -149,10 +166,11 @@ consec_stats <- function(data, threshold){
     summ_df
 }
 
+# plotly ----
 # deal with plotly: interactive in html; static in pdf
 
 plotly_out <- function(p, legend_pos = "bottom") {
-    if (knitr::is_html_output()) {
+    if (interactive() || knitr::is_html_output()){
         # Map positions to Plotly layout settings
         legend_settings <- switch(
             legend_pos,
@@ -174,4 +192,13 @@ plotly_out <- function(p, legend_pos = "bottom") {
         # PDF/LaTeX just uses the ggplot legend settings
         p
     }
+}
+
+# correlation plot function ----
+lowerFn <- function(data, mapping, method = "lm", ...) {
+    p <- ggplot(data = data, mapping = mapping) +
+        geom_point(colour = "navy", alpha = 0.8) +
+        geom_smooth(method = method, color = "darkorange", 
+                    se = FALSE, linewidth = 0.8, ...)
+    p
 }

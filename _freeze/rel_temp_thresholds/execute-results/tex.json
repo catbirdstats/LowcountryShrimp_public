@@ -1,0 +1,21 @@
+{
+  "hash": "33332d7e6cb223c133c3193133fd3dfc",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\nformat:\n    html:\n        fig-width: 5\n        fig-height: 7\n    pdf:\n        fig-width: 6\n        fig-height: 6\n---\n\n\n\n\n# Temperature thresholds  \n\nThis chapter will look at temperature thresholds and relationships to abundance indices.  \n\nRelationships will only be examined in years where we have data from all life stages (using the variable `abundanceIndex_commonTimePeriod`).  \n\n\n\n::: {.cell}\n\n:::\n\n\n\nRead in data; trim to only common years; put life stages in proper order.  \n\n\n\n::: {.cell}\n\n:::\n\n\n\n## Brown Shrimp  \n\n\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n::: {.cell-output-display}\n![Estimated Spearman correlations between each life stage and the total number of winter days below a selected temperature threshold for brown shrimp. Points represent the estimated Spearman correlation coefficient, and vertical gray lines represnt the 95% confidence interval for the coefficient. Points are colored brown if the correlation is not significantly different from 0 (p > 0.05) and teal if the correlation is significant (p < 0.05). Significant points are also larger. These p-values are unadjusted, so expect around 1 'false' significant result for every 20 tests at this level.](rel_temp_thresholds_files/figure-pdf/fig-brnCorrTotalColdDays-1.pdf){#fig-brnCorrTotalColdDays}\n:::\n:::\n\n::: {.cell}\n::: {.cell-output-display}\n![Estimated Spearman correlations between each life stage and the largest number of consecutive winter days below a selected temperature threshold for brown shrimp. Points represent the estimated Spearman correlation coefficient, and vertical gray lines represnt the 95% confidence interval for the coefficient. Points are colored brown if the correlation is not significantly different from 0 (p > 0.05) and teal if the correlation is significant (p < 0.05). These p-values are unadjusted, so expect around 1 'false' significant result for every 20 tests at this level.](rel_temp_thresholds_files/figure-pdf/fig-brnCorrLongestColdSpell-1.pdf){#fig-brnCorrLongestColdSpell}\n:::\n:::\n\n::: {.cell}\n::: {.cell-output-display}\n![](rel_temp_thresholds_files/figure-pdf/unnamed-chunk-6-1.pdf)\n:::\n:::\n\n\n\n## White Shrimp  \n\n\nFor white shrimp, need to break up the columns reasonably to correlate postlarval and juvenile with one winter, and adults with the next.  \n\n\n\n## About\n\n**Input `.qmd` file** for this section was: **rel_temp_thresholds.qmd** and can be found in the main directory.  \n\n**Input data file(s)** - in `data/processed`:  \n\n-   `brn_abundAndEnv.csv`\n-   `wht_abundAndEnv.csv`\n",
+    "supporting": [
+      "rel_temp_thresholds_files\\figure-pdf"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {
+      "knitr": [
+        "{\"type\":\"list\",\"attributes\":{},\"value\":[]}"
+      ]
+    },
+    "preserve": null,
+    "postProcess": false
+  }
+}
