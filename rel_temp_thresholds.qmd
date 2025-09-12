@@ -53,6 +53,7 @@ wht_wide <- wht |>
 
 ## Brown Shrimp  
 
+
 ```{r}
 totalDays <- names(brn)[str_starts(names(brn), "totalDays")]
 comp_grid <- expand.grid(life_stage = levels(brn$life_stage),
@@ -208,4 +209,4 @@ For white shrimp, need to break up the columns reasonably to correlate postlarva
 **Input data file(s)** - in `data/processed`:  
 
 -   `brn_abundAndEnv.csv`
--   `wht_abundAndEnv.csv`
+-   `wht_abundAndEnv.csv`  

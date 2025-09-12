@@ -170,7 +170,7 @@ consec_stats <- function(data, threshold){
 # deal with plotly: interactive in html; static in pdf
 
 plotly_out <- function(p, legend_pos = "bottom") {
-    if (interactive() || knitr::is_html_output()){
+    if (knitr::is_html_output()){
         # Map positions to Plotly layout settings
         legend_settings <- switch(
             legend_pos,

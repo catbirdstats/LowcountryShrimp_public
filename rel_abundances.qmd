@@ -207,57 +207,57 @@ plotly_out(p)
 ```{r}
 #| label: fig-brnPCA3d
 #| fig-cap: "3-dimensional plot of brown shrimp PCA. Each point represents a year."
-#| eval: false
-#| eval-html: true
 
-fig <- plot_ly() %>% 
-    add_trace(data = row.scores,
-              type = "scatter3d",
-              mode = "markers",
-              x = ~PC1,
-              y = ~PC2,
-              z = ~PC3,
-              color = ~shrimp_year,
-              marker = list(size = 6,
-                            opacity = 0.9)
-    ) 
-
-# now add lines, text, and cross-hatches for each identified loading
-for (i in 1:nrow(col.scores)) {
-    fig <- fig %>% 
-        add_paths(
-            x = c(0, col.scores$PC1[i]),
-            y = c(0, col.scores$PC2[i]),
-            z = c(0, col.scores$PC3[i]),
-            # type = "scatter3d",
-            mode = "lines",
-            line = list(color = "red", width = 4),
-            showlegend = FALSE
-        )  |>
-        add_text(
-            x = col.scores$PC1[i],
-            y = col.scores$PC2[i],
-            z = col.scores$PC3[i],
-            text = col.scores$column[i],
-            textfont = list(color = "red", size = 12),
-            showlegend = FALSE
-        )  %>% 
-        add_trace(
-            type = "scatter3d",
-            mode = "markers",
-            x = col.scores$PC1[i],
-            y = col.scores$PC2[i],
-            z = col.scores$PC3[i],
-            marker = list(size = 6,
-                          color = "red",
-                          symbol = "cross"),
-            showlegend = FALSE
-        )
+if (knitr::is_html_output()){
+    fig <- plot_ly() %>% 
+        add_trace(data = row.scores,
+                  type = "scatter3d",
+                  mode = "markers",
+                  x = ~PC1,
+                  y = ~PC2,
+                  z = ~PC3,
+                  color = ~shrimp_year,
+                  marker = list(size = 6,
+                                opacity = 0.9)
+        ) 
+    
+    # now add lines, text, and cross-hatches for each identified loading
+    for (i in 1:nrow(col.scores)) {
+        fig <- fig %>% 
+            add_paths(
+                x = c(0, col.scores$PC1[i]),
+                y = c(0, col.scores$PC2[i]),
+                z = c(0, col.scores$PC3[i]),
+                # type = "scatter3d",
+                mode = "lines",
+                line = list(color = "red", width = 4),
+                showlegend = FALSE
+            )  |>
+            add_text(
+                x = col.scores$PC1[i],
+                y = col.scores$PC2[i],
+                z = col.scores$PC3[i],
+                text = col.scores$column[i],
+                textfont = list(color = "red", size = 12),
+                showlegend = FALSE
+            )  %>% 
+            add_trace(
+                type = "scatter3d",
+                mode = "markers",
+                x = col.scores$PC1[i],
+                y = col.scores$PC2[i],
+                z = col.scores$PC3[i],
+                marker = list(size = 6,
+                              color = "red",
+                              symbol = "cross"),
+                showlegend = FALSE
+            )
         
+    }
+    
+    # print the plot
+    fig
 }
-
-# print the plot
-fig
 ```
 
 ### Correlations between life stages  
@@ -446,57 +446,59 @@ plotly_out(p)
 ```{r}
 #| label: fig-whtPCA3d
 #| fig-cap: "3-dimensional plot of white shrimp PCA. Each point represents a year."
-#| eval: false
 #| eval-html: true
+#| eval-pdf: false
 
-fig <- plot_ly() %>% 
-    add_trace(data = row.scores,
-              type = "scatter3d",
-              mode = "markers",
-              x = ~PC1,
-              y = ~PC2,
-              z = ~PC3,
-              color = ~shrimp_year,
-              marker = list(size = 6,
-                            opacity = 0.9)
-    ) 
-
-# now add lines, text, and cross-hatches for each identified loading
-for (i in 1:nrow(col.scores)) {
-    fig <- fig %>% 
-        add_paths(
-            x = c(0, col.scores$PC1[i]),
-            y = c(0, col.scores$PC2[i]),
-            z = c(0, col.scores$PC3[i]),
-            # type = "scatter3d",
-            mode = "lines",
-            line = list(color = "red", width = 4),
-            showlegend = FALSE
-        )  |>
-        add_text(
-            x = col.scores$PC1[i],
-            y = col.scores$PC2[i],
-            z = col.scores$PC3[i],
-            text = col.scores$column[i],
-            textfont = list(color = "red", size = 12),
-            showlegend = FALSE
-        )  %>% 
-        add_trace(
-            type = "scatter3d",
-            mode = "markers",
-            x = col.scores$PC1[i],
-            y = col.scores$PC2[i],
-            z = col.scores$PC3[i],
-            marker = list(size = 6,
-                          color = "red",
-                          symbol = "cross"),
-            showlegend = FALSE
-        )
+if (knitr::is_html_output()){
+    fig <- plot_ly() %>% 
+        add_trace(data = row.scores,
+                  type = "scatter3d",
+                  mode = "markers",
+                  x = ~PC1,
+                  y = ~PC2,
+                  z = ~PC3,
+                  color = ~shrimp_year,
+                  marker = list(size = 6,
+                                opacity = 0.9)
+        ) 
+    
+    # now add lines, text, and cross-hatches for each identified loading
+    for (i in 1:nrow(col.scores)) {
+        fig <- fig %>% 
+            add_paths(
+                x = c(0, col.scores$PC1[i]),
+                y = c(0, col.scores$PC2[i]),
+                z = c(0, col.scores$PC3[i]),
+                # type = "scatter3d",
+                mode = "lines",
+                line = list(color = "red", width = 4),
+                showlegend = FALSE
+            )  |>
+            add_text(
+                x = col.scores$PC1[i],
+                y = col.scores$PC2[i],
+                z = col.scores$PC3[i],
+                text = col.scores$column[i],
+                textfont = list(color = "red", size = 12),
+                showlegend = FALSE
+            )  %>% 
+            add_trace(
+                type = "scatter3d",
+                mode = "markers",
+                x = col.scores$PC1[i],
+                y = col.scores$PC2[i],
+                z = col.scores$PC3[i],
+                marker = list(size = 6,
+                              color = "red",
+                              symbol = "cross"),
+                showlegend = FALSE
+            )
         
+    }
+    
+    # print the plot
+    fig
 }
-
-# print the plot
-fig
 ```
 
 ### Correlations between life stages  
