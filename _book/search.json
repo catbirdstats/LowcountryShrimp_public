@@ -24,7 +24,7 @@
     "href": "index.html#collaborators",
     "title": "Lowcountry Shrimp Dataset Deep Dive",
     "section": "Collaborators",
-    "text": "Collaborators\nProject PIs were Robert Dunn1,2 and Joshua Stone1. The work group that guided the compilation of this document included Matt Kimball1, Michael Kendrick3, Liam Batchelder1, Graham Wagner1, and Maggie1. The R code developed to work with the data and produce this document was written by Kim Cressman4.\n1 University of South Carolina, Baruch Marine Lab\n2 Ecological Dynamics, LLC\n3 South Carolina Department of Natural Resources\n4 Catbird Stats, LLC",
+    "text": "Collaborators\nRobert Dunn1,2 was the project PI. The work group that guided the compilation of this document included Matt Kimball1, Joshua Stone1, Mihael Kendrick3, Liam Batchelder1, and Graham Wagner1. The R code developed to work with the data and produce this document was written by Kim Cressman4. Data used by the workgroup were generously provided by the SC Department of Natural Resources, GA Department of Natural Resources, South Atlantic Fishery Management Council, and the University of South Carolina’s Baruch Marine Field Laboratory.\n1 University of South Carolina, Baruch Marine Laboratory\n2 Ecological Dynamics, LLC\n3 South Carolina Department of Natural Resources\n4 Catbird Stats, LLC",
     "crumbs": [
       "Summary"
     ]
