@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Lowcountry Shrimp Dataset Deep Dive - 2&nbsp; Data Processing and Directory Structure</title>
+<title>Lowcountry Shrimp Dataset Deep Dive - 2&nbsp; Data and Directory Structure</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -81,7 +81,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./shrimp_year_explanations.html">Definitions and Structure</a></li><li class="breadcrumb-item"><a href="./directory_structure.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Processing and Directory Structure</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./shrimp_year_explanations.html">Definitions and Structure</a></li><li class="breadcrumb-item"><a href="./directory_structure.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data and Directory Structure</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -133,7 +133,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./directory_structure.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Processing and Directory Structure</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data and Directory Structure</span></span></a>
   </div>
 </li>
       </ul>
@@ -289,7 +289,11 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#directory-organization" id="toc-directory-organization" class="nav-link active" data-scroll-target="#directory-organization"><span class="header-section-number">2.1</span> Directory organization</a></li>
-  <li><a href="#data-data-data" id="toc-data-data-data" class="nav-link" data-scroll-target="#data-data-data"><span class="header-section-number">2.2</span> Data, data, data</a></li>
+  <li><a href="#data-data-data" id="toc-data-data-data" class="nav-link" data-scroll-target="#data-data-data"><span class="header-section-number">2.2</span> Data, data, data</a>
+  <ul class="collapse">
+  <li><a href="#brown-shrimp-combined-file" id="toc-brown-shrimp-combined-file" class="nav-link" data-scroll-target="#brown-shrimp-combined-file">Brown Shrimp combined file</a></li>
+  <li><a href="#white-shrimp-combined-file" id="toc-white-shrimp-combined-file" class="nav-link" data-scroll-target="#white-shrimp-combined-file">White Shrimp combined file</a></li>
+  </ul></li>
   <li><a href="#about" id="toc-about" class="nav-link" data-scroll-target="#about"><span class="header-section-number">2.3</span> About</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/catbirdstats/LowcountryShrimp_public/blob/main/directory_structure.qmd" target="_blank" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></nav>
@@ -297,9 +301,9 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./shrimp_year_explanations.html">Definitions and Structure</a></li><li class="breadcrumb-item"><a href="./directory_structure.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Processing and Directory Structure</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./shrimp_year_explanations.html">Definitions and Structure</a></li><li class="breadcrumb-item"><a href="./directory_structure.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data and Directory Structure</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-structure" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Processing and Directory Structure</span></span></h1>
+<h1 class="title"><span id="sec-structure" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data and Directory Structure</span></span></h1>
 </div>
 
 
@@ -332,24 +336,53 @@ ul.task-list li input[type="checkbox"] {
 </li>
 <li><code>data/intermediate</code> = time series with some simplifications for reporting and summarizing; generally outputs from the “Data Exploration” chapters of this book<br>
 </li>
-<li><code>data/processed</code> - as of this writing, I haven’t processed data yet. This folder will contain data that are aggregated to different levels:<br>
+<li><code>data/processed</code> - combined data: abundance summarized to abundance index, plus environmental metrics for each shrimp year. Separate files for brown and white shrimp. Folders contain individual pieces that contributed to these final main files, plus additional detail.<br>
 </li>
-<li>month or season<br>
+<li><code>byLifeStage</code> - single file for each life stage, summarized to shrimp year, and usually containing both species. The species have separate files for the ‘landings’ life stage due to different temporal resolution of input data. This folder has a sub-folder, <code>moreDetailed</code>, in which different sampling levels - month, state/region, etc. - are retained.<br>
 </li>
-<li>shrimp year (based on month or season); these files will also contain a column for the abundance index</li>
+<li><code>combinedLifeStages</code> - contains a single file, with abundance index calculated for each life stage of both species of shrimp. This was one of the building blocks to the files in the main <code>processed</code> directory.<br>
+</li>
+<li><code>environmental</code> - contains a file for each species, with summarized nursery period salinities and winter temperatures.</li>
 </ul>
-<p>The older version of the processed data folder has the following subfolders:</p>
+<section id="brown-shrimp-combined-file" class="level3">
+<h3 class="anchored" data-anchor-id="brown-shrimp-combined-file">Brown Shrimp combined file</h3>
+<p><code>brn_abundAndEnv.csv</code>, in <code>data/processed</code>.</p>
+<p>Columns are:</p>
 <ul>
-<li><em>01 Survey level</em> - averaged to month and then shrimp year, per survey. ALL files have the same columns: survey, species, life_stage, shrimp_year, abundance_measure, abundance, sqrt_abundance<br>
+<li><code>survey</code> - which data set or combination of datasets was used for this life stage<br>
 </li>
-<li><em>02 Life Stage level</em> - averaged survey results to shrimp year x life stage, if relevant Again all files have same columns. Survey, species, life_stage, shrimp_year, abundance, abundance_measure (if average of two surveys, will be told here), abundance, sqrt_abundance<br>
+<li><code>species</code> - brown or white; all ‘brown’ in this file</li>
+<li><code>life_stage</code> - life stage of the shrimp</li>
+<li><code>shrimp_year</code> - shrimp year for which the information applies. This file contains one row for every life stage for every shrimp year. Note, nursery period and winter metrics will be the same for each life stage in the same shrimp year.<br>
 </li>
-<li><em>03 Combined abundance</em> - combined all abundance files and calculated abundance index<br>
+<li><code>abundance_measure</code> - the metric originally used as “abundance” (e.g.&nbsp;density, count, weight)<br>
 </li>
-<li><em>04 Environmental Survey level</em><br>
+<li><code>abundance</code> - the total, for the shrimp year, of monthly abundances (see the data processing chapters for detail)<br>
 </li>
-<li><em>05 Combined environmental</em></li>
+<li><code>sqrt_abundance</code> - square root of abundance; this is the value that was normalized for each life stage in order to calculate abundance index.<br>
+</li>
+<li><code>abundanceIndex_fullTimePeriod</code>: abundance index as calculated/normalized for the entire time series of the life stage.<br>
+</li>
+<li><code>abundanceIndex_commonTimePeriod</code>: abundance index as calculated/normalized across only the shrimp years years that are common to all life stages (1989-2017).<br>
+</li>
+<li><code>nursery_sal.CH07</code> / <code>.CH09</code> / <code>.CH10</code> / <code>.CH18</code> / <code>.mean07.09.10</code>: nursery period salinity for each shrimp year at different sampling stations in Charleston Harbor, from SCDNR’s monthly sampling. Stations used are CH07, CH09, CH10, and CH18. During data exploration, CH18 showed fairly different patterns than the other stations, so was excluded from a mean between stations CH07, CH09, and CH10 for each month. These individual stations and the mean are all provided because we did not get to a stage of determining which would best represent nursery period salinity conditions. For brown shrimp, the nursery period was defined as the months of April through July.<br>
+</li>
+<li><code>winter_wTemp.CHS_min</code> / <code>mean</code> / <code>median</code> / <code>max</code> / <code>p25</code> / <code>p75</code> / <code>sd</code> / <code>iqr</code>: for each shrimp year, winter (December, January, and February) water temperatures at the Charleston Harbor NOAA station were compiled and summarized. Min, mean, median, and max are self-explanatory. p25 is the 25th percentile (1st quantile); p75 is the 75th percentile (3rd quantile); sd is standard deviaion; iqr is interquartile range.<br>
+</li>
+<li><code>totalDays_lessThan7</code> / <code>8</code> / <code>9</code> / <code>10</code> … / <code>16</code>: for each shrimp year, the total number of days in winter (December, January, and February) where the daily mean water temperature reported by the Charleston Harbor NOAA station was below the threshold X degrees Celsius, where the number at the end of the column name is X.<br>
+</li>
+<li><code>totalSpells_lessThan7</code> / <code>8</code> / … / <code>16</code>: a “cold spell” was defined as a period of 7 or more consecutive days in winter (December, January, and February) where the average water temperature at the Charleston Harbor NOAA station was below the threshold X degrees Celsius, where the number at the end of the column name is X.<br>
+</li>
+<li><code>longestSpell_lessThan7</code> / <code>8</code> / … / <code>16</code>: the number of days that the longest “cold spell” in a winter lasted, where “cold spell” is defined as a period of 7 or more consecutive days where the average water temperature at the Charleston Harbor NOAA station was below the threshold X degrees Celsius, where the number at the end of the column name is X.</li>
 </ul>
+</section>
+<section id="white-shrimp-combined-file" class="level3">
+<h3 class="anchored" data-anchor-id="white-shrimp-combined-file">White Shrimp combined file</h3>
+<p><code>wht_abundAndEnv.csv</code>, in <code>data/processed</code>.</p>
+<p>Columns are generally the same as for brown shrimp, BUT white shrimp lives can span two winters - so there are two columns for each winter metric. These columns start with either <code>postlarvWinter</code>, the shrimps’ first winter; or <code>subadultWinter</code>, the winter in which shrimp will be subadults to adults. Fishery managers are more interested in <code>subadultWinter</code> because these are the cold spells that cause the fishery to close. <code>postlarvWinter</code> was calculated as well in case future investigators want to look at effects of cold on the younger life stages.</p>
+<p>In addition to the temperature metrics for both winters, there is a column identifying which calendar year those metrics were summarized from: <code>postlarvWinter_</code> / <code>subadultWinter_calendar_year</code>. Example: for shrimp year 1981, the calendar year 1981 winter (December 1980 through February 1981) corresponds to <code>postlarvWinter</code>, and calendar year 1982 winter (December 1981 through February 1982) corresponds to <code>subadultWinter</code>. Calendar year 1982 winter will be <code>postlarvWinter</code> for shrimp year 1982. So, there is much repetitive information in these files, but I have tried to be very explicit about each piece of information represents and how it relates to the shrimp.</p>
+<p>The other difference between files is a different nursery period. The calculations and column meanings are the same, but the applicable nursery period for white shrimp is June through October.</p>
+</section>
 </section>
 <section id="about" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="about"><span class="header-section-number">2.3</span> About</h2>

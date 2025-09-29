@@ -1,3 +1,309 @@
+---
+format:
+    html:
+        fig-width: 5
+        fig-height: 7
+    pdf:
+        fig-width: 6
+        fig-height: 6
+---
+
 # Nursery Period Salinity  
 
-stuff 
+Mean nursery period salinity was calculated for each shrimp year, based on species, at each of four SCDNR estuarine trawling stations: CH07, CH09, CH10, and CH18.  
+
+We as a group didn't have a chance to decide which station would be most appropriate to use (or if an average would be better), so below I'm setting up the framework using CH10 - because it's on the lower side of the salinities, possibly more representative of the habitats of young shrimp, but not the very lowest station. If you want to use another station or a mean later, you should be able to plug it in more easily than starting from scratch.  
+
+Nursery period salinities are generally pretty well correlated with each other.
+
+Following Batchelder et al. 2024, nursery period was defined as Apr-July for brown shrimp and June-Oct for white shrimp.  
+
+```{r}
+library(tidyverse)
+library(plotly)
+library(corrplot)
+library(GGally)
+
+source(here::here("functions.R"))
+
+in_path <- here::here("data", "processed")
+```
+
+Read in data; trim to only common years; put life stages in proper order; select only salinity columns (get rid of winter).  
+
+```{r}
+# brown
+brn_all <- read.csv(here::here(in_path, "brn_abundAndEnv.csv"))
+brn <- brn_all |> 
+    filter(shrimp_year %in% common_shrimpYears) |> 
+    mutate(life_stage = factor(life_stage, levels = ls_order_brn)) |> 
+    rename(abundIndex = abundanceIndex_commonTimePeriod) |> 
+    select(survey:nursery_sal.mean07.09.10)
+brn_wide <- brn |> 
+    select(shrimp_year, life_stage, abundIndex) |> 
+    pivot_wider(names_from = life_stage,
+                values_from = abundIndex)
+brn_sals <- brn |> 
+    select(shrimp_year, starts_with("nursery_sal")) |> 
+    distinct() |> 
+    pivot_longer(all_of(starts_with("nursery_sal")),
+                 names_to = "Station",
+                 names_prefix = "nursery_sal.",
+                 values_to = "Salinity")
+
+
+# white
+wht_all <- read.csv(here::here(in_path, "wht_abundAndEnv.csv"))
+wht <- wht_all |> 
+    filter(shrimp_year %in% common_shrimpYears) |> 
+    mutate(life_stage = factor(life_stage, levels = ls_order_wht)) |> 
+    rename(abundIndex = abundanceIndex_commonTimePeriod) |> 
+    select(survey:nursery_sal.mean07.09.10)
+wht_wide <- wht |> 
+    select(shrimp_year, life_stage, abundIndex) |> 
+    pivot_wider(names_from = life_stage,
+                values_from = abundIndex)
+wht_sals <- wht |> 
+    select(shrimp_year, starts_with("nursery_sal")) |> 
+    distinct() |> 
+    pivot_longer(all_of(starts_with("nursery_sal")),
+                 names_to = "Station",
+                 names_prefix = "nursery_sal.",
+                 values_to = "Salinity")
+```
+
+
+Set up colors and shapes.  
+
+```{r}
+# for life stages
+palcols <- khroma::color("oslo", reverse = TRUE)(12)[3:11]
+shps <- c(16, 15, 17, 9, 2, 1, 0, 5)
+```
+
+
+## Brown Shrimp  
+
+### Time Series of Nursery Period Salinity  
+
+```{r}
+#| label: fig-brnSalTimeSeries
+#| fig-caption: "Time series of mean nursery period salinity for brown shrimp"
+
+p <- ggplot(filter(brn_sals, Station != "mean07.09.10"),
+       aes(x = shrimp_year,
+           y = Salinity,
+           col = Station,
+           shape = Station)) +
+    geom_point(size = 2, alpha = 0.7) +
+    geom_line() +
+    theme_bw() +
+    labs(x = "Shrimp Year",
+         y = "Mean Nursery Period Salinity (ppt)")
+
+plotly_out(p, "right")
+```
+
+### Nursery period salinity correlations between stations  
+
+```{r}
+#| label: fig-brnSalCorrs
+#| fig-caption: "Pairs plot of brown shrimp nursery period salinity at 4 SCDNR trawling stations, with Spearman correlation coefficients in the uper triangle."
+
+brn |> 
+    select(CH07 = nursery_sal.CH07,
+           CH09 = nursery_sal.CH09,
+           CH10 = nursery_sal.CH10,
+           CH18 = nursery_sal.CH18) |> 
+    ggpairs(upper = list(continuous = wrap("cor", 
+                                           method = "spearman")),
+            lower = list(continuous = wrap(lowerFn)))
+```
+
+
+### Correlation between Life Stages and Nursery Period salinity  
+
+
+```{r}
+stages <- unique(brn$life_stage)
+
+corrs_out <- list()
+
+corrs <- for(i in seq_along(stages)){
+    stg <- stages[i]
+    tmp <- filter(brn, life_stage == stg)
+    cor.all <- cor.test(tmp$abundIndex, tmp$nursery_sal.CH10,
+                   use = "pairwise.complete.obs",
+                   method = "spearman")
+    
+    out <- data.frame(
+        life_stage = stg,
+        coef = round(cor.all$estimate, 3),
+        pval = round(cor.all$p.value, 3),
+        row.names = NULL
+    )
+    
+    corrs_out[[i]] <- out
+    
+}
+
+corrs_all <- bind_rows(corrs_out)
+```
+
+```{r}
+#| label: tbl-brnSalCorrs
+#| tbl-cap: "Correlations between brown shrimp abundance index at each life stage and nursery period salinity at CH10. Estimates represent Spearman correlation coefficients."
+
+knitr::kable(corrs_all,
+             col.names = c("Life Stage",
+                           "Spearman's Rho Estimate",
+                           "p-value"))
+```
+
+
+```{r}
+#| label: fig-brnSalCorrs
+#| tbl-cap: "Graphic of brown shrimp abundance index at each life stage vs. nursery period salinity at CH10. Dashed lines show a linear smooth, whether correlations were significant or not."
+
+p <- ggplot(wht,
+       aes(x = nursery_sal.CH10,
+           y = abundIndex,
+           col = life_stage,
+           shape = life_stage,
+           group = life_stage)) +
+    geom_hline(yintercept = 0,
+               col = "gray40",
+               linewidth = 0.5) +
+    geom_point() +
+    geom_smooth(method = "lm", se = FALSE,
+                alpha = 0.6, linetype = "dashed",
+                linewidth = 0.8) +
+    theme_bw() +
+    theme(legend.position = "none") +
+    scale_color_manual(values = palcols) +
+    scale_shape_manual(values = shps) +
+    facet_wrap(~life_stage, ncol = 1) +
+    labs(x = "Nursery period salinity at CH10",
+         y = "Abundance Index")
+
+plotly_out(p)
+```
+
+
+
+## White Shrimp  
+
+### Time Series of Nursery Period Salinity  
+
+```{r}
+#| label: fig-whtSalTimeSeries
+#| fig-caption: "Time series of mean nursery period salinity for white shrimp"
+
+p <- ggplot(filter(wht_sals, Station != "mean07.09.10"),
+       aes(x = shrimp_year,
+           y = Salinity,
+           col = Station,
+           shape = Station)) +
+    geom_point(size = 2, alpha = 0.7) +
+    geom_line() +
+    theme_bw() +
+    labs(x = "Shrimp Year",
+         y = "Mean Nursery Period Salinity (ppt)")
+
+plotly_out(p, "right")
+```
+
+### Nursery period salinity correlations between stations  
+
+```{r}
+#| label: fig-whtSalCorrs
+#| fig-caption: "Pairs plot of white shrimp nursery period salinity at 4 SCDNR trawling stations, with Spearman correlation coefficients in the uper triangle."
+
+wht |> 
+    select(CH07 = nursery_sal.CH07,
+           CH09 = nursery_sal.CH09,
+           CH10 = nursery_sal.CH10,
+           CH18 = nursery_sal.CH18) |> 
+    ggpairs(upper = list(continuous = wrap("cor", 
+                                           method = "spearman")),
+            lower = list(continuous = wrap(lowerFn)))
+```
+
+### Correlation between Life Stages and Nursery Period salinity  
+
+
+```{r}
+stages <- unique(wht$life_stage)
+
+corrs_out <- list()
+
+corrs <- for(i in seq_along(stages)){
+    stg <- stages[i]
+    tmp <- filter(wht, life_stage == stg)
+    cor.all <- cor.test(tmp$abundIndex, tmp$nursery_sal.CH10,
+                   use = "pairwise.complete.obs",
+                   method = "spearman")
+    
+    out <- data.frame(
+        life_stage = stg,
+        coef = round(cor.all$estimate, 3),
+        pval = round(cor.all$p.value, 3),
+        row.names = NULL
+    )
+    
+    corrs_out[[i]] <- out
+    
+}
+
+corrs_all <- bind_rows(corrs_out)
+```
+
+```{r}
+#| label: tbl-whtSalCorrs
+#| tbl-cap: "Correlations between white shrimp abundance index at each life stage and nursery period salinity at CH10. Estimates represent Spearman correlation coefficients."
+
+knitr::kable(corrs_all,
+             col.names = c("Life Stage",
+                           "Spearman's Rho Estimate",
+                           "p-value"))
+```
+
+
+```{r}
+#| label: fig-whtSalCorrs
+#| tbl-cap: "Graphic of white shrimp abundance index at each life stage vs. nursery period salinity at CH10. Dashed lines show a linear smooth, whether correlations were significant or not."
+
+p <- ggplot(wht,
+       aes(x = nursery_sal.CH10,
+           y = abundIndex,
+           col = life_stage,
+           shape = life_stage,
+           group = life_stage)) +
+    geom_hline(yintercept = 0,
+               col = "gray40",
+               linewidth = 0.5) +
+    geom_point() +
+    geom_smooth(method = "lm", se = FALSE,
+                alpha = 0.6, linetype = "dashed",
+                linewidth = 0.8) +
+    theme_bw() +
+    theme(legend.position = "none") +
+    scale_color_manual(values = palcols) +
+    scale_shape_manual(values = shps) +
+    facet_wrap(~life_stage, ncol = 1) +
+    labs(x = "Nursery period salinity at CH10",
+         y = "Abundance Index")
+
+plotly_out(p)
+```
+
+
+
+## About
+
+**Input `.qmd` file** for this section was: **`r xfun::with_ext(knitr::current_input(), "qmd")`** and can be found in the main directory.  
+
+**Input data file(s)** - in `data/processed`:  
+
+-   `brn_abundAndEnv.csv`
+-   `wht_abundAndEnv.csv`  

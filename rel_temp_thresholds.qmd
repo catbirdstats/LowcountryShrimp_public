@@ -19,10 +19,12 @@ Relationships will only be examined in years where we have data from all life st
 library(tidyverse)
 library(DescTools)   # for SpearmanRho
 library(corrplot)    # for corrplot
+library(plotly)
 
 source(here::here("functions.R"))
 
 in_path <- here::here("data", "processed")
+
 ```
 
 Read in data; trim to only common years; put life stages in proper order.  
@@ -136,10 +138,10 @@ p <- ggplot(corrs_all,
     theme_bw() +
     labs(title = "Brown Shrimp vs. Total Cold Days",
          x = "Temperature threshold (C)",
-         y = "Correlation (Spearman's rho)",
+         y = "Correlation estimate and 95% CI (Spearman's rho)",
          col = "Significant?")
 
-plotly_out(p, "right")
+plotly_out(p, legend_pos = "right")
 ```
 
 
@@ -164,15 +166,89 @@ p <- ggplot(corrs_all,
     theme_bw() +
     labs(title = "Brown Shrimp vs. Longest Cold Spell",
          x = "Temperature threshold (C)",
-         y = "Correlation (Spearman's rho)",
+         y = "Correlation estimate and 95% CI (Spearman's rho)",
          col = "Significant?")
 
-plotly_out(p, "right")
+plotly_out(p, legend_pos = "right")
+```
+
+
+
+## White Shrimp  
+
+
+For white shrimp, not all life stages can be compared to the same winter, so they are broken up appropriately here.  
+
+### Young (postlarvae + juvenile)  
+
+```{r}
+totalDays <- names(wht)[str_starts(names(wht), "postlarvWinter.totalDays")]
+
+comp_grid <- expand.grid(life_stage = levels(wht$life_stage),
+                         totalDays = totalDays)
+
+comp_grid <- comp_grid |> 
+    mutate(longestSpell = str_replace(totalDays, "totalDays", "longestSpell")) |> 
+    filter(life_stage %in% c("postlarval", "juvenile"))
+
+comp_out <- list()
+
+for(i in 1:nrow(comp_grid)){
+    comp.stage <- comp_grid[i, "life_stage"]
+    comp.totalDays <- comp_grid[i, "totalDays"]
+    comp.longestSpell <- comp_grid[i, "longestSpell"]
+    
+    # subset the data frame
+    comp.rows <- which(wht$life_stage == comp.stage)
+    comp.cols <- which(names(wht) %in% c("shrimp_year", "abundIndex", as.character(comp.totalDays), as.character(comp.longestSpell)))
+    
+    
+    comb <- wht[comp.rows, comp.cols]
+    names(comb) <- c("shrimp_year", "abund_index", "totalDays", "longestSpell")
+    
+    # correlation and CI for total # days
+    corr_totalDays <- SpearmanRho(comb$totalDays,
+                                  comb$abund_index,
+                                  use = "pairwise.complete.obs",
+                                  conf.level = 0.95)
+    corr_totalDays <- data.frame("totalDays_estimate" = corr_totalDays["rho"],
+                                 "totalDays_ciLow" = corr_totalDays["lwr.ci"],
+                                 "totalDays_ciHigh" = corr_totalDays["upr.ci"],
+                                 row.names = NULL)
+    
+    # correlation and CI for longest # days
+    corr_mostDays <- SpearmanRho(comb$longestSpell,
+                                 comb$abund_index,
+                                 use = "pairwise.complete.obs",
+                                 conf.level = 0.95)
+    corr_mostDays <- data.frame("consecDays_estimate" = corr_mostDays["rho"],
+                                "consecDays_ciLow" = corr_mostDays["lwr.ci"],
+                                "consecDays_ciHigh" = corr_mostDays["upr.ci"],
+                                row.names = NULL)
+    
+    corr_out <- cbind(comp_grid[i, ],
+                      corr_totalDays,
+                      corr_mostDays)
+    
+    comp_out[[i]] <- corr_out
+}
+
+corrs_all <- bind_rows(comp_out) |> 
+    mutate(totalDays_significant = case_when(totalDays_ciLow * totalDays_ciHigh > 0 ~ "yes",
+                                            .default = "no"),
+           consecDays_significant = case_when(consecDays_ciLow * consecDays_ciHigh > 0 ~ "yes",
+                                            .default = "no"),
+           thresholdC = as.numeric(str_remove(totalDays, "postlarvWinter.totalDays_lessThan")))
+
 ```
 
 
 ```{r}
-ggplot(corrs_all,
+#| label: fig-whtYoungCorrTotalColdDays
+#| fig-cap: "Estimated Spearman correlations between life stage and the total number of winter days below a selected temperature threshold for white shrimp in their postlarval/juvenile winters. Points represent the estimated Spearman correlation coefficient, and vertical gray lines represnt the 95% confidence interval for the coefficient. Points are colored brown if the correlation is not significantly different from 0 (p > 0.05) and teal if the correlation is significant (p < 0.05). Significant points are also larger. These p-values are unadjusted, so expect around 1 'false' significant result for every 20 tests at this level."
+#| fig-height: 5
+
+p <- ggplot(corrs_all,
        aes(x = thresholdC,
            y = totalDays_estimate,
            color = totalDays_significant)) +
@@ -187,19 +263,162 @@ ggplot(corrs_all,
     geom_hline(yintercept = 0) +
     facet_wrap(~ life_stage, ncol = 1) +
     theme_bw() +
-    labs(title = "Brown: Correlation between abundance index and \nTotal # of cold days",
-         subtitle = "Full time series for each life stage",
+    labs(title = "White Shrimp vs. Total Cold Days",
          x = "Temperature threshold (C)",
          y = "Correlation estimate and 95% CI (Spearman's rho)",
          col = "Significant?")
 
+plotly_out(p, legend_pos = "right")
 ```
 
-## White Shrimp  
+```{r}
+#| label: fig-whtYoungCorrLongestColdSpell
+#| fig-cap: "Estimated Spearman correlations between life stage and the largest number of consecutive winter days below a selected temperature threshold for white shrimp in their postlarval/juvenile winters. Points represent the estimated Spearman correlation coefficient, and vertical gray lines represnt the 95% confidence interval for the coefficient. Points are colored brown if the correlation is not significantly different from 0 (p > 0.05) and teal if the correlation is significant (p < 0.05). These p-values are unadjusted, so expect around 1 'false' significant result for every 20 tests at this level."
+#| fig-height: 5
+
+p <- ggplot(corrs_all,
+       aes(x = thresholdC,
+           y = consecDays_estimate,
+           color = consecDays_significant)) +
+    geom_linerange(aes(ymin = consecDays_ciLow,
+                       ymax = consecDays_ciHigh),
+                   col = "gray60") +
+    geom_point(aes(size = consecDays_significant),
+               alpha = 0.9) +
+    scale_size_manual(values = c(2, 3),
+                      guide = "none") +
+    scale_color_manual(values = c("#a6611a", "#018571")) +   # r color brewer BrBG, colorblind-safe, endpoints of 5-class palette
+    geom_hline(yintercept = 0) +
+    facet_wrap(~ life_stage, ncol = 1) +
+    theme_bw() +
+    labs(title = "White Shrimp vs. Longest Cold Spell",
+         x = "Temperature threshold (C)",
+         y = "Correlation estimate and 95% CI (Spearman's rho)",
+         col = "Significant?")
+
+plotly_out(p, legend_pos = "right")
+```
 
 
-For white shrimp, need to break up the columns reasonably to correlate postlarval and juvenile with one winter, and adults with the next.  
+### Subadults and Adults  
 
+```{r}
+totalDays <- names(wht)[str_starts(names(wht), "subadultWinter.totalDays")]
+
+comp_grid <- expand.grid(life_stage = levels(wht$life_stage),
+                         totalDays = totalDays)
+
+comp_grid <- comp_grid |> 
+    mutate(longestSpell = str_replace(totalDays, "totalDays", "longestSpell")) |> 
+    filter(!(life_stage %in% c("postlarval", "juvenile")))
+
+comp_out <- list()
+
+for(i in 1:nrow(comp_grid)){
+    comp.stage <- comp_grid[i, "life_stage"]
+    comp.totalDays <- comp_grid[i, "totalDays"]
+    comp.longestSpell <- comp_grid[i, "longestSpell"]
+    
+    # subset the data frame
+    comp.rows <- which(wht$life_stage == comp.stage)
+    comp.cols <- which(names(wht) %in% c("shrimp_year", "abundIndex", as.character(comp.totalDays), as.character(comp.longestSpell)))
+    
+    
+    comb <- wht[comp.rows, comp.cols]
+    names(comb) <- c("shrimp_year", "abund_index", "totalDays", "longestSpell")
+    
+    # correlation and CI for total # days
+    corr_totalDays <- SpearmanRho(comb$totalDays,
+                                  comb$abund_index,
+                                  use = "pairwise.complete.obs",
+                                  conf.level = 0.95)
+    corr_totalDays <- data.frame("totalDays_estimate" = corr_totalDays["rho"],
+                                 "totalDays_ciLow" = corr_totalDays["lwr.ci"],
+                                 "totalDays_ciHigh" = corr_totalDays["upr.ci"],
+                                 row.names = NULL)
+    
+    # correlation and CI for longest # days
+    corr_mostDays <- SpearmanRho(comb$longestSpell,
+                                 comb$abund_index,
+                                 use = "pairwise.complete.obs",
+                                 conf.level = 0.95)
+    corr_mostDays <- data.frame("consecDays_estimate" = corr_mostDays["rho"],
+                                "consecDays_ciLow" = corr_mostDays["lwr.ci"],
+                                "consecDays_ciHigh" = corr_mostDays["upr.ci"],
+                                row.names = NULL)
+    
+    corr_out <- cbind(comp_grid[i, ],
+                      corr_totalDays,
+                      corr_mostDays)
+    
+    comp_out[[i]] <- corr_out
+}
+
+corrs_all <- bind_rows(comp_out) |> 
+    mutate(totalDays_significant = case_when(totalDays_ciLow * totalDays_ciHigh > 0 ~ "yes",
+                                            .default = "no"),
+           consecDays_significant = case_when(consecDays_ciLow * consecDays_ciHigh > 0 ~ "yes",
+                                            .default = "no"),
+           thresholdC = as.numeric(str_remove(totalDays, "subadultWinter.totalDays_lessThan")))
+
+```
+
+
+```{r}
+#| label: fig-whtAdultsCorrTotalColdDays
+#| fig-cap: "Estimated Spearman correlations between life stage and the total number of winter days below a selected temperature threshold for white shrimp in their subadult and adult winters. Points represent the estimated Spearman correlation coefficient, and vertical gray lines represnt the 95% confidence interval for the coefficient. Points are colored brown if the correlation is not significantly different from 0 (p > 0.05) and teal if the correlation is significant (p < 0.05). Significant points are also larger. These p-values are unadjusted, so expect around 1 'false' significant result for every 20 tests at this level."
+
+
+p <- ggplot(corrs_all,
+       aes(x = thresholdC,
+           y = totalDays_estimate,
+           color = totalDays_significant)) +
+    geom_linerange(aes(ymin = totalDays_ciLow,
+                       ymax = totalDays_ciHigh),
+                   col = "gray60") +
+    geom_point(aes(size = totalDays_significant),
+               alpha = 0.9) +
+    scale_size_manual(values = c(2, 3),
+                      guide = "none") +
+    scale_color_manual(values = c("#a6611a", "#018571")) +   # r color brewer BrBG, colorblind-safe, endpoints of 5-class palette
+    geom_hline(yintercept = 0) +
+    facet_wrap(~ life_stage, ncol = 1) +
+    theme_bw() +
+    labs(title = "White Shrimp vs. Total Cold Days",
+         x = "Temperature threshold (C)",
+         y = "Correlation estimate and 95% CI (Spearman's rho)",
+         col = "Significant?")
+
+plotly_out(p, legend_pos = "right")
+```
+
+
+```{r}
+#| label: fig-whtAdultsCorrLongestColdSpell
+#| fig-cap: "Estimated Spearman correlations between life stage and the largest number of consecutive winter days below a selected temperature threshold for white shrimp in their subadult and adult winters. Points represent the estimated Spearman correlation coefficient, and vertical gray lines represnt the 95% confidence interval for the coefficient. Points are colored brown if the correlation is not significantly different from 0 (p > 0.05) and teal if the correlation is significant (p < 0.05). These p-values are unadjusted, so expect around 1 'false' significant result for every 20 tests at this level."
+
+p <- ggplot(corrs_all,
+       aes(x = thresholdC,
+           y = consecDays_estimate,
+           color = consecDays_significant)) +
+    geom_linerange(aes(ymin = consecDays_ciLow,
+                       ymax = consecDays_ciHigh),
+                   col = "gray60") +
+    geom_point(aes(size = consecDays_significant),
+               alpha = 0.9) +
+    scale_size_manual(values = c(2, 3),
+                      guide = "none") +
+    scale_color_manual(values = c("#a6611a", "#018571")) +   # r color brewer BrBG, colorblind-safe, endpoints of 5-class palette
+    geom_hline(yintercept = 0) +
+    facet_wrap(~ life_stage, ncol = 1) +
+    theme_bw() +
+    labs(title = "White Shrimp vs. Longest Cold Spell",
+         x = "Temperature threshold (C)",
+         y = "Correlation estimate and 95% CI (Spearman's rho)",
+         col = "Significant?")
+
+plotly_out(p, legend_pos = "right")
+```
 
 
 ## About

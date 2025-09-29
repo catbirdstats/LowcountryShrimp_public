@@ -4,6 +4,11 @@
 
 There are two datasets that represent juveniles: SCDNR's Creek Trawls, and NIW NERR's Oyster Landing seines. We will explore each.  
 
+Sizes in Oyster Landing Seines were in RCL; here they have been converted to Total Length using the equations from Batchelder et al. 2024, Appendix table A1:  
+
+brown shrimp:  TL = 2.862 + 2.617\*RCL  (R2 = 0.94)  
+white shrimp:  TL = 4.271 + 2.43\*RCL   (R2 = 0.95)
+
 ```{r}
 library(tidyverse)
 library(patchwork)
@@ -73,8 +78,11 @@ juv_ol_size <- juv_ol |>
            starts_with("LEN")) |> 
     pivot_longer(cols = starts_with("LEN"),
                  names_to = "Rep",
-                 values_to = "Length") |> 
-    filter(!is.na(Length))
+                 values_to = "Length.RCL") |> 
+    filter(!is.na(Length.RCL)) |> 
+    mutate(Length.TL = case_when(Species == "brown" ~ 2.617*Length.RCL + 2.862,
+                                 Species == "white" ~ 2.43*Length.RCL + 4.271,
+                                 .default = 999))
 ```
 
 ```{r}
@@ -91,6 +99,7 @@ save(juv_sc_cpue, juv_sc_size,
 ## Graphics - Size Distributions  
 
 Beeswarm plots can be slow to render so I have subsetted both data frames here to 15,000 rows.  
+
 
 ```{r}
 set.seed(1234)
@@ -109,16 +118,18 @@ juv_sc_sizeb <- juv_sc_size[juv_sc_sizeb_ind, ]
 
 beeswarm_sizeDistn(juv_sc_sizeb,
                    x = "Species", y = "Length", month = "Month",
-                   survey = surv_sc)
+                   survey = surv_sc) +
+    labs(y = "Length (mm)")
 ```
 
 ```{r}
 #| label: fig-beeswarm-ol
-#| fig-cap: "Beeswarm plot of juvenile shrimp length for the Oyster Landing seine data. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center."
+#| fig-cap: "Beeswarm plot of juvenile shrimp length for the Oyster Landing seine data. Lengths represent Total Length, converted from RCL. Points represent measurements of individual shrimp, and are colored by the month in which they were captured. The y-axis represents length. More points spread out along the x-axis for a given length means that there were more individuals of that length captured than regions where points remain closer to the center."
 
 beeswarm_sizeDistn(juv_ol_sizeb,
-                   x = "Species", y = "Length", month = "Month",
-                   survey = surv_ol)
+                   x = "Species", y = "Length.TL", month = "Month",
+                   survey = surv_ol) +
+    labs(y = "Length (mm)")
 ```
 
 
@@ -296,7 +307,8 @@ skimr::skim_without_charts(sz_ol_wht)
 **Modifications to data:**
 
 -   All files: changed `Species` from provided scientific names to 'brown', 'white', and 'pink'.\
--   Oyster Landing file: removed 'DataGap' from temp, salinity, and weight columns and turned these to numeric. Split data into counts data frame and sizes data frame. Pivoted sizes to long format.\
+-   Oyster Landing file: removed 'DataGap' from temp, salinity, and weight columns and turned these to numeric. Split data into counts data frame and sizes data frame. Pivoted sizes to long format.\  
+-  Oyster Landing Sizes: converted to TL from RCL using equations from Batchelder et al. 2024 Appendix table A1.  
 
 
 **Generated data file(s):**  Data frames were modified as described above, and written to `data/intermediate/juvenile_dfs.RData` (the single `.RData` file contains multiple data frames):

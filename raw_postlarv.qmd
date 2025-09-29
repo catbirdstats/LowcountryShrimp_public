@@ -68,7 +68,8 @@ There are three different measures of size in this dataset: Rostrum length, Tels
 beeswarm_sizeDistn(postlarv_size, 
                x = "Species", y = "Rostrum_length",
                month = "Month",
-               survey = surv)
+               survey = surv) +
+    labs(y = expression("Rostrum length ("*mu*"m)"))
 ```
 
 ```{r}
@@ -78,7 +79,8 @@ beeswarm_sizeDistn(postlarv_size,
 beeswarm_sizeDistn(postlarv_size, 
                x = "Species", y = "Telson_length",
                month = "Month",
-               survey = surv)
+               survey = surv) +
+    labs(y = expression("Telson length ("*mu*"m)"))
 ```
 
 ```{r}
@@ -88,7 +90,8 @@ beeswarm_sizeDistn(postlarv_size,
 beeswarm_sizeDistn(postlarv_size, 
                x = "Species", y = "Uropod_length",
                month = "Month",
-               survey = surv)
+               survey = surv) +
+    labs(y = expression("Uropod length ("*mu*"m)"))
 ```
 
 With brown shrimp, looks like we've got a couple of size classes in here - bigger shrimp earlier in the year, and smaller ones that are mostly later months.
@@ -104,7 +107,8 @@ ggplot(postlarv_size) +
                    y = Uropod_length,
                    col = Month)) +
     facet_wrap(~Species, scales = "free_y", ncol = 1) +
-    khroma::scale_color_YlOrBr()
+    khroma::scale_color_YlOrBr() +
+    labs(y = expression("Uropod length ("*mu*"m)"))
 ```
 
 
@@ -122,7 +126,8 @@ p1 <- ggplot(postlarv_size) +
     khroma::scale_fill_YlOrBr() +
     theme(legend.position = "none") +
     labs(title = "Size by time of year",
-         x = "Month")
+         x = "Month",
+         y = expression("Uropod length ("*mu*"m)"))
 
 
 postlarv_abund_long <- postlarv_abund |> 
@@ -146,7 +151,8 @@ p2 <- ggplot(postlarv_abund_long) +
     khroma::scale_fill_YlOrBr() +
     theme(legend.position = "none") +
     labs(title = "Abundance by time of year",
-         x = "Month")
+         x = "Month",
+         y = "Density")
 
 p1 + p2
 ```

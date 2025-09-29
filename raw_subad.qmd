@@ -99,7 +99,8 @@ subad_sc_sizeb <- subad_sc_size[subad_sc_sizeb_ind, ]
 # make plots
 beeswarm_sizeDistn(subad_ga_sizeb,
                    x = "Species", y = "Size", month = "Month",
-                   survey = surv_ga)
+                   survey = surv_ga) +
+    labs(y = "Length (mm)")
 ```
 
 ```{r}
@@ -108,7 +109,8 @@ beeswarm_sizeDistn(subad_ga_sizeb,
 
 beeswarm_sizeDistn(subad_sc_sizeb,
                    x = "Species", y = "Length", month = "Month",
-                   survey = surv_sc)
+                   survey = surv_sc) +
+    labs(y = "Length (mm)")
 ```
 
 ## Graphics - Abundance/CPUE Boxplots

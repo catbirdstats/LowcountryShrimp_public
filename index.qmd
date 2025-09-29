@@ -6,7 +6,7 @@ Funded by the NERRS Science Collaborative - see the [project page here](https://
 
 ## Collaborators  
 
-Robert Dunn^1,2^ was the project PI. The work group that guided the compilation of this document included Matt Kimball^1^, Joshua Stone^1^, Mihael Kendrick^3^, Liam Batchelder^1^, and Graham Wagner^1^. The R code developed to work with the data and produce this document was written by Kim Cressman^4^. Data used by the workgroup were generously provided by the SC Department of Natural Resources, GA Department of Natural Resources, South Atlantic Fishery Management Council, and the University of South Carolina's Baruch Marine Field Laboratory.
+Robert Dunn^1,2^ was the project PI. The work group that guided the compilation of this document included Matt Kimball^1^, Joshua Stone^1^, Michael Kendrick^3^, Liam Batchelder^1^, and Graham Wagner^1^. The R code developed to work with the data and produce this document was written by Kim Cressman^4^. Data used by the workgroup were generously provided by the SC Department of Natural Resources, GA Department of Natural Resources, South Atlantic Fishery Management Council, and the University of South Carolina's Baruch Marine Field Laboratory.
 
 ^1^ University of South Carolina, Baruch Marine Laboratory  
 ^2^ Ecological Dynamics, LLC  
