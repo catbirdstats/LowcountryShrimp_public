@@ -151,7 +151,7 @@ corrs_all <- bind_rows(corrs_out)
 ```
 
 ```{r}
-#| label: tbl-brnSalCorrs
+#| label: tbl-brnSalCorrsWithAbund
 #| tbl-cap: "Correlations between brown shrimp abundance index at each life stage and nursery period salinity at CH10. Estimates represent Spearman correlation coefficients."
 
 knitr::kable(corrs_all,
@@ -162,7 +162,7 @@ knitr::kable(corrs_all,
 
 
 ```{r}
-#| label: fig-brnSalCorrs
+#| label: fig-brnSalCorrsWithAbund
 #| tbl-cap: "Graphic of brown shrimp abundance index at each life stage vs. nursery period salinity at CH10. Dashed lines show a linear smooth, whether correlations were significant or not."
 
 p <- ggplot(wht,
@@ -259,7 +259,7 @@ corrs_all <- bind_rows(corrs_out)
 ```
 
 ```{r}
-#| label: tbl-whtSalCorrs
+#| label: tbl-whtSalCorrsWithAbund
 #| tbl-cap: "Correlations between white shrimp abundance index at each life stage and nursery period salinity at CH10. Estimates represent Spearman correlation coefficients."
 
 knitr::kable(corrs_all,
@@ -270,7 +270,7 @@ knitr::kable(corrs_all,
 
 
 ```{r}
-#| label: fig-whtSalCorrs
+#| label: fig-whtSalCorrsWithAbund
 #| tbl-cap: "Graphic of white shrimp abundance index at each life stage vs. nursery period salinity at CH10. Dashed lines show a linear smooth, whether correlations were significant or not."
 
 p <- ggplot(wht,
