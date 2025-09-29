@@ -289,12 +289,13 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#directory-organization" id="toc-directory-organization" class="nav-link active" data-scroll-target="#directory-organization"><span class="header-section-number">2.1</span> Directory organization</a></li>
-  <li><a href="#data-data-data" id="toc-data-data-data" class="nav-link" data-scroll-target="#data-data-data"><span class="header-section-number">2.2</span> Data, data, data</a>
+  <li><a href="#data-data-data" id="toc-data-data-data" class="nav-link" data-scroll-target="#data-data-data"><span class="header-section-number">2.2</span> Data, data, data</a></li>
+  <li><a href="#main-files" id="toc-main-files" class="nav-link" data-scroll-target="#main-files"><span class="header-section-number">2.3</span> Main Files</a>
   <ul class="collapse">
   <li><a href="#brown-shrimp-combined-file" id="toc-brown-shrimp-combined-file" class="nav-link" data-scroll-target="#brown-shrimp-combined-file">Brown Shrimp combined file</a></li>
   <li><a href="#white-shrimp-combined-file" id="toc-white-shrimp-combined-file" class="nav-link" data-scroll-target="#white-shrimp-combined-file">White Shrimp combined file</a></li>
   </ul></li>
-  <li><a href="#about" id="toc-about" class="nav-link" data-scroll-target="#about"><span class="header-section-number">2.3</span> About</a></li>
+  <li><a href="#about" id="toc-about" class="nav-link" data-scroll-target="#about"><span class="header-section-number">2.4</span> About</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/catbirdstats/LowcountryShrimp_public/blob/main/directory_structure.qmd" target="_blank" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></nav>
     </div>
@@ -344,6 +345,10 @@ ul.task-list li input[type="checkbox"] {
 </li>
 <li><code>environmental</code> - contains a file for each species, with summarized nursery period salinities and winter temperatures.</li>
 </ul>
+</section>
+<section id="main-files" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="main-files"><span class="header-section-number">2.3</span> Main Files</h2>
+<p>There are two main data files: one for each species. Each file combines abundance information with environmental information. They are in the folder <code>data/processed</code>. Each files contains one row for each shrimp_year x life_stage combination, meaning environmental data is replicated several times for each shrimp_year. This was done on purpose to make future data selection easier on users; but if you want a single row of environmental data per shrimp year, use the file in the <code>data/processed/environmental</code> directory.</p>
 <section id="brown-shrimp-combined-file" class="level3">
 <h3 class="anchored" data-anchor-id="brown-shrimp-combined-file">Brown Shrimp combined file</h3>
 <p><code>brn_abundAndEnv.csv</code>, in <code>data/processed</code>.</p>
@@ -384,8 +389,8 @@ ul.task-list li input[type="checkbox"] {
 <p>The other difference between files is a different nursery period. The calculations and column meanings are the same, but the applicable nursery period for white shrimp is June through October.</p>
 </section>
 </section>
-<section id="about" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="about"><span class="header-section-number">2.3</span> About</h2>
+<section id="about" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="about"><span class="header-section-number">2.4</span> About</h2>
 <p><strong>Input <code>.qmd</code> file</strong> for this section was: <strong>directory_structure.qmd</strong> and can be found in the main directory.</p>
 
 

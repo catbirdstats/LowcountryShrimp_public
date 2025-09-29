@@ -21,6 +21,9 @@ This chapter primarily exists to guide other members of the working group in mod
   -  `combinedLifeStages` - contains a single file, with abundance index calculated for each life stage of both species of shrimp. This was one of the building blocks to the files in the main `processed` directory.   
   -  `environmental` - contains a file for each species, with summarized nursery period salinities and winter temperatures.   
 
+## Main Files  
+
+There are two main data files: one for each species. Each file combines abundance information with environmental information. They are in the folder `data/processed`. Each files contains one row for each shrimp_year x life_stage combination, meaning environmental data is replicated several times for each shrimp_year. This was done on purpose to make future data selection easier on users; but if you want a single row of environmental data per shrimp year, use the file in the `data/processed/environmental` directory.  
 
 ### Brown Shrimp combined file  
 

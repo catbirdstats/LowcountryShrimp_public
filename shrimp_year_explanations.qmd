@@ -106,7 +106,6 @@ For each survey:
     b.  Mean-center the result from (a) across all shrimp years for the dataset.  
     c.  Divide by the standard deviation across all shrimp years for the datset.
 
-**talk about multiple datasets and how they were combined**  
 
 
 ## About
