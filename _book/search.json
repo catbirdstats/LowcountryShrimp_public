@@ -808,16 +808,5 @@
       "Relationships between datasets",
       "<span class='chapter-number'>17</span>  <span class='chapter-title'>Nursery Period Salinity</span>"
     ]
-  },
-  {
-    "objectID": "rel_regression_models.html",
-    "href": "rel_regression_models.html",
-    "title": "18  Regression Models",
-    "section": "",
-    "text": "Start to explore what happens when we do more than just correlations.",
-    "crumbs": [
-      "Relationships between datasets",
-      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Regression Models</span>"
-    ]
   }
 ]

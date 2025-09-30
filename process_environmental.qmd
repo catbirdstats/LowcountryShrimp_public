@@ -3,6 +3,8 @@
 ```{r}
 library(tidyverse)
 library(patchwork)
+library(plotly)
+library(GGally)
 
 source("functions.R")
 

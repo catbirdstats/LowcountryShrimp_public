@@ -49,7 +49,6 @@ book:
         - rel_abundances.qmd  
         - rel_temp_thresholds.qmd  
         - rel_sal.qmd  
-        - rel_regression_models.qmd  
 
 bibliography: references.bib
 
