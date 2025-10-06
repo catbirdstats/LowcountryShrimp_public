@@ -81,9 +81,15 @@ Again, we need to aggregate data. **Winter** here is defined as December through
 
 ## Graphic of abundances, temperatures, and assigned shrimp years
 
-**this will be what Kim showed the group at some point in the past, with 2 or 3 calendar years worth of data**
+@fig-lifeStageGraph 
 
-**need to actually process the data though** and use quarto's `embed` functionality to show it here  
+Here is a graph actually made later in this document as @fig-lifeStageGraph :
+
+{{< embed life_stage_graphic.qmd#fig-lifeStageGraph >}}
+
+
+
+Here is an earlier version of that graphic:  
 
 ![Temperature and abundance data, colored by shrimp year, with irrelevant life stages grayed out.](winters-shrimpYears-markedup.png){#fig-wintershrimpyears width="9.43in"}
 

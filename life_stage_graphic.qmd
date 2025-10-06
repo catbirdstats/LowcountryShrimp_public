@@ -1,0 +1,216 @@
+# Life Stage Graphic  
+
+For this graphic, we need monthly/seasonal abundances of shrimp, and daily temperatures. I will subset to only a few years and do some weird naming in order to get the grouping I want for the graphic.     
+
+```{r}
+library(tidyverse)
+library(plotly)
+
+source(here::here("functions.R"))
+
+in_path <- here::here("data", 
+                      "processed",
+                      "byLifeStage",
+                      "moreDetailed")
+
+in_env <- here::here("data",
+                     "raw",
+                     "environmental")
+
+out_path <- here::here("data",
+                       "processed")
+```
+
+```{r}
+# postlarval
+pl <- read.csv(here::here(in_path,
+                          "postlarval_byMonth.csv"))
+
+# juvenile
+jv <- read.csv(here::here(in_path,
+                          "juvenile_bySurveyAndMonth.csv"))
+
+
+# subadult
+sa <- read.csv(here::here(in_path,
+                          "subadult_bySurveyAndMonth.csv"))
+
+# adult 
+ad <- read.csv(here::here(in_path,
+                          "adult.seamap_byStateAndSeason.csv")) |> 
+    tidyr::separate(life_stage, 
+                    into = c("life_stage", "substage"),
+                    sep = "\\.", fill = "right")
+
+# water temp
+ch <- readxl::read_xlsx(here::here(in_env, "SCDNR_CHS_TempData_ 1950_2024.xlsx"))
+# cut out summary rows and column
+ch <- ch[1:366, -78]
+# pivot
+ch2 <- ch |> 
+    pivot_longer(-c(Day, Month),
+                 names_to = "Year",
+                 values_to = "waterTempC") |> 
+    mutate(across(everything(), as.numeric),
+           date = lubridate::ymd(paste(Year, Month, Day)))
+```
+
+```{r}
+# combine and subset shrimp
+shr_all <- bind_rows(pl, jv, sa, ad) |> 
+    mutate(species = case_when(species == "white" & life_stage %in% c("postlarval", "juvenile") ~ "white_young",
+                               species == "white" ~ "white_adultish",
+                               .default = "brown"),
+           date.char = case_when(is.na(season) ~ paste(year, month, "15", sep = "-"),
+                                 season == "Spring" ~ paste(year, "05-01", sep = "-"),
+                                 season == "Summer" ~ paste(year, "08-01", sep = "-"),
+                                 season == "Fall" ~ paste(year, "10-15", sep = "-")),
+           date = lubridate::ymd(date.char))
+
+# average when there are multiple surveys (but not multiple "substages")
+shr_monthly <- shr_all |> 
+    summarize(.by = c(species, life_stage, substage,
+                      shrimp_year, date),
+              abundance = mean(abundance, na.rm = TRUE))
+    
+```
+
+```{r}
+date_start <- as.Date("1992-12-01")
+date_end <- as.Date("1996-03-01")
+shryr_start <- 1993
+```
+
+```{r}
+winter_delineations <- c("1993-3-01",
+                         "1993-12-01",
+                         "1994-03-01",
+                         "1994-12-01",
+                         "1995-03-01",
+                         "1995-12-01")
+
+
+```
+
+
+```{r}
+# deal with temperatures
+# will need to repeat temperatures for each of 3 species
+# and assign correct shrimp years to them
+wtemp <- ch2 |> 
+    filter(date >= date_start,
+           date < date_end) |> 
+    mutate(brown = case_when(Month == 12 ~ Year + 1,
+                                        Month %in% c(1, 2) ~ Year,
+                                        .default = 9999),
+           white_young = brown,
+           white_adultish = case_when(Month == 12 ~ Year,
+                                             Month %in% c(1, 2) ~ Year - 1,
+                                             .default = 9999)) |> 
+    select(date, waterTempC, brown, white_young, white_adultish) |> 
+    pivot_longer(c(brown, white_young, white_adultish),
+                 names_to = "species",
+                 values_to = "shrimp_year") |> 
+    mutate(life_stage = "water temp") |> 
+    rename(abundance = waterTempC)
+```
+
+```{r}
+shr_monthly <- bind_rows(shr_monthly, wtemp) |> 
+    mutate(species = factor(species, levels = c("brown", "white_young", "white_adultish")),
+           life_stage = factor(life_stage, levels = c("water temp", "postlarval",
+                                                      "juvenile", "subadult", "adult")))
+```
+
+
+```{r}
+shr_most <- shr_monthly |> 
+    filter(is.na(substage),
+           date >= date_start,
+           date < date_end,
+           shrimp_year >= shryr_start)
+shr_remainder <- shr_monthly |> 
+    filter(!is.na(substage),
+           date >= date_start,
+           date < date_end,
+           shrimp_year >= shryr_start)
+
+custom_palette <- c(khroma::color("muted")(4), "#DDDDDD")
+names(custom_palette) <- c("1993", "1994", "1995", "1996", "9999")
+
+winter_delineations <- c("1993-3-01",
+                         "1993-12-01",
+                         "1994-03-01",
+                         "1994-12-01",
+                         "1995-03-01",
+                         "1995-12-01")
+```
+
+
+## Graph  
+
+```{r}
+#| label: fig-lifeStageGraph
+#| fig-cap: "Graph of shrimp abundances by species and life stage, with winter temperatures in the top panel. The same winter may be associated with different shrimp years for different species or life stages. Color corresponds to shrimp year in this graph."
+#| fig-width: 8
+#| fig-height: 4.5
+
+ggplot(shr_most,
+       aes(x = date,
+           y = abundance,
+           col = factor(shrimp_year))) +
+    geom_vline(xintercept = as.Date(winter_delineations),
+               col = "blue",
+               linetype = "dashed") +
+    geom_point(aes(group = life_stage),
+               size = 2) +
+    geom_line(aes(group = life_stage)) +
+    geom_point(data = shr_remainder,
+               aes(shape = substage),
+               size = 2) +
+    geom_line(data = shr_remainder) +
+    facet_grid(life_stage ~ species,
+               scales = "free_y") +
+    theme_bw() +
+    theme(panel.grid.major.y = element_blank(),
+          panel.grid.minor.y = element_blank(),
+          panel.grid.minor.x = element_blank(),) +
+    scale_color_manual(values = custom_palette) +
+    labs(x = "Date",
+         y = "Value",
+         col = "Shrimp Year",
+         shape = "White shrimp adult stage")
+```
+
+
+## About
+
+**Input `.qmd` file** for this section was: **`r xfun::with_ext(knitr::current_input(), "qmd")`** and can be found in the main directory.  
+
+**Input data file(s)** - in `data/processed/byLifeStage`:  
+
+-   `postlarval_byShrimpYear.csv`
+-   `juvenile_byShrimpYear.csv`
+-   `subadult_byShrimpYear.csv`  
+-   `adult_byShrimpYear.csv`  
+-   `adult.landings.brown_byShrimpYear.csv`  
+-   `adult.landings.white_byShrimpYear.csv`  
+
+
+**Modifications to data:**  
+
+-   reduced to only common shrimp abundance columns  
+-   combined abundance and environmental data, based on shrimp year.  
+-   **NOTE:** because the abundances are in a long format, meaning each life stage has a separate row for shrimp year, the same environmental data is repeated on multiple rows.
+
+
+**Generated data file(s):**   
+
+-   `allAbundanceIndices.csv`, in `data/processed/combinedLifeStages`. Contains abundance indices for each life stage and shrimp year, for both brown and white shrimp.  
+-   `brn_abundAndEnv.csv`, in `data/processed`. Contains abundance index and environmental metrics (nursery period salinity; winter days below temperature thresholds) for brown shrimp only.  
+-   `wht_abundAndEnv.csv`, in `data/processed`. Contains abundance index and environmental metrics (nursery period salinity; winter days below temperature thresholds) for white shrimp only.  
+
+
+**Other notes about data:**
+
+- none

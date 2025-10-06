@@ -23,7 +23,7 @@ NC, SC, GA, and FL are present in this dataset.
 
 ## Datasets
 
-There are two SEAMAP files: one of events, and one of catch data.  
+There are three SEAMAP files. The only one handled here is the one containing trawl data (weights and total amounts of shrimp). The other two files contain a) additional information from the trawling events; and b) shrimp size data.    
 
 ```{r}
 library(tidyverse)
@@ -102,7 +102,7 @@ save(seamap, adsm_long, adsm_wide,
 
 ## Graphics - Abundance/Landings/CPUE Boxplots  
 
-**STILL IN PROGRESS**  
+
 
 ```{r}
 ggplot(adsm_long,
@@ -163,7 +163,7 @@ p1 <- adsm_long |>
     facet_grid(Region~species) +
     # scale_y_log10() +
     khroma::scale_fill_YlOrBr() +
-    labs(title = "Annual Landings via NMFS",
+    labs(title = "SEAMAP biomass",
          subtitle = "by species x state",
          x = "Year",
          y = "10,000 Pounds") +
@@ -237,4 +237,7 @@ adsm_long |>
 
 **Other notes about data:**
 
--   Contains 4 states: GA, NC, SC, FL  
+-   Contains 4 states: GA, NC, SC, FL   
+-   Two data files are in the `data/raw/ad_seamap` folder and not processed here:  
+    -  `SEAMAP_CoastalSurvey_Events_19892022.csv` - contains additional data about each trawl  
+    -  `SEAMAP_Sizes.csv` - contains total length data for shrimp from each trawl.  

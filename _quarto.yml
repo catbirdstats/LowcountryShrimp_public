@@ -44,6 +44,7 @@ book:
         - process_ad_seamap.qmd
         - process_ad_commercial.qmd
         - combine_processed_abundances.qmd
+        - life_stage_graphic.qmd
     - part: "Relationships between datasets"
       chapters:
         - rel_abundances.qmd  

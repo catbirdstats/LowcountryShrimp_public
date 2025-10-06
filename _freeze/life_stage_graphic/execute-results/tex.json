@@ -1,0 +1,21 @@
+{
+  "hash": "1a49ab761c22e9c42a1cee676a8c1710",
+  "result": {
+    "engine": "knitr",
+    "markdown": "# Life Stage Graphic  \n\nFor this graphic, we need monthly/seasonal abundances of shrimp, and daily temperatures. I will subset to only a few years and do some weird naming in order to get the grouping I want for the graphic.     \n\n\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n\n\n\n## Graph  \n\n\n\n::: {.cell}\n::: {.cell-output-display}\n![Graph of shrimp abundances by species and life stage, with winter temperatures in the top panel. The same winter may be associated with different shrimp years for different species or life stages. Color corresponds to shrimp year in this graph.](life_stage_graphic_files/figure-pdf/fig-lifeStageGraph-1.pdf){#fig-lifeStageGraph}\n:::\n:::\n\n\n\n\n## About\n\n**Input `.qmd` file** for this section was: **life_stage_graphic.qmd** and can be found in the main directory.  \n\n**Input data file(s)** - in `data/processed/byLifeStage`:  \n\n-   `postlarval_byShrimpYear.csv`\n-   `juvenile_byShrimpYear.csv`\n-   `subadult_byShrimpYear.csv`  \n-   `adult_byShrimpYear.csv`  \n-   `adult.landings.brown_byShrimpYear.csv`  \n-   `adult.landings.white_byShrimpYear.csv`  \n\n\n**Modifications to data:**  \n\n-   reduced to only common shrimp abundance columns  \n-   combined abundance and environmental data, based on shrimp year.  \n-   **NOTE:** because the abundances are in a long format, meaning each life stage has a separate row for shrimp year, the same environmental data is repeated on multiple rows.\n\n\n**Generated data file(s):**   \n\n-   `allAbundanceIndices.csv`, in `data/processed/combinedLifeStages`. Contains abundance indices for each life stage and shrimp year, for both brown and white shrimp.  \n-   `brn_abundAndEnv.csv`, in `data/processed`. Contains abundance index and environmental metrics (nursery period salinity; winter days below temperature thresholds) for brown shrimp only.  \n-   `wht_abundAndEnv.csv`, in `data/processed`. Contains abundance index and environmental metrics (nursery period salinity; winter days below temperature thresholds) for white shrimp only.  \n\n\n**Other notes about data:**\n\n- none",
+    "supporting": [
+      "life_stage_graphic_files\\figure-pdf"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {
+      "knitr": [
+        "{\"type\":\"list\",\"attributes\":{},\"value\":[]}"
+      ]
+    },
+    "preserve": null,
+    "postProcess": false
+  }
+}

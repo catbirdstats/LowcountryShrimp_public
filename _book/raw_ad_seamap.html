@@ -275,6 +275,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Combine abundance information</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./life_stage_graphic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Life Stage Graphic</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -289,19 +295,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rel_abundances.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Abundance Index Relationships</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Abundance Index Relationships</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rel_temp_thresholds.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Temperature thresholds</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Temperature thresholds</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rel_sal.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Nursery Period Salinity</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Nursery Period Salinity</span></span></a>
   </div>
 </li>
       </ul>
@@ -362,7 +368,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>NC, SC, GA, and FL are present in this dataset.</p>
 <section id="datasets" class="level2" data-number="7.1">
 <h2 data-number="7.1" class="anchored" data-anchor-id="datasets"><span class="header-section-number">7.1</span> Datasets</h2>
-<p>There are two SEAMAP files: one of events, and one of catch data.</p>
+<p>There are three SEAMAP files. The only one handled here is the one containing trawl data (weights and total amounts of shrimp). The other two files contain a) additional information from the trawling events; and b) shrimp size data.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -442,7 +448,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="graphics---abundancelandingscpue-boxplots" class="level2" data-number="7.2">
 <h2 data-number="7.2" class="anchored" data-anchor-id="graphics---abundancelandingscpue-boxplots"><span class="header-section-number">7.2</span> Graphics - Abundance/Landings/CPUE Boxplots</h2>
-<p><strong>STILL IN PROGRESS</strong></p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -538,7 +543,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_grid</span>(Region<span class="sc">~</span>species) <span class="sc">+</span></span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># scale_y_log10() +</span></span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    khroma<span class="sc">::</span><span class="fu">scale_fill_YlOrBr</span>() <span class="sc">+</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Annual Landings via NMFS"</span>,</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"SEAMAP biomass"</span>,</span>
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">subtitle =</span> <span class="st">"by species x state"</span>,</span>
 <span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">"Year"</span>,</span>
 <span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">"10,000 Pounds"</span>) <span class="sc">+</span></span>
@@ -1082,7 +1087,14 @@ Table&nbsp;7.2: White shrimp SEAMAP summary
 </ul>
 <p><strong>Other notes about data:</strong></p>
 <ul>
-<li>Contains 4 states: GA, NC, SC, FL</li>
+<li>Contains 4 states: GA, NC, SC, FL<br>
+</li>
+<li>Two data files are in the <code>data/raw/ad_seamap</code> folder and not processed here:
+<ul>
+<li><code>SEAMAP_CoastalSurvey_Events_19892022.csv</code> - contains additional data about each trawl<br>
+</li>
+<li><code>SEAMAP_Sizes.csv</code> - contains total length data for shrimp from each trawl.</li>
+</ul></li>
 </ul>
 
 
